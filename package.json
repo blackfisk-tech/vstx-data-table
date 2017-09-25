@@ -1,0 +1,17 @@
+{
+  "name": "vue-stacks-data-table",
+  "version": "0.0.1",
+  "description": "Data table component for the Vue Stacks Template",
+  "main": "DataTable.vue",
+  "scripts": {
+  },
+  "keywords": [
+	"vue",
+	"data table",
+	"component",
+	"table",
+	"datatable"
+  ],
+  "author": "Garion Berg <garionberg@gmail.com>",
+  "license": "MIT"
+}

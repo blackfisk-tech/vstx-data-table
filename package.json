@@ -26,6 +26,7 @@
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-stage-2": "^6.11.0",
     "babel-runtime": "^6.9.2",
+    "css-loader": "^0.28.7",
     "pug": "^2.0.0-rc.4",
     "pug-loader": "^2.3.0",
     "rimraf": "^2.6.1",
@@ -44,6 +45,7 @@
     "joi-browser": "^10.6.1",
     "lodash": "^4.17.4",
     "md5": "^2.2.1",
-    "store": "^2.0.12"
+    "store": "^2.0.12",
+    "vue-stacks-search-bar": "0.0.3"
   }
 }

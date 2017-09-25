@@ -96,13 +96,13 @@
               //- Sorting
               div.panel-block
                 //- Order By
-                draggable-list(:list="getSortedColumns", @changed.passive="updateOrderBy")
+                //- draggable-list(:list="getSortedColumns", @changed.passive="updateOrderBy")
                   span(slot="slot-title") Order By:&nbsp;&nbsp;
                   template(slot="slot-item", scope="props")
                     div.draggable__level
                       span.label.is-small.orderByItem {{ props.item.name }} {{ props.item.sort.direction }}
                 //- Column Order
-                draggable-list(:list="getDisplayColumns", @changed.passive="updateColumnOrder")
+                //- draggable-list(:list="getDisplayColumns", @changed.passive="updateColumnOrder")
                   span(slot="slot-title") Column Order:&nbsp;&nbsp;
                   template(slot="slot-item", scope="props")
                     div.draggable__level
@@ -169,7 +169,7 @@
               .hero-body.has-text-centered
                 slot(name="error")
                   p.subtitle &nbsp;Loading...&nbsp;
-                    loader-wave-bars(:barCount="parseInt(5)", size="small")
+                    //- loader-wave-bars(:barCount="parseInt(5)", size="small")
         tr(v-if="!isLoading", v-for="(item, i) in getData")
           td.data-table__row(:class="{'borderless': !options.table.cellbordered}", v-if="options.isRanked") {{ (i + 1) + (state.offset * options.pagination.rowsPerPage) }}
           td.data-table__row(v-for="(column, idx) in getDisplayColumns", :class="getColumnAlignment(column)")
@@ -178,9 +178,11 @@
 </template>
 
 <script>
+import DataTableCell from './DataTableCell.vue'
 import { orderBy, sortBy, filter, forEach, throttle, indexOf, differenceWith, isEqual, merge, cloneDeep } from 'lodash'
-import DataTableCell from './DataTableCell'
-import SearchBar from 'vstx-search-bar'
+import SearchBar from 'vue-stacks-search-bar'
+// import LoaderWaveBars from 'vue-stacks-loader-wave-bars'
+// import DraggableList from 'vue-stacks-draggable-list'
 import joi from 'joi'
 import localStore from 'store'
 import md5 from 'md5'
@@ -344,8 +346,8 @@ export default {
   },
   components: {
     'data-table-cell': DataTableCell,
-    'draggable-list': () => import('vstx-draggable-list'),
-    'loader-wave-bars': () => import('vstx-loader-wave-bars'),
+    // 'draggable-list': DraggableList,
+    // 'loader-wave-bars': LoaderWaveBars,
     'vstx-search': SearchBar
   },
   props: {

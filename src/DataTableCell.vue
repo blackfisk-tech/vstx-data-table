@@ -1,32 +1,26 @@
 <template lang="pug">
-  span.data-table-cell
-    slot
-      seller-name( v-if="getColumn['format'] === 'seller'", :id="item[getColumn['field']]", :hasLink="getColumn['hasLink']", :showLogo="getColumn['showLogo']", :link="`${replaceLink(getColumn['link'], getColumn['linkReplaceText'], getColumn['linkReplaceField'])}`" )
-      brand-name( v-else-if="getColumn['format'] === 'brand'", :id="item[getColumn['field']]", :hasLink="getColumn['hasLink']", :showLogo="getColumn['showLogo']", :link="`${replaceLink(getColumn['link'], getColumn['linkReplaceText'], getColumn['linkReplaceField'])}`" )
-      asin-profile( v-else-if="getColumn['format'] === 'product'", :asin="item[getColumn['field']]", :hasLink="getColumn['hasLink']", :showLogo="getColumn['showLogo']" )
-      span(v-else="")
-        div(v-if="getColumn['type'] === 'link' && !edit && item['type'] !== 'total'")
-          a.cell--link(:href="`${replaceLink(getColumn['link'], getColumn['linkReplaceText'], getColumn['linkReplaceField'])}`") {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
-        div.field.is-narrow(v-else-if="editable && edit && item['type'] !== 'total'")
-          input.input(:value.number="item[getColumn['field']]", @input="update")
-        //- Total
-        div.has-text-left(v-else-if="item['type'] === 'total'"): strong {{ applyFilter(item['value'], getColumn['format']) }}
-        template(v-else="")
-          data-table-cell-default(:text="applyFilter(item[getColumn['field']], getColumn['format'])", :maxLength="125")
+span.data-table-cell
+  slot
+    span
+      div(v-if="getColumn['type'] === 'link' && !edit && item['type'] !== 'total'")
+        a.cell--link(:href="replaceLink(getColumn['link'], getColumn['linkReplaceText'], getColumn['linkReplaceField'])") {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
+      div.field.is-narrow(v-else-if="editable && edit && item['type'] !== 'total'")
+        input.input(:value.number="item[getColumn['field']]", @input="update")
+      //- Total
+      div.has-text-left(v-else-if="item['type'] === 'total'"): strong {{ applyFilter(item['value'], getColumn['format']) }}
+      template(v-else="")
+        data-table-cell-default(:text="applyFilter(item[getColumn['field']], getColumn['format'])", :maxLength="125")
 
 </template>
 
 <script>
 import { debounce } from 'lodash'
-import dataTableCellDefault from './dataTableCellDefault'
+import DataTableCellDefault from './DataTableCellDefault.vue'
 
 export default {
   name: 'data-table-cell',
   components: {
-    'seller-name': () => import('../sellerName'),
-    'brand-name': () => import('../brandName'),
-    'asin-profile': () => import('../asinProfile'),
-    'data-table-cell-default': dataTableCellDefault
+    'data-table-cell-default': DataTableCellDefault
   },
   props: {
     column: {

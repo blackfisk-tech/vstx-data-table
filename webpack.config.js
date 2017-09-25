@@ -26,13 +26,13 @@ var config = {
   },
   externals: {
     joi: 'joi',
-    joi-browser: 'joi-browser',
+    joiBrowser: 'joi-browser',
     lodash: 'lodash',
     localStore: 'store',
     md5: 'md5',
-    SearchBar: 'vstx-search-bar',
-    DraggableList: 'vstx-draggable-list',
-    LoaderWaveBars: 'vstx-loader-wave-bars'
+    SearchBar: 'vue-stacks-search-bar',
+    // DraggableList: 'vue-stacks-draggable-list',
+    // LoaderWaveBars: 'vue-stacks-wave-bars'
   },
   plugins: [
     new webpack.optimize.UglifyJsPlugin( {

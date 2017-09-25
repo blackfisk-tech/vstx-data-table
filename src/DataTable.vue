@@ -1,15 +1,5 @@
 <template lang="pug">
-  .data-table(@click.left.passive="hideContextMenu")
-    //- context-menu(v-if="state.context.isVisible && options.context.isAllowed", :x="state.context.x", :y="state.context.y", :id="_uid")
-    //-   template(slot="menuItems", scope="props")
-    //-     a.panel-block.is-active(@click.passive="toggleColumnOptions")
-    //-       span.panel-icon
-    //-         i.fa.fa-columns
-    //-       | Column Settings
-    //-     a.panel-block.is-active(@click.passive="toggleOptions")
-    //-       span.panel-icon
-    //-         i.fa.fa-table
-    //-       | Table Settings
+  .data-table()
     .level.data-table__head
       .level-left
         //- Table Title
@@ -17,7 +7,7 @@
       .level-right
         //- Filter Slot
         slot(name="filter", v-if="options.filter.isAllowed && options.filter.isVisible")
-          v-search(:search="state.search", class="data-table__search", @onSearch="$emit('onSearch', $event)")
+          search-bar(:search="state.search", class="data-table__search", @onSearch="$emit('onSearch', $event)")
         span.label.is-small(v-if="options.totals.isAllowed && options.totals.isVisible.count") {{ this.getPayload.length }} Rows
         a.is-small.data-table__settings(@click.passive="toggleOptions", v-if="options.settings.isAllowed && options.settings.isVisible")
           span.icon
@@ -26,7 +16,7 @@
           span.icon
             i.fa.fa-columns
     //- Controls
-    table.table.is-narrow.is-relative-position(v-if="options.context.isAllowed", v-bind:class="{'is-overflow-hidden': options.settings.overflow, 'is-bordered': options.table.bordered, 'is-striped': options.table.striped}",@contextmenu="onTableClick")
+    table.table.is-narrow.is-relative-position(v-bind:class="{'is-overflow-hidden': options.settings.overflow, 'is-bordered': options.table.bordered, 'is-striped': options.table.striped}")
       //- Settings
       transition(name="slideUp", @after-leave.passive="setOverflow(false)")
         caption.is-overlay(v-if="options.orderBy.isAllowed && options.orderBy.isVisible")
@@ -189,8 +179,8 @@
 
 <script>
 import { orderBy, sortBy, filter, forEach, throttle, indexOf, differenceWith, isEqual, merge, cloneDeep } from 'lodash'
-import dataTableCell from './dataTableCell'
-import vSearch from '../elements/vSearch'
+import DataTableCell from './DataTableCell'
+import SearchBar from 'vstx-search-bar'
 import joi from 'joi'
 import localStore from 'store'
 import md5 from 'md5'
@@ -200,9 +190,6 @@ const defaults = {
   configuration: {
     collapsePages: false,
     isRanked: false,
-    context: {
-      isAllowed: true
-    },
     table: {
       bordered: false,
       striped: false,
@@ -251,9 +238,6 @@ const schemas = {
     schema: joi.object().keys({
       collapsePages: joi.boolean(),
       isRanked: joi.boolean(),
-      context: {
-        isAllowed: joi.boolean()
-      },
       columns: joi.object().keys({
         isVisible: joi.boolean(),
         isAllowed: joi.boolean()
@@ -329,8 +313,8 @@ const schemas = {
 }
 export default {
   name: 'data-table',
-  introduction: 'An awesome data table',
-  description: 'Data Table is pretty neat. It can display just about any data, and is highly configurable.',
+  introduction: 'A data table component for the Vue Stacks Template',
+  description: '',
   token: `data-table-cell()&attributes({:payload: 'payload', :options: 'options'})`,
   created () {
     // Configure
@@ -359,11 +343,10 @@ export default {
     })
   },
   components: {
-    'data-table-cell': dataTableCell,
-    'draggable-list': () => import('../elements/draggableList'),
-    'loader-wave-bars': () => import('../loaders/LoaderWaveBars'),
-    'context-menu': () => import('../contextMenu'),
-    'v-search': vSearch
+    'data-table-cell': DataTableCell,
+    'draggable-list': () => import('vstx-draggable-list'),
+    'loader-wave-bars': () => import('vstx-loader-wave-bars'),
+    'vstx-search': SearchBar
   },
   props: {
     isLoading: {
@@ -435,12 +418,7 @@ export default {
         totals: {},
         offset: this.getConfiguration().settings.offset,
         columns: [],
-        editMode: false,
-        context: {
-          isVisible: false,
-          x: '0px',
-          y: '0px'
-        }
+        editMode: false
       },
       options: this.getConfiguration()
     }
@@ -534,38 +512,11 @@ export default {
     clearLocalSettings () {
       localStore.remove(this.uniqueID)
     },
-    toggleContextMenu (e) {
-      let pageX = e.pageX - 20
-      let pageY = e.pageY - 50
-      if (pageX === undefined) {
-        pageX = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft
-        pageY = e.clientY + document.body.scrollTop + document.documentElement.scrollTop
-      }
-      this.state.context.x = `${pageX}px`
-      this.state.context.y = `${pageY}px`
-      let element = document.getElementById(this._uid)
-      if (element !== null) {
-      } else if (element !== null && element.contains(e.target)) {
-      } else if (e.target !== element) {
-        this.state.context.isVisible = !this.state.context.isVisible
-      }
-      return false
-    },
-    hideContextMenu (e) {
-      // let element = document.getElementById(this._uid)
-      // if (element !== null && !element.contains(e.target)) {
-      //   this.state.context.isVisible = false
-      // }
-      this.state.context.isVisible = false
-    },
     onTableClick (event) {
       let headerRows = document.getElementsByClassName('column__headers')
       let target = event.target
       for (let i = 0; i < headerRows.length; i++) {
         let headerRow = headerRows[i]
-        if (headerRow.contains(target)) {
-          this.toggleContextMenu(event)
-        }
       }
     },
     getDecimalPlaces (num) {
@@ -675,7 +626,6 @@ export default {
       this.options.settings.overflow = boolean
     },
     toggleColumnOptions () {
-      this.hideContextMenu()
       if (this.options.columns.isVisible === true) {
         this.options.columns.isVisible = false
       } else {

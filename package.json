@@ -46,6 +46,7 @@
     "lodash": "^4.17.4",
     "md5": "^2.2.1",
     "store": "^2.0.12",
+    "vstx-loader": "0.0.1",
     "vstx-search-bar": "0.0.1"
   }
 }

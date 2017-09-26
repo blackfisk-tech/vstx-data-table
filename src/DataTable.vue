@@ -169,7 +169,7 @@
               .hero-body.has-text-centered
                 slot(name="error")
                   p.subtitle &nbsp;Loading...&nbsp;
-                    //- loader-wave-bars(:barCount="parseInt(5)", size="small")
+                    loader(:barCount="parseInt(5)", size="small")
         tr(v-if="!isLoading", v-for="(item, i) in getData")
           td.data-table__row(:class="{'borderless': !options.table.cellbordered}", v-if="options.isRanked") {{ (i + 1) + (state.offset * options.pagination.rowsPerPage) }}
           td.data-table__row(v-for="(column, idx) in getDisplayColumns", :class="getColumnAlignment(column)")
@@ -181,8 +181,8 @@
 import DataTableCell from './DataTableCell.vue'
 import { orderBy, sortBy, filter, forEach, throttle, indexOf, differenceWith, isEqual, merge, cloneDeep } from 'lodash'
 import SearchBar from 'vstx-search-bar'
-// import LoaderWaveBars from 'vue-stacks-loader-wave-bars'
-// import DraggableList from 'vue-stacks-draggable-list'
+import Loader from 'vstx-loader'
+// import DraggableList from 'vstx-draggable-list'
 import joi from 'joi'
 import localStore from 'store'
 import md5 from 'md5'
@@ -347,7 +347,7 @@ export default {
   components: {
     'data-table-cell': DataTableCell,
     // 'draggable-list': DraggableList,
-    // 'loader-wave-bars': LoaderWaveBars,
+    'loader': Loader,
     'vstx-search': SearchBar
   },
   props: {

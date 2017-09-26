@@ -96,13 +96,13 @@
               //- Sorting
               div.panel-block
                 //- Order By
-                //- draggable-list(:list="getSortedColumns", @changed.passive="updateOrderBy")
+                draggable-list(:list="getSortedColumns", @changed.passive="updateOrderBy")
                   span(slot="slot-title") Order By:&nbsp;&nbsp;
                   template(slot="slot-item", scope="props")
                     div.draggable__level
                       span.label.is-small.orderByItem {{ props.item.name }} {{ props.item.sort.direction }}
                 //- Column Order
-                //- draggable-list(:list="getDisplayColumns", @changed.passive="updateColumnOrder")
+                draggable-list(:list="getDisplayColumns", @changed.passive="updateColumnOrder")
                   span(slot="slot-title") Column Order:&nbsp;&nbsp;
                   template(slot="slot-item", scope="props")
                     div.draggable__level
@@ -182,7 +182,7 @@ import DataTableCell from './DataTableCell.vue'
 import { orderBy, sortBy, filter, forEach, throttle, indexOf, differenceWith, isEqual, merge, cloneDeep } from 'lodash'
 import SearchBar from 'vstx-search-bar'
 import Loader from 'vstx-loader'
-// import DraggableList from 'vstx-draggable-list'
+import DraggableList from 'vstx-draggable-list'
 import joi from 'joi'
 import localStore from 'store'
 import md5 from 'md5'
@@ -346,7 +346,7 @@ export default {
   },
   components: {
     'data-table-cell': DataTableCell,
-    // 'draggable-list': DraggableList,
+    'draggable-list': DraggableList,
     'loader': Loader,
     'vstx-search': SearchBar
   },

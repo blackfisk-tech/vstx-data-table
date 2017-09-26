@@ -180,7 +180,7 @@
 <script>
 import DataTableCell from './DataTableCell.vue'
 import { orderBy, sortBy, filter, forEach, throttle, indexOf, differenceWith, isEqual, merge, cloneDeep } from 'lodash'
-import SearchBar from 'vue-stacks-search-bar'
+import SearchBar from 'vstx-search-bar'
 // import LoaderWaveBars from 'vue-stacks-loader-wave-bars'
 // import DraggableList from 'vue-stacks-draggable-list'
 import joi from 'joi'

@@ -4,6 +4,8 @@ span.data-table-cell
     span
       div(v-if="getColumn['type'] === 'link' && !edit && item['type'] !== 'total'")
         a.cell--link(:href="replaceLink(getColumn['link'], getColumn['linkReplaceText'], getColumn['linkReplaceField'])") {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
+      div(v-else-if="getColumn['type'] === 'filter'")
+        a.cell--link(@click.prevent="emitFilter(applyFilter(item[getColumn['field']], getColumn['format']))") {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
       div.field.is-narrow(v-else-if="editable && edit && item['type'] !== 'total'")
         input.input(:value.number="item[getColumn['field']]", @input="update")
       //- Total
@@ -58,6 +60,9 @@ export default {
     }
   },
   methods: {
+    emitFilter (search) {
+      this.$emit('onFilter', search)
+    },
     applyFilter (items, name) {
       if (name === undefined || name === null || name === '' || items === '') {
         return items

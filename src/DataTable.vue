@@ -7,7 +7,8 @@
       .level-right
         //- Filter Slot
         slot(name="filter", v-if="options.filter.isAllowed && options.filter.isVisible")
-          search-bar(:search="state.search", class="data-table__search", @onSearch="$emit('onSearch', $event)")
+          vstx-search-bar(v-if="options.filter.isEvent", :search="state.search", class="data-table__search", @onSearch="$emit('onSearch', $event)")
+          vstx-search-bar(v-else="", :search="state.search", class="data-table__search", @onSearch="filter($event.search)")
         span.label.is-small(v-if="options.totals.isAllowed && options.totals.isVisible.count") {{ this.getPayload.length }} Rows
         a.is-small.data-table__settings(@click.passive="toggleOptions", v-if="options.settings.isAllowed && options.settings.isVisible")
           span.icon
@@ -174,12 +175,12 @@
           td.data-table__row(:class="{'borderless': !options.table.cellbordered}", v-if="options.isRanked") {{ (i + 1) + (state.offset * options.pagination.rowsPerPage) }}
           td.data-table__row(v-for="(column, idx) in getDisplayColumns", :class="getColumnAlignment(column)")
             slot(:name="column.field")&attributes({':item': 'item', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
-              data-table-cell()&attributes({':item': 'item', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
+              data-table-cell()&attributes({':item': 'item', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})(@onFilter="filter($event)")
 </template>
 
 <script>
 import DataTableCell from './DataTableCell.vue'
-import { orderBy, sortBy, filter, forEach, throttle, indexOf, differenceWith, isEqual, merge, cloneDeep } from 'lodash'
+import { orderBy, sortBy, filter, forEach, throttle, indexOf, differenceWith, isEqual, merge, cloneDeep, debounce } from 'lodash'
 import SearchBar from 'vstx-search-bar'
 import Loader from 'vstx-loader'
 import DraggableList from 'vstx-draggable-list'
@@ -209,7 +210,8 @@ const defaults = {
     },
     filter: {
       isVisible: false,
-      isAllowed: true
+      isAllowed: true,
+      isEvent: false
     },
     columns: {
       isVisible: false,
@@ -300,6 +302,8 @@ const schemas = {
         link: joi.string(),
         linkReplaceText: joi.string(),
         linkReplaceField: joi.string(),
+        eventName: joi.string(),
+        eventData: joi.any(),
         sort: joi.object().keys({
           isSortable: joi.boolean(),
           direction: joi.string().lowercase().allow('').valid(['asc', 'desc', '']),
@@ -348,7 +352,7 @@ export default {
     'data-table-cell': DataTableCell,
     'draggable-list': DraggableList,
     'loader': Loader,
-    'vstx-search': SearchBar
+    'vstx-search-bar': SearchBar
   },
   props: {
     isLoading: {
@@ -501,12 +505,34 @@ export default {
       // worker.onmessage = (event) => {
       //   console.log('onmessage', event.data)
       // }
-      let sortedData = orderBy(this.getPayload, this.getOrderBy.columns, this.getOrderBy.directions)
+      let data = []
+      if (this.state.search.length) {
+        data = this.state.data
+      } else {
+        data = this.getPayload
+      }
+      let sortedData = orderBy(data, this.getOrderBy.columns, this.getOrderBy.directions)
       sortedData = sortedData.slice(this.state.offset * this.options.pagination.rowsPerPage, this.options.pagination.rowsPerPage + this.state.offset * this.options.pagination.rowsPerPage)
       return sortedData
     }
   },
   methods: {
+    filter: debounce(function(search) {
+      this.state.search = search
+      let newData = filter(this.getPayload, (o) => {
+        let found = false
+        for (let key in o) {
+          if (o[key] !== 'null' && o[key] !== null) {
+            let match = o[key].toString().match(new RegExp(search, 'i'))
+            if( match !== 'null' && match !== null && match.length > 0) {
+              found = true
+            }
+          }
+        }
+        return found
+      })
+      this.state.data = newData
+    }, 275),
     assignUniqueID () {
       let thisHash = md5(this.$parent.$options.name + JSON.stringify(this.state) + JSON.stringify(this.options))
       this.uniqueID = thisHash

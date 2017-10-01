@@ -1,5 +1,11 @@
 <template lang="pug">
-  .data-table()
+  .data-table
+    .data-table__filters__active(v-if="state.search.length",style="padding-bottom:10px;") 
+      nav.breadcrumb(aria-label="filters")
+        ul
+          li Filtering by:&nbsp;&nbsp;
+            span.tag.is-primary {{ state.search }}
+              button(class="delete is-small", @click="filterClear")
     .level.data-table__head
       .level-left
         //- Table Title
@@ -7,8 +13,8 @@
       .level-right
         //- Filter Slot
         slot(name="filter", v-if="options.filter.isAllowed && options.filter.isVisible")
-          vstx-search-bar(v-if="options.filter.isEvent", :search="state.search", class="data-table__search", @onSearch="$emit('onSearch', $event)")
-          vstx-search-bar(v-else="", :search="state.search", class="data-table__search", @onSearch="filter($event.search)")
+          vstx-search-bar.data-table__search(v-if="options.filter.isEvent", :value="state.search", :search="state.search", @onSearch="$emit('onSearch', $event)")
+          vstx-search-bar.data-table__search(v-else="", :value="state.search", :search="state.search", @onSearch="filter($event)")
         span.label.is-small(v-if="options.totals.isAllowed && options.totals.isVisible.count") {{ this.getPayload.length }} Rows
         a.is-small.data-table__settings(@click.passive="toggleOptions", v-if="options.settings.isAllowed && options.settings.isVisible")
           span.icon
@@ -452,7 +458,13 @@ export default {
       return sortedCols
     },
     getPagination () {
-      let totalPages = Math.round(this.getPayload.length / this.options.pagination.rowsPerPage)
+      let data = []
+      if (this.state.search.length) {
+        data = this.state.data
+      } else {
+        data = this.getPayload
+      }
+      let totalPages = Math.round(data.length / this.options.pagination.rowsPerPage)
       let returnData = []
       let min = (this.state.offset - 4 < 0 ? 0 : this.state.offset - 4)
       let max = min + 10
@@ -517,22 +529,38 @@ export default {
     }
   },
   methods: {
-    filter: debounce(function(search) {
-      this.state.search = search
-      let newData = filter(this.getPayload, (o) => {
-        let found = false
-        for (let key in o) {
-          if (o[key] !== 'null' && o[key] !== null) {
-            let match = o[key].toString().match(new RegExp(search, 'i'))
-            if( match !== 'null' && match !== null && match.length > 0) {
-              found = true
+    filter: debounce(function(event = {}) {
+      if (event.hasOwnProperty('search') && typeof event.search !== 'undefined' ) {
+        this.state.search = event.search
+        let newData = filter(this.getPayload, (o) => {
+          let found = false
+          for (let key in o) {
+            if (event.hasOwnProperty('column') && event.column.length) {
+              if (key === event.column) {
+                if (o[key] !== 'null' && o[key] !== null) {
+                  let match = o[key].toString().match(new RegExp(event.search, 'i'))
+                  if( match !== 'null' && match !== null && match.length > 0) {
+                    found = true
+                  }
+                }
+              }
+            } else {
+              if (o[key] !== 'null' && o[key] !== null) {
+                let match = o[key].toString().match(new RegExp(event.search, 'i'))
+                if( match !== 'null' && match !== null && match.length > 0) {
+                  found = true
+                }
+              }
             }
           }
-        }
-        return found
-      })
-      this.state.data = newData
+          return found
+        })
+        this.state.data = newData
+      }
     }, 275),
+    filterClear () {
+      this.state.search = ""
+    },
     assignUniqueID () {
       let thisHash = md5(this.$parent.$options.name + JSON.stringify(this.state) + JSON.stringify(this.options))
       this.uniqueID = thisHash

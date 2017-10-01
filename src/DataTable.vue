@@ -175,7 +175,7 @@
           td.data-table__row(:class="{'borderless': !options.table.cellbordered}", v-if="options.isRanked") {{ (i + 1) + (state.offset * options.pagination.rowsPerPage) }}
           td.data-table__row(v-for="(column, idx) in getDisplayColumns", :class="getColumnAlignment(column)")
             slot(:name="column.field")&attributes({':item': 'item', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
-              data-table-cell()&attributes({':item': 'item', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})(@onFilter="filter($event)")
+              data-table-cell()&attributes({'@onFilter': 'filter($event)', ':item': 'item', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
 </template>
 
 <script>

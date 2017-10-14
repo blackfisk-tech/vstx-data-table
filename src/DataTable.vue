@@ -15,7 +15,7 @@
         slot(name="filter", v-if="options.filter.isAllowed && options.filter.isVisible")
           vstx-search-bar.data-table__search(v-if="options.filter.isEvent", :value="state.search", :search="state.search", @onSearch="$emit('onSearch', $event)")
           vstx-search-bar.data-table__search(v-else="", :value="state.search", :search="state.search", @onSearch="filter($event)")
-        span.label.is-small(v-if="options.totals.isAllowed && options.totals.isVisible.count") {{ this.getPayload.length }} Rows
+        span.label.is-small(v-if="options.totals.isAllowed && options.totals.isVisible.count") {{ getRowCount }} Rows
         a.is-small.data-table__settings(@click.passive="toggleOptions", v-if="options.settings.isAllowed && options.settings.isVisible")
           span.icon
             i.fa.fa-table
@@ -436,6 +436,13 @@ export default {
     }
   },
   computed: {
+    getRowCount () {
+      if (this.state.search.length) {
+        return this.state.data.length
+      } else {
+        return this.payload.length
+      }
+    },
     getPayload () {
       if (this.payload.length > 0) {
         this.configure()
@@ -531,6 +538,7 @@ export default {
   methods: {
     filter: debounce(function(event = {}) {
       if (event.hasOwnProperty('search') && typeof event.search !== 'undefined' ) {
+        this.state.offset = 0
         this.state.search = event.search
         let newData = filter(this.getPayload, (o) => {
           let found = false

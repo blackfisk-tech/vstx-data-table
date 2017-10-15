@@ -44,7 +44,7 @@
                   //- Clear Saved State
                   a.is-warning.button.is-small.options__clearState(@click.passive="clearLocalSettings")
                     span.icon.is-small
-                      i.fa.fa-remove
+                      i.fa.fa-times
                   //- Add Columns
                   a.is-success.button.is-small.options__addColumn(@click.passive="toggleOptions")
                     span.icon.is-small
@@ -106,13 +106,13 @@
                 draggable-list(:list="getSortedColumns", @changed.passive="updateOrderBy")
                   span(slot="slot-title") Order By:&nbsp;&nbsp;
                   template(slot="slot-item", slot-scope="props")
-                    div.draggable__level
+                    div.draggable__level(v-if="props !== null")
                       span.label.is-small.orderByItem {{ props.item.name }} {{ props.item.sort.direction }}
                 //- Column Order
                 draggable-list(:list="getDisplayColumns", @changed.passive="updateColumnOrder")
                   span(slot="slot-title") Column Order:&nbsp;&nbsp;
                   template(slot="slot-item", slot-scope="props")
-                    div.draggable__level
+                    div.draggable__level(v-if="props !== null")
                       span.label.is-small.orderByItem {{ props.item.name }}
 
       thead

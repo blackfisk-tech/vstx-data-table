@@ -1,6 +1,6 @@
 {
   "name": "vstx-data-table",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Data table component for the Vue Stacks Template",
   "main": "dist/vstx-data-table.js",
   "scripts": {

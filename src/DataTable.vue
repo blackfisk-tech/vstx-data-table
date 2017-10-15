@@ -105,13 +105,13 @@
                 //- Order By
                 draggable-list(:list="getSortedColumns", @changed.passive="updateOrderBy")
                   span(slot="slot-title") Order By:&nbsp;&nbsp;
-                  template(slot="slot-item", scope="props")
+                  template(slot="slot-item", slot-scope="props")
                     div.draggable__level
                       span.label.is-small.orderByItem {{ props.item.name }} {{ props.item.sort.direction }}
                 //- Column Order
                 draggable-list(:list="getDisplayColumns", @changed.passive="updateColumnOrder")
                   span(slot="slot-title") Column Order:&nbsp;&nbsp;
-                  template(slot="slot-item", scope="props")
+                  template(slot="slot-item", slot-scope="props")
                     div.draggable__level
                       span.label.is-small.orderByItem {{ props.item.name }}
 

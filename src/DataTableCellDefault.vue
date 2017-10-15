@@ -18,8 +18,10 @@ export default {
     getText () {
       if (this.isHovered) {
         return this.text
-      } else {
+      } else if (this.text !== null) {
         return (this.text.length > this.maxLength ? `${this.text.substring(0, this.maxLength)}...` : this.text)
+      } else {
+        return ''
       }
     }
   },

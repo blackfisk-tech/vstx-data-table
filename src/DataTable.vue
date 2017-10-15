@@ -400,6 +400,11 @@ export default {
           return err ? () => { throw err } : true
         })
       }
+    },
+    id: {
+      note: '',
+      type: String,
+      default: () => { return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) }
     }
   },
   watch: {
@@ -570,7 +575,8 @@ export default {
       this.state.search = ""
     },
     assignUniqueID () {
-      let thisHash = md5(this.$parent.$options.name + JSON.stringify(this.state) + JSON.stringify(this.options))
+      // let thisHash = md5(this.$parent.$options.name + JSON.stringify(this.state) + JSON.stringify(this.options))
+      let thisHash = md5(`${this.id}`)
       this.uniqueID = thisHash
     },
     clearLocalSettings () {

@@ -3,15 +3,17 @@
 </template>
 
 <script>
+import {delay} from 'lodash'
 export default {
   name: 'data-table-cell-default',
   props: {
-    text: [String, Number],
+    text: [String, Number, Object],
     maxLength: Number
   },
   data () {
     return {
-      isHovered: false
+      isHovered: false,
+      timer: ''
     }
   },
   computed: {
@@ -27,9 +29,12 @@ export default {
   },
   methods: {
     expandText () {
-      this.isHovered = true
+      this.timer = delay(() => {
+        this.isHovered = true
+      }, 250)
     },
     shrinkText () {
+      clearTimeout(this.timer)
       this.isHovered = false
     }
   }

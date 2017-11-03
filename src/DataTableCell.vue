@@ -2,10 +2,19 @@
 span.data-table-cell
   slot
     span
+      //- Link
       div(v-if="getColumn['type'] === 'link' && !edit && item['type'] !== 'total'")
         a.cell--link(:href="replaceLink(getColumn['link'], getColumn['linkReplaceText'], getColumn['linkReplaceField'])") {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
+      //- Filter
       div(v-else-if="getColumn['type'] === 'filter'")
         a.cell--link(@click.prevent="emitFilter(applyFilter(item[getColumn['field']], getColumn['format']), getColumn['field'])") {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
+      //- Hover/Click Events
+      div(v-else-if="getColumn['type'] === 'event'")
+        a.cell--link(
+          @hover.prevent="getColumn['onHover'] === true ? emitEvent(item[getColumn['eventName']], item[getColumn['eventPayload']], item[getColumn['eventBus']]) : ''",
+          @click.prevent="getColumn['onClick'] === true ? emitEvent(item[getColumn['eventName']], item[getColumn['eventPayload']], item[getColumn['eventBus']]) : ''"
+        ) {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
+      //- Editable Total
       div.field.is-narrow(v-else-if="editable && edit && item['type'] !== 'total'")
         input.input(:value.number="item[getColumn['field']]", @input="update")
       //- Total
@@ -60,6 +69,15 @@ export default {
     }
   },
   methods: {
+    emitEvent (eventName = '', eventPayload = {}, eventBus = false) {
+      if (eventName.length) {
+        if (eventBus) {
+          this.$bus.$emit(eventName, eventPayload)
+        } else {
+          this.$emit(eventName, eventPayload)
+        }
+      }
+    },
     emitFilter (search, column) {
       this.$emit('onFilter', {
         search,

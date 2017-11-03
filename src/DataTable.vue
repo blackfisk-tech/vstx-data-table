@@ -119,7 +119,7 @@
         //- Header
         tr.column__headers
           th(v-if="options.isRanked") #
-          th.column__header(v-for="(column, idx) in getDisplayColumns", :class="getColumnAlignment(column)", style="position:relative;")
+          th.column__header(v-for="(column, idx) in getDisplayColumns", :key="`table-header-${idx}`", :class="getColumnAlignment(column)", style="position:relative;")
             div
               span(v-if="column['sort']['isSortable']")
                 a(@click.passive="toggleSortDirection(column['field'])") {{ column['name'] }}&nbsp;
@@ -151,14 +151,14 @@
         //- Top Totals
         tr.data-table__total-row(v-if="options.totals.isVisible.all && getData.length > 0")
           td.data-table__row(v-if="options.isRanked"): strong Totals
-          td.data-table__row(v-for="(column, idx) in getDisplayColumns", :class="column['align'] === 'Left' ? 'has-text-left' : 'has-text-right'")
+          td.data-table__row(v-for="(column, idx) in getDisplayColumns", :key="`table-total-top-${idx}`", :class="column['align'] === 'Left' ? 'has-text-left' : 'has-text-right'")
             data-table-cell(v-if="column['format'] !== 'seller' && column['format'] !== 'brand' && column['format'] !== 'product'", :column="column", :item="state.totals[column['field']]", :edit="false", :editable="false")
             div(v-else="")
       tfoot
         //- Bottom Totals
         tr.data-table__total-row(v-if="options.totals.isVisible.page && getData.length > 0")
           td.data-table__row(v-if="options.isRanked"): strong Page Totals
-          td.data-table__row(v-for="(column, idx) in getDisplayColumns", :class="column['align'] === 'Left' ? 'has-text-left' : 'has-text-right'")
+          td.data-table__row(v-for="(column, idx) in getDisplayColumns", :key="`table-total-bottom-${idx}`", :class="column['align'] === 'Left' ? 'has-text-left' : 'has-text-right'")
             data-table-cell(v-if="column['format'] !== 'seller' && column['format'] !== 'brand' && column['format'] !== 'product'", :column="column", :item="getColumnTotal(column, 'page')", :edit="false", :editable="false")
             div(v-else="")
         //- Pagination
@@ -168,7 +168,7 @@
               a.pagination-previous(@click.passive="pageBack",:disabled="state.offset - 1 >= 0 ? false : true"): i.fa.fa-angle-left
               a.pagination-next(@click.passive="pageForward",:disabled="state.offset + 1 < getPagination[getPagination.length - 1] ? false : true"): i.fa.fa-angle-right
               ul.pagination-list.data-table__pagination-list
-                li(class="data-table__pagination-list-item",v-for="i in getPagination"): a(v-bind:class="{'pagination-ellipsis':isNaN(i),'pagination-link':!isNaN(i),'is-current': i - 1 === state.offset ? true : false}" @click.passive="state.offset = i - 1") {{ i }}
+                li(class="data-table__pagination-list-item",v-for="i in getPagination", :key="`table-pagination-${i}`"): a(v-bind:class="{'pagination-ellipsis':isNaN(i),'pagination-link':!isNaN(i),'is-current': i - 1 === state.offset ? true : false}" @click.passive="state.offset = i - 1") {{ i }}
       tbody
         tr(v-if="getData.length === 0 || isLoading")
           td(:colspan="getColspan")
@@ -177,11 +177,11 @@
                 slot(name="error")
                   p.subtitle &nbsp;Loading...&nbsp;
                     loader(:barCount="parseInt(5)", size="small")
-        tr(v-if="!isLoading", v-for="(item, i) in getData")
+        tr(v-if="!isLoading", v-for="(item, i) in getData", :key="`table-row-${i}`")
           td.data-table__row(:class="{'borderless': !options.table.cellbordered}", v-if="options.isRanked") {{ (i + 1) + (state.offset * options.pagination.rowsPerPage) }}
-          td.data-table__row(v-for="(column, idx) in getDisplayColumns", :class="getColumnAlignment(column)")
-            slot(:name="column.field")&attributes({':item': 'item', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
-              data-table-cell()&attributes({'@onFilter': 'filter($event)', ':item': 'item', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
+          td.data-table__row(v-for="(column, idx) in getDisplayColumns", :key="`table-column-${idx}`", :class="getColumnAlignment(column)")
+            slot(:name="column.field")&attributes({':item': 'item', ':index': 'i', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
+              data-table-cell()&attributes({'@onFilter': 'filter($event)', ':item': 'item', ':index': 'i', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
 </template>
 
 <script>

@@ -943,10 +943,6 @@ export default {
     height 1rem
     top 6px
     left 6px
-  .table.is-striped tbody tr:not(.is-selected):nth-child(even):hover
-    background-color: hsla(0,0,0,.10)
-  .table.is-striped tbody tr:not(.is-selected):nth-child(odd):hover
-    background-color: hsla(0,0,0,.10)
   // Animation CSS
   .slideUp-enter-active
     animation fadeInUp .125s

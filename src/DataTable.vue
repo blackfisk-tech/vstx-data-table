@@ -23,7 +23,7 @@
           span.icon
             i.fa.fa-columns
     //- Controls
-    table.table.is-narrow.is-relative-position(v-bind:class="{'is-overflow-hidden': options.settings.overflow, 'is-bordered': options.table.bordered, 'is-striped': options.table.striped}")
+    table.table.is-narrow.is-relative-position(v-bind:class="{'is-overflow-hidden': options.settings.overflow, 'is-bordered': options.table.bordered, 'is-striped': options.table.striped, 'is-hoverable': options.table.hoverable, 'is-fullwidth': options.table.fullwidth}")
       //- Settings
       transition(name="slideUp", @after-leave.passive="setOverflow(false)")
         caption.is-overlay(v-if="options.orderBy.isAllowed && options.orderBy.isVisible")

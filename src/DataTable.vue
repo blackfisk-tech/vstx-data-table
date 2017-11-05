@@ -34,21 +34,31 @@
                 span Table Settings&nbsp;
                 span.is-pulled-right
                   //- Edit
-                  a.button.is-small.options__edit(@click.passive="state.editMode = !state.editMode")
-                    i.fa.fa-edit
+                  //- a.button.is-small.options__edit(@click.passive="state.editMode = !state.editMode")
+                  //-   i.fa.fa-edit
                   //- Save
-                  a.button.is-small.options__save(@click.passive="saveEdits", v-if="state.editMode")
-                    span.icon
-                      i.fa.fa-download
+                  //- a.button.is-small.options__save(@click.passive="saveEdits", v-if="state.editMode")
+                  //-   span.icon
+                  //-     i.fa.fa-download
                     | &nbsp;&nbsp;Save Changes
                   //- Clear Saved State
-                  a.is-warning.button.is-small.options__clearState(@click.passive="clearLocalSettings")
+                  //- a.is-warning.button.is-small.options__clearState(title="Clear Custom Settings", @click.passive="clearLocalSettings")
+                  //-   span.icon.is-small
+                  //-     i.fa.fa-times
+                  //- Clear Saved State
+                  //- a.is-warning.button.is-small.options__clearState(title="Remove Sorts", @click.passive="unsort")
+                  //-   span.icon.is-small
+                  //-     i.fa.fa-times
+
+                  //- Close Options
+                  a.is-danger.button.is-small.options__toggleOptions(title="Close Options", @click.passive="toggleOptions")
                     span.icon.is-small
                       i.fa.fa-times
+
                   //- Add Columns
-                  a.is-success.button.is-small.options__addColumn(@click.passive="toggleOptions")
-                    span.icon.is-small
-                      i.fa.fa-columns
+                  //- a.is-success.button.is-small.options__addColumn(@click.passive="toggleOptions")
+                  //-   span.icon.is-small
+                  //-     i.fa.fa-columns
               //- Totals
               div.panel-block
                 .columns.is-multiline
@@ -62,6 +72,7 @@
                             option(value="25") 25 Rows Per Page
                             option(value="50") 50 Rows Per Page
                             option(value="100") 100 Rows Per Page
+                            option(:value="options.pagination.rowsPerPage") {{ options.pagination.rowsPerPage }} Rows Per Page
                         span.icon.is-small.is-left
                           i.fa.fa-list
                   //- All
@@ -102,18 +113,36 @@
                         | Show Row Count
               //- Sorting
               div.panel-block
-                //- Order By
-                draggable-list(:list="getSortedColumns", @changed.passive="updateOrderBy")
-                  span(slot="slot-title") Order By:&nbsp;&nbsp;
-                  template(slot="slot-item", slot-scope="props")
-                    div.draggable__level(v-if="props !== null")
-                      span.label.is-small.orderByItem {{ props.item.name }} {{ props.item.sort.direction }}
-                //- Column Order
-                draggable-list(:list="getDisplayColumns", @changed.passive="updateColumnOrder")
-                  span(slot="slot-title") Column Order:&nbsp;&nbsp;
-                  template(slot="slot-item", slot-scope="props")
-                    div.draggable__level(v-if="props !== null")
-                      span.label.is-small.orderByItem {{ props.item.name }}
+                .level
+                  .level-item
+                    //- Order By
+                    draggable-list(:list="getSortedColumns", @changed.passive="updateOrderBy")
+                      span(slot="slot-title") Order By:&nbsp;&nbsp;
+                      template(slot="slot-item", slot-scope="props")
+                        div.draggable__level(v-if="props !== null")
+                          span.label.is-small.orderByItem {{ props.item.name }} {{ props.item.sort.direction }}
+                  .level-item
+                    //- Column Order
+                    draggable-list(:list="getDisplayColumns", @changed.passive="updateColumnOrder")
+                      span(slot="slot-title") Column Order:&nbsp;&nbsp;
+                      template(slot="slot-item", slot-scope="props")
+                        div.draggable__level(v-if="props !== null")
+                          span.label.is-small.orderByItem {{ props.item.name }}
+                  .level-item
+                    div
+                      //- Clear Saved State
+                      div
+                        a.is-default.button.is-small.options__clearState(title="Clear Custom Settings", @click.passive="clearLocalSettings")
+                          span.icon.is-small
+                            i.fa.fa-times
+                          span Reset Options
+                      br
+                      //- Remove Sorting
+                      div
+                        a.is-default.button.is-small.options__clearState(title="Remove Sorts", @click.passive="unsort")
+                          span.icon.is-small
+                            i.fa.fa-times
+                          span Remove Sorting
 
       thead
         //- Header
@@ -128,7 +157,7 @@
               span(v-else="") {{ column['name'] }}&nbsp;
             //- Column Settings
             .column__settings(v-if="options.columns.isAllowed && options.columns.isVisible")
-              label.subtitle.is-6 Format:
+              label.is-6 Format:
               .field.is-grouped.data-table__field.data-table__rowsPerPage
                 p.control.has-icons-left
                   span.select.is-small
@@ -137,14 +166,12 @@
                       option(value="formatMoney")  Money
                       option(value="formatPercent")  Percent
                       option(value="formatString")  String
-                      option(value="seller") Seller
-                      option(value="brand") Brand
-                      option(value="asin") ASIN
+                      option(value="formatDate")  Date
                   span.icon.is-small.is-left
                     i.fa.fa-wrench
               .field.data-table__field
                 div.control
-                  label.subtitle.is-6(class="checkbox")
+                  label.is-6(class="checkbox")
                     input(type="checkbox", v-model="column['sort']['isSortable']")
                     | &nbsp;Sortable
 
@@ -202,7 +229,10 @@ const defaults = {
     table: {
       bordered: false,
       striped: false,
-      cellbordered: false
+      cellbordered: false,
+      overflow: false,
+      hoverable: true,
+      fullwidth: true
     },
     settings: {
       overflow: false,
@@ -541,8 +571,8 @@ export default {
     }
   },
   methods: {
-    filter: debounce(function(event = {}) {
-      if (event.hasOwnProperty('search') && typeof event.search !== 'undefined' ) {
+    filter: debounce(function (event = {}) {
+      if (event.hasOwnProperty('search') && typeof event.search !== 'undefined') {
         this.state.offset = 0
         this.state.search = event.search
         let newData = filter(this.getPayload, (o) => {
@@ -552,7 +582,7 @@ export default {
               if (key === event.column) {
                 if (o[key] !== 'null' && o[key] !== null) {
                   let match = o[key].toString().match(new RegExp(event.search, 'i'))
-                  if( match !== 'null' && match !== null && match.length > 0) {
+                  if (match !== 'null' && match !== null && match.length > 0) {
                     found = true
                   }
                 }
@@ -560,7 +590,7 @@ export default {
             } else {
               if (o[key] !== 'null' && o[key] !== null) {
                 let match = o[key].toString().match(new RegExp(event.search, 'i'))
-                if( match !== 'null' && match !== null && match.length > 0) {
+                if (match !== 'null' && match !== null && match.length > 0) {
                   found = true
                 }
               }
@@ -572,7 +602,7 @@ export default {
       }
     }, 275),
     filterClear () {
-      this.state.search = ""
+      this.state.search = ''
     },
     assignUniqueID () {
       // let thisHash = md5(this.$parent.$options.name + JSON.stringify(this.state) + JSON.stringify(this.options))
@@ -582,13 +612,18 @@ export default {
     clearLocalSettings () {
       localStore.remove(this.uniqueID)
     },
-    onTableClick (event) {
-      let headerRows = document.getElementsByClassName('column__headers')
-      let target = event.target
-      for (let i = 0; i < headerRows.length; i++) {
-        let headerRow = headerRows[i]
-      }
+    unsort () {
+      forEach(this.getSortedColumns, (value) => {
+        value.sort.direction = ''
+      })
     },
+    // onTableClick (event) {
+    //   let headerRows = document.getElementsByClassName('column__headers')
+    //   let target = event.target
+    //   for (let i = 0; i < headerRows.length; i++) {
+    //     let headerRow = headerRows[i]
+    //   }
+    // },
     getDecimalPlaces (num) {
       var match = ('' + num).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/)
       if (!match) {
@@ -867,6 +902,7 @@ export default {
     padding 5px
     border-bottom: 1px solid #eeeeee
     box-shadow: 3px 3px 2px 0px rgba(0,0,0,0.15)
+    z-index 999999
   .column__headers
     white-space: nowrap
   .inline-block

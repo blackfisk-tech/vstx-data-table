@@ -72,6 +72,7 @@
                             option(value="25") 25 Rows Per Page
                             option(value="50") 50 Rows Per Page
                             option(value="100") 100 Rows Per Page
+                            option(value="250") 250 Rows Per Page
                             option(:value="options.pagination.rowsPerPage") {{ options.pagination.rowsPerPage }} Rows Per Page
                         span.icon.is-small.is-left
                           i.fa.fa-list

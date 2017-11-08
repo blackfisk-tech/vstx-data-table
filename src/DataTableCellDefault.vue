@@ -7,13 +7,16 @@ import {delay} from 'lodash'
 export default {
   name: 'data-table-cell-default',
   props: {
-    text: [String, Number, Object],
+    text: {
+      required: true
+    },
     maxLength: Number
   },
   data () {
     return {
       isHovered: false,
-      timer: ''
+      mouseInTimer: '',
+      mouseOutTimer: ''
     }
   },
   computed: {
@@ -29,13 +32,15 @@ export default {
   },
   methods: {
     expandText () {
-      this.timer = delay(() => {
+      this.mouseInTimer = delay(() => {
         this.isHovered = true
       }, 250)
     },
     shrinkText () {
-      clearTimeout(this.timer)
-      this.isHovered = false
+      this.mouseOutTimer = delay(() => {
+        clearTimeout(this.mouseInTimer)
+        this.isHovered = false
+      }, 750)
     }
   }
 }

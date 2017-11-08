@@ -4,7 +4,7 @@ span.data-table-cell
     span
       //- Link
       div(v-if="getColumn['type'] === 'link' && !edit && item['type'] !== 'total'")
-        a.cell--link(:href="replaceLink(getColumn['link'], getColumn['linkReplaceText'], getColumn['linkReplaceField'])") {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
+        a.cell--link(:href="replaceLink(getColumn['link'], getColumn['linkReplaceText'], getColumn['linkReplaceField'])", :target="getColumn['target']") {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
       //- Filter
       div(v-else-if="getColumn['type'] === 'filter'")
         a.cell--link(@click.prevent="emitFilter(applyFilter(item[getColumn['field']], getColumn['format']), getColumn['field'])") {{ applyFilter(item[getColumn['field']], getColumn['format']) }}

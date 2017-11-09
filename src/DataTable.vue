@@ -214,17 +214,38 @@
           td.data-table__row(v-for="(column, idx) in getDisplayColumns", :key="`table-column-${idx}`", :class="getColumnAlignment(column)")
             slot(:name="column.field")&attributes({':item': 'item', ':index': 'i', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
               data-table-cell()&attributes({'@onFilter': 'filter($event)', ':item': 'item', ':index': 'i', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
+    .level
+      .level-left
+
+      .level-right
+        a(@click.prevent="downloadCSV(getData, filename)") 
+          span.icon
+            i.fa.fa-download
+          | Download as CSV
 </template>
 
 <script>
 import DataTableCell from './DataTableCell.vue'
-import { orderBy, sortBy, filter, forEach, throttle, indexOf, differenceWith, isEqual, merge, cloneDeep, debounce } from 'lodash'
+import {
+  orderBy,
+  sortBy,
+  filter,
+  forEach,
+  throttle,
+  indexOf,
+  differenceWith,
+  isEqual,
+  merge,
+  cloneDeep,
+  debounce
+} from 'lodash'
 import SearchBar from 'vstx-search-bar'
 import Loader from 'vstx-loader'
 import DraggableList from 'vstx-draggable-list'
 import joi from 'joi'
 import localStore from 'store'
 import md5 from 'md5'
+import { downloadCSV } from './downloadCSV'
 
 // The defaults should be set here so they can used for the merge function and the prop defaults.
 const defaults = {
@@ -237,7 +258,8 @@ const defaults = {
       cellbordered: false,
       overflow: false,
       hoverable: true,
-      fullwidth: true
+      fullwidth: true,
+      filename: ''
     },
     settings: {
       overflow: false,
@@ -395,11 +417,17 @@ export default {
     'loader': Loader,
     'vstx-search-bar': SearchBar
   },
+  mixins: [downloadCSV],
   props: {
     isLoading: {
       type: Boolean,
       required: false,
       default: false
+    },
+    filename: {
+      type: String,
+      required: false,
+      default: `export-${new Date().toISOString().split('T')[0]}.csv`
     },
     payload: {
       note: 'An Array of Objects of the DATA__ROW class.',

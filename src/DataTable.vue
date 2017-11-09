@@ -8,7 +8,6 @@
               button(class="delete is-small", @click="filterClear")
     .level.data-table__head
       .level-left
-        span {{ getRawData.length }}
         //- Table Title
         slot(name="slot-title")
       .level-right

@@ -8,6 +8,7 @@
               button(class="delete is-small", @click="filterClear")
     .level.data-table__head
       .level-left
+        span {{ getRawData.length }}
         //- Table Title
         slot(name="slot-title")
       .level-right
@@ -28,7 +29,7 @@
           span.icon
             i.fa.fa-sort
         //- Download CSV
-        a.is-small.data-table__download-csv(title="Download as CSV", @click.passive="downloadCSV(getData, filename)", v-if="options.settings.isAllowed && options.settings.isVisible && getData.length")
+        a.is-small.data-table__download-csv(title="Download as CSV", @click.passive="downloadCSV(getRawData, filename)", v-if="options.settings.isAllowed && options.settings.isVisible && getData.length")
           span.icon
             i.fa.fa-download
     //- Controls
@@ -599,6 +600,16 @@ export default {
       }
       let sortedData = orderBy(data, this.getOrderBy.columns, this.getOrderBy.directions)
       sortedData = sortedData.slice(this.state.offset * this.options.pagination.rowsPerPage, this.options.pagination.rowsPerPage + this.state.offset * this.options.pagination.rowsPerPage)
+      return sortedData
+    },
+    getRawData () {
+      let data = []
+      if (this.state.search.length) {
+        data = this.state.data
+      } else {
+        data = this.getPayload
+      }
+      let sortedData = orderBy(data, this.getOrderBy.columns, this.getOrderBy.directions)
       return sortedData
     }
   },

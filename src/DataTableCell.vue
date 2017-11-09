@@ -18,7 +18,7 @@ span.data-table-cell
       div.field.is-narrow(v-else-if="editable && edit && item['type'] !== 'total'")
         input.input(:value.number="item[getColumn['field']]", @input="update")
       //- Total
-      div.has-text-left(v-else-if="item['type'] === 'total'"): strong {{ applyFilter(item['value'], getColumn['format']) }}
+      div(v-else-if="item['type'] === 'total'"): strong {{ applyFilter(item['value'], getColumn['format']) }}
       template(v-else="")
         data-table-cell-default(:text="applyFilter(item[getColumn['field']], getColumn['format'])", :maxLength="125")
 

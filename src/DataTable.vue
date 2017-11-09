@@ -16,12 +16,17 @@
           vstx-search-bar.data-table__search(v-if="options.filter.isEvent", :value="state.search", :search="state.search", @onSearch="$emit('onSearch', $event)")
           vstx-search-bar.data-table__search(v-else="", :value="state.search", :search="state.search", @onSearch="filter($event)")
         span.label.is-small(v-if="options.totals.isAllowed && options.totals.isVisible.count") {{ getRowCount }} Rows
-        a.is-small.data-table__settings(@click.passive="toggleOptions", v-if="options.settings.isAllowed && options.settings.isVisible")
+        a.is-small.data-table__settings(title="Table Settings", @click.passive="toggleOptions", v-if="options.settings.isAllowed && options.settings.isVisible")
           span.icon
             i.fa.fa-table
-        a.is-small.data-table__settings(@click.passive="toggleColumnOptions", v-if="options.settings.isAllowed && options.settings.isVisible && options.columns.isAllowed")
+        //- Column Settings
+        a.is-small.data-table__column-settings(title="Column Settings", @click.passive="toggleColumnOptions", v-if="options.settings.isAllowed && options.settings.isVisible && options.columns.isAllowed")
           span.icon
             i.fa.fa-columns
+        //- Clear Sort
+        a.is-small.data-table__clear-sorts(title="Remove All Column Sorting", @click.passive="unsort", v-if="options.settings.isAllowed && options.settings.isVisible")
+          span.icon
+            i.fa.fa-sort
     //- Controls
     table.table.is-narrow.is-relative-position(v-bind:class="{'is-overflow-hidden': options.settings.overflow, 'is-bordered': options.table.bordered, 'is-striped': options.table.striped, 'is-hoverable': options.table.hoverable, 'is-fullwidth': options.table.fullwidth}")
       //- Settings
@@ -175,18 +180,17 @@
                   label.is-6(class="checkbox")
                     input(type="checkbox", v-model="column['sort']['isSortable']")
                     | &nbsp;Sortable
-
         //- Top Totals
         tr.data-table__total-row(v-if="options.totals.isVisible.all && getData.length > 0")
           td.data-table__row(v-if="options.isRanked"): strong Totals
-          td.data-table__row(v-for="(column, idx) in getDisplayColumns", :key="`table-total-top-${idx}`", :class="column['align'] === 'Left' ? 'has-text-left' : 'has-text-right'")
+          td.data-table__row(v-for="(column, idx) in getDisplayColumns", :key="`table-total-top-${idx}`", :class="getColumnAlignment(column)")
             data-table-cell(v-if="column['format'] !== 'seller' && column['format'] !== 'brand' && column['format'] !== 'product'", :column="column", :item="state.totals[column['field']]", :edit="false", :editable="false")
             div(v-else="")
       tfoot
         //- Bottom Totals
         tr.data-table__total-row(v-if="options.totals.isVisible.page && getData.length > 0")
           td.data-table__row(v-if="options.isRanked"): strong Page Totals
-          td.data-table__row(v-for="(column, idx) in getDisplayColumns", :key="`table-total-bottom-${idx}`", :class="column['align'] === 'Left' ? 'has-text-left' : 'has-text-right'")
+          td.data-table__row(v-for="(column, idx) in getDisplayColumns", :key="`table-total-bottom-${idx}`", :class="getColumnAlignment(column)")
             data-table-cell(v-if="column['format'] !== 'seller' && column['format'] !== 'brand' && column['format'] !== 'product'", :column="column", :item="getColumnTotal(column, 'page')", :edit="false", :editable="false")
             div(v-else="")
         //- Pagination
@@ -447,11 +451,14 @@ export default {
     },
     'isLoading' () {
       if (this.isLoading) {
-        // Altering Prop, but it's fine.
-        this.payload = []
-        this.state.columns = []
+        this.state.data = []
+        this.state.search = ''
         this.hasCalculatedTotals = false
-        this.totals = {}
+        this.state.totals = {}
+        this.state.offset = 0
+        this.state.columns = []
+        this.state.editMode = false
+        this.options.totals.isVisible.all = false
         this.computeTotals()
       }
     }
@@ -805,28 +812,29 @@ export default {
       let isTotalable = true
       for (let c = 0; c < this.state.columns.length; c++) {
         let total = 0
-        if (this.state.columns[c]['format'] === 'formatString' || this.state.columns[c]['format'] === '') {
-          isTotalable = false
+        isTotalable = !(this.state.columns[c]['format'] === 'formatString' || this.state.columns[c]['format'] === '')
+        if (isTotalable) {
+          for (let i = 0; i < this.payload.length; i++) {
+            let value = this.payload[i][this.state.columns[c]['field']]
+            total = total + value
+          }
+          let value = total
+          if (this.state.columns[c]['format'] === 'formatPercent') {
+            value = value / this.payload.length
+          }
+          let item = {
+            'id': 1,
+            'value': value,
+            'type': 'total'
+          }
+          this.state.totals[this.state.columns[c]['field']] = item
         } else {
-          isTotalable = true
+          this.state.totals[this.state.columns[c]['field']] = {
+            'id': 1,
+            'value': 'N/A',
+            'type': 'total'
+          }
         }
-        for (let i = 0; i < this.payload.length; i++) {
-          let value = this.payload[i][this.state.columns[c]['field']]
-          total = total + value
-        }
-        let value = total
-        if (this.state.columns[c]['format'] === 'formatPercent') {
-          value = value / this.payload.length
-        }
-        if (!isTotalable) {
-          value = ''
-        }
-        let item = {
-          'id': 1,
-          'value': value,
-          'type': 'total'
-        }
-        this.state.totals[this.state.columns[c]['field']] = item
       }
     },
     getColumnAlignment (column) {
@@ -929,8 +937,6 @@ export default {
 
   .column__sort-indicator
     font-size .75em
-    position relative
-    top 4px
     if $orange is defined
       color $orange
     else

@@ -27,6 +27,10 @@
         a.is-small.data-table__clear-sorts(title="Remove All Column Sorting", @click.passive="unsort", v-if="options.settings.isAllowed && options.settings.isVisible")
           span.icon
             i.fa.fa-sort
+        //- Download CSV
+        a.is-small.data-table__download-csv(title="Download as CSV", @click.passive="downloadCSV(getData, filename)", v-if="options.settings.isAllowed && options.settings.isVisible && getData.length")
+          span.icon
+            i.fa.fa-download
     //- Controls
     table.table.is-narrow.is-relative-position(v-bind:class="{'is-overflow-hidden': options.settings.overflow, 'is-bordered': options.table.bordered, 'is-striped': options.table.striped, 'is-hoverable': options.table.hoverable, 'is-fullwidth': options.table.fullwidth}")
       //- Settings
@@ -214,14 +218,6 @@
           td.data-table__row(v-for="(column, idx) in getDisplayColumns", :key="`table-column-${idx}`", :class="getColumnAlignment(column)")
             slot(:name="column.field")&attributes({':item': 'item', ':index': 'i', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
               data-table-cell()&attributes({'@onFilter': 'filter($event)', ':item': 'item', ':index': 'i', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
-    .level
-      .level-left
-
-      .level-right
-        a(@click.prevent="downloadCSV(getData, filename)") 
-          span.icon
-            i.fa.fa-download
-          | Download as CSV
 </template>
 
 <script>

@@ -1,10 +1,8 @@
 export const downloadCSV = {
   methods: {
     downloadCSV (input = [], filename = `export-${new Date().toISOString().split('T')[0]}.csv`, columnDelimiter = ',', lineDelimiter = '\n') {
-      console.log(input)
       if (!input.length) return
-      input = this.convert(input, columnDelimiter, lineDelimiter)
-      console.log('AFTER CONVERSION', input)
+      input = this.convertCSV(input, columnDelimiter, lineDelimiter)
       if (!input.match(/^data:text\/csv/i)) {
         input = 'data:text/csv;charset=utf-8,' + input
       }
@@ -12,10 +10,9 @@ export const downloadCSV = {
       let link = document.createElement('a')
       link.setAttribute('href', output)
       link.setAttribute('download', filename)
-      console.log(link)
       link.click()
     },
-    convert (input = [], columnDelimiter = ',', lineDelimiter = '\n') {
+    convertCSV (input = [], columnDelimiter = ',', lineDelimiter = '\n') {
       let data = input
       if (data == null || !data.length) {
         return

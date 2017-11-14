@@ -221,407 +221,416 @@
 </template>
 
 <script>
-import DataTableCell from './DataTableCell.vue'
-import {
-  orderBy,
-  sortBy,
-  filter,
-  forEach,
-  throttle,
-  indexOf,
-  differenceWith,
-  isEqual,
-  merge,
-  cloneDeep,
-  debounce
-} from 'lodash'
-import SearchBar from 'vstx-search-bar'
-import Loader from 'vstx-loader'
-import DraggableList from 'vstx-draggable-list'
-import joi from 'joi'
-import localStore from 'store'
-import md5 from 'md5'
-import { downloadCSV } from './downloadCSV'
+  import DataTableCell from './DataTableCell.vue'
+  import {
+    orderBy,
+    sortBy,
+    filter,
+    forEach,
+    throttle,
+    indexOf,
+    differenceWith,
+    isEqual,
+    merge,
+    cloneDeep,
+    debounce
+  } from 'lodash'
+  import SearchBar from 'vstx-search-bar'
+  import Loader from 'vstx-loader'
+  import DraggableList from 'vstx-draggable-list'
+  import joi from 'joi'
+  import localStore from 'store'
+  import md5 from 'md5'
+  import { downloadCSV } from './downloadCSV'
 
-// The defaults should be set here so they can used for the merge function and the prop defaults.
-const defaults = {
-  configuration: {
-    collapsePages: false,
-    isRanked: false,
-    table: {
-      bordered: false,
-      striped: false,
-      cellbordered: false,
-      overflow: false,
-      hoverable: true,
-      fullwidth: true,
-      filename: ''
-    },
-    settings: {
-      overflow: false,
-      isVisible: true,
-      isAllowed: true,
-      offset: 0
-    },
-    sortIndicator: {
-      isVisible: true,
-      isAllowed: true
-    },
-    filter: {
-      isVisible: false,
-      isAllowed: true,
-      isEvent: false
-    },
-    columns: {
-      isVisible: false,
-      isAllowed: true
-    },
-    pagination: {
-      rowsPerPage: 10,
-      isAllowed: true,
-      isVisible: true
-    },
-    orderBy: {
-      isVisible: false,
-      isAllowed: true
-    },
-    totals: {
-      isVisible: {
-        all: false,
-        page: false,
-        count: false
+  // The defaults should be set here so they can used for the merge function and the prop defaults.
+  const defaults = {
+    configuration: {
+      collapsePages: false,
+      isRanked: false,
+      table: {
+        bordered: false,
+        striped: false,
+        cellbordered: false,
+        overflow: false,
+        hoverable: true,
+        fullwidth: true,
+        filename: ''
       },
-      isAllowed: true
+      settings: {
+        overflow: false,
+        isVisible: true,
+        isAllowed: true,
+        offset: 0
+      },
+      sortIndicator: {
+        isVisible: true,
+        isAllowed: true
+      },
+      filter: {
+        isVisible: false,
+        isAllowed: true,
+        isEvent: false
+      },
+      columns: {
+        isVisible: false,
+        isAllowed: true
+      },
+      pagination: {
+        rowsPerPage: 10,
+        isAllowed: true,
+        isVisible: true
+      },
+      orderBy: {
+        isVisible: false,
+        isAllowed: true
+      },
+      totals: {
+        isVisible: {
+          all: false,
+          page: false,
+          count: false
+        },
+        isAllowed: true
+      }
     }
   }
-}
-// Joi Validation Schemas
-const schemas = {
-  configuration: {
-    schema: joi.object().keys({
-      collapsePages: joi.boolean(),
-      isRanked: joi.boolean(),
-      columns: joi.object().keys({
-        isVisible: joi.boolean(),
-        isAllowed: joi.boolean()
-      }),
-      settings: joi.object().keys({
-        overflow: joi.boolean(),
-        isVisible: joi.boolean(),
-        isAllowed: joi.boolean(),
-        offset: joi.number().integer().min(0)
-      }),
-      sortIndicator: joi.object().keys({
-        isVisible: joi.boolean(),
-        isAllowed: joi.boolean()
-      }),
-      filter: joi.object().keys({
-        isVisible: joi.boolean(),
-        isAllowed: joi.boolean()
-      }),
-      pagination: joi.object().keys({
-        rowsPerPage: joi.number().integer().min(10).max(100),
-        isVisible: joi.boolean(),
-        isAllowed: joi.boolean()
-      }),
-      orderBy: joi.object().keys({
-        isVisible: joi.boolean(),
-        isAllowed: joi.boolean()
-      }),
-      totals: joi.object().keys({
-        isVisible: joi.object().keys({
-          all: joi.boolean(),
-          page: joi.boolean(),
-          count: joi.boolean()
-        }),
-        isAllowed: joi.boolean()
-      })
-    }),
-    options: {}
-  },
-  payload: {
-    schema: joi.array().items(joi.object().min(1)),
-    options: {}
-  },
-  columns: {
-    schema: joi.array().items(
-      joi.object().keys({
-        name: joi.string().min(1).required(),
-        editing: joi.object().keys({
-          edit: joi.boolean(),
+  // Joi Validation Schemas
+  const schemas = {
+    configuration: {
+      schema: joi.object().keys({
+        collapsePages: joi.boolean(),
+        isRanked: joi.boolean(),
+        columns: joi.object().keys({
+          isVisible: joi.boolean(),
           isAllowed: joi.boolean()
         }),
-        align: joi.string().lowercase().valid(['left', 'right', 'centered']),
-        field: joi.string(),
-        format: joi.string(),
-        hasLink: joi.boolean(),
-        showLogo: joi.boolean(),
-        position: joi.number().required(),
-        isVisible: joi.boolean(),
-        link: joi.string(),
-        linkReplaceText: joi.string(),
-        linkReplaceField: joi.string(),
-        eventName: joi.string(),
-        eventData: joi.any(),
-        sort: joi.object().keys({
-          isSortable: joi.boolean(),
-          direction: joi.string().lowercase().allow('').valid(['asc', 'desc', '']),
-          order: joi.number().min(0)
-        }).and('order', 'isSortable', 'direction')
-      }).and('linkReplaceText', 'linkReplaceField')
-    ),
-    options: {
-      allowUnknown: true,
-      convert: false
+        settings: joi.object().keys({
+          overflow: joi.boolean(),
+          isVisible: joi.boolean(),
+          isAllowed: joi.boolean(),
+          offset: joi.number().integer().min(0)
+        }),
+        sortIndicator: joi.object().keys({
+          isVisible: joi.boolean(),
+          isAllowed: joi.boolean()
+        }),
+        filter: joi.object().keys({
+          isVisible: joi.boolean(),
+          isAllowed: joi.boolean()
+        }),
+        pagination: joi.object().keys({
+          rowsPerPage: joi.number().integer().min(10).max(100),
+          isVisible: joi.boolean(),
+          isAllowed: joi.boolean()
+        }),
+        orderBy: joi.object().keys({
+          isVisible: joi.boolean(),
+          isAllowed: joi.boolean()
+        }),
+        totals: joi.object().keys({
+          isVisible: joi.object().keys({
+            all: joi.boolean(),
+            page: joi.boolean(),
+            count: joi.boolean()
+          }),
+          isAllowed: joi.boolean()
+        })
+      }),
+      options: {}
+    },
+    payload: {
+      schema: joi.array().items(joi.object().min(1)),
+      options: {}
+    },
+    columns: {
+      schema: joi.array().items(
+        joi.object().keys({
+          name: joi.string().min(1).required(),
+          editing: joi.object().keys({
+            edit: joi.boolean(),
+            isAllowed: joi.boolean()
+          }),
+          align: joi.string().lowercase().valid(['left', 'right', 'centered']),
+          field: joi.string(),
+          format: joi.string(),
+          hasLink: joi.boolean(),
+          showLogo: joi.boolean(),
+          position: joi.number().required(),
+          isVisible: joi.boolean(),
+          link: joi.string(),
+          linkReplaceText: joi.string(),
+          linkReplaceField: joi.string(),
+          eventName: joi.string(),
+          eventData: joi.any(),
+          sort: joi.object().keys({
+            isSortable: joi.boolean(),
+            direction: joi.string().lowercase().allow('').valid(['asc', 'desc', '']),
+            order: joi.number().min(0)
+          }).and('order', 'isSortable', 'direction')
+        }).and('linkReplaceText', 'linkReplaceField')
+      ),
+      options: {
+        allowUnknown: true,
+        convert: false
+      }
     }
   }
-}
-export default {
-  name: 'data-table',
-  introduction: 'A data table component for the Vue Stacks Template',
-  description: '',
-  token: `data-table-cell()&attributes({:payload: 'payload', :options: 'options'})`,
-  created () {
-    // Configure
-    if (this.payload.length > 0) {
-      this.configure()
-    }
-    // Create Unique ID
-    this.assignUniqueID()
-    // Load Saved State from LocalStorage
-    let storedSettings = localStore.get(this.uniqueID)
-    if (typeof storedSettings === 'undefined') {
+  export default {
+    name: 'data-table',
+    introduction: 'A data table component for the Vue Stacks Template',
+    description: '',
+    token: `data-table-cell()&attributes({:payload: 'payload', :options: 'options'})`,
+    created () {
+      // Configure
+      if (this.payload.length > 0) {
+        this.configure()
+      }
+      // Create Unique ID
+      this.assignUniqueID()
+      // Load Saved State from LocalStorage
+      let storedSettings = localStore.get(this.uniqueID)
+      if (typeof storedSettings === 'undefined') {
+        localStore.set(this.uniqueID, {
+          state: this.state,
+          options: this.options
+        })
+      } else {
+        this.state = storedSettings.state
+        this.options = storedSettings.options
+      }
+    },
+    destroyed () {
+      // Persist State to LocalStorage
       localStore.set(this.uniqueID, {
         state: this.state,
         options: this.options
       })
-    } else {
-      this.state = storedSettings.state
-      this.options = storedSettings.options
-    }
-  },
-  destroyed () {
-    // Persist State to LocalStorage
-    localStore.set(this.uniqueID, {
-      state: this.state,
-      options: this.options
-    })
-  },
-  components: {
-    'data-table-cell': DataTableCell,
-    'draggable-list': DraggableList,
-    'loader': Loader,
-    'vstx-search-bar': SearchBar
-  },
-  mixins: [downloadCSV],
-  props: {
-    isLoading: {
-      type: Boolean,
-      required: false,
-      default: false
     },
-    filename: {
-      type: String,
-      required: false,
-      default: `export-${new Date().toISOString().split('T')[0]}.csv`
+    components: {
+      'data-table-cell': DataTableCell,
+      'draggable-list': DraggableList,
+      'loader': Loader,
+      'vstx-search-bar': SearchBar
     },
-    payload: {
-      note: 'An Array of Objects of the DATA__ROW class.',
-      type: Array,
-      required: false,
-      default: () => { return [] },
-      validator: value => {
-        return joi.validate(value, schemas.payload.schema, (err, value) => {
-          return err ? () => { throw err } : true
-        })
-      }
-    },
-    configuration: {
-      note: 'Data table options include showing/hiding, allowing, paging, rowsPerPage, and more.',
-      type: Object,
-      required: false,
-      default: () => {
-        return defaults.configuration
+    mixins: [downloadCSV],
+    props: {
+      isLoading: {
+        type: Boolean,
+        required: false,
+        default: false
       },
-      validator: value => {
-        return joi.validate(value, schemas.configuration.schema, (err, value) => {
-          return err ? () => { throw err } : true
-        })
-      }
-    },
-    columns: {
-      note: '[OPTIONAL] Pass in explicit Columns with custom Options',
-      type: Array,
-      required: false,
-      default: () => { return [] },
-      validator: value => {
-        return joi.validate(value, schemas.columns.schema, schemas.columns.options, (err, value) => {
-          return err ? () => { throw err } : true
-        })
-      }
-    },
-    id: {
-      note: '',
-      type: String,
-      default: () => { return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) }
-    }
-  },
-  watch: {
-    'options.totals.isVisible.all' () {
-      // Calculate Totals Only when Necessary
-      if (!this.state.hasCalculatedTotals) {
-        this.computeTotals()
-      }
-    },
-    'isLoading' () {
-      if (this.isLoading) {
-        this.state.data = []
-        this.state.search = ''
-        this.hasCalculatedTotals = false
-        this.state.totals = {}
-        this.state.offset = 0
-        this.state.columns = []
-        this.state.editMode = false
-        this.options.totals.isVisible.all = false
-        this.computeTotals()
-      }
-    }
-  },
-  data () {
-    return {
-      uniqueID: '',
-      state: {
-        data: [],
-        search: '',
-        hasCalculatedTotals: false,
-        totals: {},
-        offset: this.getConfiguration().settings.offset,
-        columns: [],
-        editMode: false
+      filename: {
+        type: String,
+        required: false,
+        default: `export-${new Date().toISOString().split('T')[0]}.csv`
       },
-      options: this.getConfiguration()
-    }
-  },
-  computed: {
-    getRowCount () {
-      if (this.state.search.length) {
-        return this.state.data.length
-      } else {
-        return this.payload.length
+      payload: {
+        note: 'An Array of Objects of the DATA__ROW class.',
+        type: Array,
+        required: false,
+        default: () => { return [] },
+        validator: value => {
+          return joi.validate(value, schemas.payload.schema, (err, value) => {
+            return err ? () => { throw err } : true
+          })
+        }
+      },
+      configuration: {
+        note: 'Data table options include showing/hiding, allowing, paging, rowsPerPage, and more.',
+        type: Object,
+        required: false,
+        default: () => {
+          return defaults.configuration
+        },
+        validator: value => {
+          return joi.validate(value, schemas.configuration.schema, (err, value) => {
+            return err ? () => { throw err } : true
+          })
+        }
+      },
+      columns: {
+        note: '[OPTIONAL] Pass in explicit Columns with custom Options',
+        type: Array,
+        required: false,
+        default: () => { return [] },
+        validator: value => {
+          return joi.validate(value, schemas.columns.schema, schemas.columns.options, (err, value) => {
+            return err ? () => { throw err } : true
+          })
+        }
+      },
+      id: {
+        note: '',
+        type: String,
+        default: () => { return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) }
       }
     },
-    getPayload () {
-      if (this.payload.length > 0) {
-        this.configure()
-      }
-      return this.payload
-    },
-    getColspan () {
-      return this.options.isRanked ? this.state.columns.length + 1 : this.state.columns.length
-    },
-    getDisplayColumns () {
-      let columns = sortBy(filter(this.state.columns, 'isVisible'), [ (c) => { return c.position } ])
-      return columns
-    },
-    getSortedColumns () {
-      let sortedCols = sortBy(filter(this.state.columns, column => {
-        return column.sort.isSortable && column.sort.direction !== ''
-      }), [ (c) => {
-        return c.sort.order
-      } ])
-      return sortedCols
-    },
-    getPagination () {
-      let data = []
-      if (this.state.search.length) {
-        data = this.state.data
-      } else {
-        data = this.getPayload
-      }
-      let totalPages = Math.round(data.length / this.options.pagination.rowsPerPage)
-      let returnData = []
-      let min = (this.state.offset - 4 < 0 ? 0 : this.state.offset - 4)
-      let max = min + 10
-      for (let i = 0; i < totalPages; i++) {
-        if ((returnData.length < this.listPages && this.state.offset === 0) || (i >= min && i < max)) {
-          returnData.push(i + 1)
+    watch: {
+      'options.totals.isVisible.all' () {
+        // Calculate Totals Only when Necessary
+        if (!this.state.hasCalculatedTotals) {
+          this.computeTotals()
+        }
+      },
+      'isLoading' () {
+        if (this.isLoading) {
+          this.state.data = []
+          this.state.search = ''
+          this.hasCalculatedTotals = false
+          this.state.totals = {}
+          this.state.offset = 0
+          this.state.columns = []
+          this.state.editMode = false
+          this.options.totals.isVisible.all = false
+          this.computeTotals()
         }
       }
-      if (min >= 1) {
-        returnData[0] = 1
-        returnData.splice(1, 1, '...')
-      }
-      if (max < totalPages) {
-        returnData[returnData.length - 1] = totalPages - 1
-        returnData[returnData.length] = totalPages
-        returnData.splice(returnData.length - 3, 1, '...')
-      }
-      return returnData
     },
-    getOrderBy () {
-      let columns = []
-      let directions = []
-      forEach(this.getSortedColumns, (value) => {
-        if (value.sort.direction !== '') {
-          columns.push(value.field)
-          directions.push(value.sort.direction)
+    data () {
+      return {
+        uniqueID: '',
+        state: {
+          data: [],
+          search: '',
+          hasCalculatedTotals: false,
+          totals: {},
+          offset: this.getConfiguration().settings.offset,
+          columns: [],
+          editMode: false
+        },
+        options: this.getConfiguration()
+      }
+    },
+    computed: {
+      getRowCount () {
+        if (this.state.search.length) {
+          return this.state.data.length
+        } else {
+          return this.payload.length
         }
-      })
-      let data = {
-        columns,
-        directions
+      },
+      getPayload () {
+        if (this.payload.length > 0) {
+          this.configure()
+        }
+        return this.payload
+      },
+      getColspan () {
+        return this.options.isRanked ? this.state.columns.length + 1 : this.state.columns.length
+      },
+      getDisplayColumns () {
+        let columns = sortBy(filter(this.state.columns, 'isVisible'), [ (c) => { return c.position } ])
+        return columns
+      },
+      getSortedColumns () {
+        let sortedCols = sortBy(filter(this.state.columns, column => {
+          return column.sort.isSortable && column.sort.direction !== ''
+        }), [ (c) => {
+          return c.sort.order
+        } ])
+        return sortedCols
+      },
+      getPagination () {
+        let data = []
+        if (this.state.search.length) {
+          data = this.state.data
+        } else {
+          data = this.getPayload
+        }
+        let totalPages = Math.ceil(data.length / this.options.pagination.rowsPerPage)
+        let returnData = []
+        let min = (this.state.offset - 4 < 0 ? 0 : this.state.offset - 4)
+        let pagesShown = 10
+        let max = min + pagesShown
+        for (let i = 0; i < totalPages; i++) {
+          if ((returnData.length < this.listPages && this.state.offset === 0) || (i >= min && i <= max)) {
+            returnData.push(i + 1)
+          }
+        }
+        if (min >= 1) {
+          returnData[0] = 1
+          returnData.splice(1, 1, '...')
+        }
+        if (max < totalPages) {
+          returnData[returnData.length - 1] = totalPages - 1
+          returnData[returnData.length] = totalPages
+          returnData.splice(returnData.length - 3, 1, '...')
+        }
+        return returnData
+      },
+      getOrderBy () {
+        let columns = []
+        let directions = []
+        forEach(this.getSortedColumns, (value) => {
+          if (value.sort.direction !== '') {
+            columns.push(value.field)
+            directions.push(value.sort.direction)
+          }
+        })
+        let data = {
+          columns,
+          directions
+        }
+        return data
+      },
+      getData () {
+        // Use Worker to Compute Order and Slice
+        /*
+          Workers are ASYNC. This cannot be in a computed property.
+        */
+        // let workerData = {
+        //   payload: this.payload,
+        //   columns: this.getOrderBy.columns,
+        //   directions: this.getOrderBy.directions,
+        //   offset: this.state.offset,
+        //   rowsPerPage: this.options.pagination.rowsPerPage
+        // }
+        // const OrderByWorker = require('worker-loader!./workers/orderByAndPaginate.js')
+        // let worker = new OrderByWorker()
+        // worker.postMessage(workerData)
+        // worker.onmessage = (event) => {
+        //   console.log('onmessage', event.data)
+        // }
+        let data = []
+        if (this.state.search.length) {
+          data = this.state.data
+        } else {
+          data = this.getPayload
+        }
+        let sortedData = orderBy(data, this.getOrderBy.columns, this.getOrderBy.directions)
+        sortedData = sortedData.slice(this.state.offset * this.options.pagination.rowsPerPage, this.options.pagination.rowsPerPage + this.state.offset * this.options.pagination.rowsPerPage)
+        return sortedData
+      },
+      getRawData () {
+        let data = []
+        if (this.state.search.length) {
+          data = this.state.data
+        } else {
+          data = this.getPayload
+        }
+        let sortedData = orderBy(data, this.getOrderBy.columns, this.getOrderBy.directions)
+        return sortedData
       }
-      return data
     },
-    getData () {
-      // Use Worker to Compute Order and Slice
-      /*
-        Workers are ASYNC. This cannot be in a computed property.
-      */
-      // let workerData = {
-      //   payload: this.payload,
-      //   columns: this.getOrderBy.columns,
-      //   directions: this.getOrderBy.directions,
-      //   offset: this.state.offset,
-      //   rowsPerPage: this.options.pagination.rowsPerPage
-      // }
-      // const OrderByWorker = require('worker-loader!./workers/orderByAndPaginate.js')
-      // let worker = new OrderByWorker()
-      // worker.postMessage(workerData)
-      // worker.onmessage = (event) => {
-      //   console.log('onmessage', event.data)
-      // }
-      let data = []
-      if (this.state.search.length) {
-        data = this.state.data
-      } else {
-        data = this.getPayload
-      }
-      let sortedData = orderBy(data, this.getOrderBy.columns, this.getOrderBy.directions)
-      sortedData = sortedData.slice(this.state.offset * this.options.pagination.rowsPerPage, this.options.pagination.rowsPerPage + this.state.offset * this.options.pagination.rowsPerPage)
-      return sortedData
-    },
-    getRawData () {
-      let data = []
-      if (this.state.search.length) {
-        data = this.state.data
-      } else {
-        data = this.getPayload
-      }
-      let sortedData = orderBy(data, this.getOrderBy.columns, this.getOrderBy.directions)
-      return sortedData
-    }
-  },
-  methods: {
-    filter: debounce(function (event = {}) {
-      if (event.hasOwnProperty('search') && typeof event.search !== 'undefined') {
-        this.state.offset = 0
-        this.state.search = event.search
-        let newData = filter(this.getPayload, (o) => {
-          let found = false
-          for (let key in o) {
-            if (event.hasOwnProperty('column') && event.column.length) {
-              if (key === event.column) {
+    methods: {
+      filter: debounce(function (event = {}) {
+        if (event.hasOwnProperty('search') && typeof event.search !== 'undefined') {
+          this.state.offset = 0
+          this.state.search = event.search
+          let newData = filter(this.getPayload, (o) => {
+            let found = false
+            for (let key in o) {
+              if (event.hasOwnProperty('column') && event.column.length) {
+                if (key === event.column) {
+                  if (o[key] !== 'null' && o[key] !== null) {
+                    let match = o[key].toString().match(new RegExp(event.search, 'i'))
+                    if (match !== 'null' && match !== null && match.length > 0) {
+                      found = true
+                    }
+                  }
+                }
+              } else {
                 if (o[key] !== 'null' && o[key] !== null) {
                   let match = o[key].toString().match(new RegExp(event.search, 'i'))
                   if (match !== 'null' && match !== null && match.length > 0) {
@@ -629,306 +638,298 @@ export default {
                   }
                 }
               }
-            } else {
-              if (o[key] !== 'null' && o[key] !== null) {
-                let match = o[key].toString().match(new RegExp(event.search, 'i'))
-                if (match !== 'null' && match !== null && match.length > 0) {
-                  found = true
+            }
+            return found
+          })
+          this.state.data = newData
+        }
+      }, 275),
+      filterClear () {
+        this.state.search = ''
+      },
+      assignUniqueID () {
+        // let thisHash = md5(this.$parent.$options.name + JSON.stringify(this.state) + JSON.stringify(this.options))
+        let thisHash = md5(`${this.id}`)
+        this.uniqueID = thisHash
+      },
+      clearLocalSettings () {
+        localStore.remove(this.uniqueID)
+      },
+      unsort () {
+        forEach(this.getSortedColumns, (value) => {
+          value.sort.direction = ''
+        })
+      },
+      // onTableClick (event) {
+      //   let headerRows = document.getElementsByClassName('column__headers')
+      //   let target = event.target
+      //   for (let i = 0; i < headerRows.length; i++) {
+      //     let headerRow = headerRows[i]
+      //   }
+      // },
+      getDecimalPlaces (num) {
+        var match = ('' + num).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/)
+        if (!match) {
+          return 0
+        }
+        return Math.max(0, (match[1] ? match[1].length : 0) - (match[2] ? +match[2] : 0)
+        )
+      },
+      configure () {
+        this.populateColumnsFromPayload()
+        this.collapsePages()
+        this.checkRequiresPagination()
+        // Calculate Data Totals if Necessary
+        if (this.options.totals.isVisible.all) {
+          this.computeTotals()
+        }
+      },
+      collapsePages () {
+        // Default RowsPerPage to 25 when Necessary
+        if (this.options.collapsePages && this.options.pagination.rowsPerPage < 25 && ((this.payload.length > 10 && this.payload.length <= 25) || (this.columns.length > 6))) {
+          this.options.pagination.rowsPerPage = 25
+        } else {
+          this.options.pagination.rowsPerPage = this.options.pagination.rowsPerPage
+        }
+      },
+      checkRequiresPagination () {
+        // Hide Pagination if Content is One Page Only
+        if (this.options.pagination.rowsPerPage >= this.payload.length) {
+          this.options.pagination.isAllowed = false
+        } else {
+          this.options.pagination.isAllowed = true
+        }
+      },
+      populateColumnsFromPayload () {
+        if (this.state.columns.length === 0) {
+          if (this.columns.length === 0) {
+            let firstRow = this.payload[0]
+            let rowKeys = Object.keys(firstRow)
+            let columns = []
+            for (let i = 0; i < rowKeys.length; i++) {
+              let columnName = rowKeys[i]
+              let firstValue = firstRow[columnName]
+              let columnFormat = 'formatString'
+              let alignment = 'left'
+              if (typeof firstValue === 'number') {
+                alignment = 'right'
+                if (columnName.toLowerCase().includes('percent') || columnName.includes('%')) {
+                  columnFormat = 'formatPercent'
+                } else if (this.getDecimalPlaces(firstValue) === 2) {
+                  columnFormat = 'formatMoney'
+                } else {
+                  columnFormat = 'formatNumber'
                 }
               }
-            }
-          }
-          return found
-        })
-        this.state.data = newData
-      }
-    }, 275),
-    filterClear () {
-      this.state.search = ''
-    },
-    assignUniqueID () {
-      // let thisHash = md5(this.$parent.$options.name + JSON.stringify(this.state) + JSON.stringify(this.options))
-      let thisHash = md5(`${this.id}`)
-      this.uniqueID = thisHash
-    },
-    clearLocalSettings () {
-      localStore.remove(this.uniqueID)
-    },
-    unsort () {
-      forEach(this.getSortedColumns, (value) => {
-        value.sort.direction = ''
-      })
-    },
-    // onTableClick (event) {
-    //   let headerRows = document.getElementsByClassName('column__headers')
-    //   let target = event.target
-    //   for (let i = 0; i < headerRows.length; i++) {
-    //     let headerRow = headerRows[i]
-    //   }
-    // },
-    getDecimalPlaces (num) {
-      var match = ('' + num).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/)
-      if (!match) {
-        return 0
-      }
-      return Math.max(0, (match[1] ? match[1].length : 0) - (match[2] ? +match[2] : 0)
-      )
-    },
-    configure () {
-      this.populateColumnsFromPayload()
-      this.collapsePages()
-      this.checkRequiresPagination()
-      // Calculate Data Totals if Necessary
-      if (this.options.totals.isVisible.all) {
-        this.computeTotals()
-      }
-    },
-    collapsePages () {
-      // Default RowsPerPage to 25 when Necessary
-      if (this.options.collapsePages && this.options.pagination.rowsPerPage < 25 && ((this.payload.length > 10 && this.payload.length <= 25) || (this.columns.length > 6))) {
-        this.options.pagination.rowsPerPage = 25
-      } else {
-        this.options.pagination.rowsPerPage = this.options.pagination.rowsPerPage
-      }
-    },
-    checkRequiresPagination () {
-      // Hide Pagination if Content is One Page Only
-      if (this.options.pagination.rowsPerPage >= this.payload.length) {
-        this.options.pagination.isAllowed = false
-      } else {
-        this.options.pagination.isAllowed = true
-      }
-    },
-    populateColumnsFromPayload () {
-      if (this.state.columns.length === 0) {
-        if (this.columns.length === 0) {
-          let firstRow = this.payload[0]
-          let rowKeys = Object.keys(firstRow)
-          let columns = []
-          for (let i = 0; i < rowKeys.length; i++) {
-            let columnName = rowKeys[i]
-            let firstValue = firstRow[columnName]
-            let columnFormat = 'formatString'
-            let alignment = 'left'
-            if (typeof firstValue === 'number') {
-              alignment = 'right'
-              if (columnName.toLowerCase().includes('percent') || columnName.includes('%')) {
-                columnFormat = 'formatPercent'
-              } else if (this.getDecimalPlaces(firstValue) === 2) {
-                columnFormat = 'formatMoney'
-              } else {
-                columnFormat = 'formatNumber'
+              let column = {
+                name: rowKeys[i],
+                format: columnFormat,
+                field: rowKeys[i],
+                align: alignment,
+                position: i,
+                isVisible: true,
+                editing: {
+                  edit: false,
+                  isAllowed: false
+                },
+                sort: {
+                  isSortable: true,
+                  direction: '',
+                  order: i
+                }
               }
+              columns.push(column)
             }
-            let column = {
-              name: rowKeys[i],
-              format: columnFormat,
-              field: rowKeys[i],
-              align: alignment,
-              position: i,
-              isVisible: true,
-              editing: {
-                edit: false,
-                isAllowed: false
-              },
-              sort: {
-                isSortable: true,
-                direction: '',
-                order: i
-              }
-            }
-            columns.push(column)
+            this.state.columns = columns
+          } else {
+            this.state.columns = this.columns
           }
-          this.state.columns = columns
-        } else {
-          this.state.columns = this.columns
         }
-      }
-    },
-    getConfiguration () {
-      let defaultsCopy = cloneDeep(defaults)
-      let configuration = merge(defaultsCopy.configuration, this.configuration)
-      return configuration
-    },
-    updateOrderBy (columns) {
-      let lastIndex = 0
-      for (let i = 0; i < columns.length; i++) {
-        columns[i].sort.order = i
-        lastIndex = i
-      }
-      let diff = differenceWith(this.state.columns, columns, isEqual)
-      for (let i = 0; i < diff.length; i++) {
-        diff[i].sort.order = lastIndex + i + 1
-        columns.push(diff[i])
-      }
-      this.state.columns = columns
-    },
-    updateColumnOrder (columns) {
-      for (let i = 0; i < columns.length; i++) {
-        columns[i].position = i
-      }
-      this.state.columns = columns
-    },
-    setOverflow (boolean) {
-      this.options.settings.overflow = boolean
-    },
-    toggleColumnOptions () {
-      if (this.options.columns.isVisible === true) {
-        this.options.columns.isVisible = false
-      } else {
+      },
+      getConfiguration () {
+        let defaultsCopy = cloneDeep(defaults)
+        let configuration = merge(defaultsCopy.configuration, this.configuration)
+        return configuration
+      },
+      updateOrderBy (columns) {
+        let lastIndex = 0
+        for (let i = 0; i < columns.length; i++) {
+          columns[i].sort.order = i
+          lastIndex = i
+        }
+        let diff = differenceWith(this.state.columns, columns, isEqual)
+        for (let i = 0; i < diff.length; i++) {
+          diff[i].sort.order = lastIndex + i + 1
+          columns.push(diff[i])
+        }
+        this.state.columns = columns
+      },
+      updateColumnOrder (columns) {
+        for (let i = 0; i < columns.length; i++) {
+          columns[i].position = i
+        }
+        this.state.columns = columns
+      },
+      setOverflow (boolean) {
+        this.options.settings.overflow = boolean
+      },
+      toggleColumnOptions () {
+        if (this.options.columns.isVisible === true) {
+          this.options.columns.isVisible = false
+        } else {
+          this.options.settings.overflow = true
+          this.options.columns.isVisible = true
+        }
+      },
+      toggleOptions () {
+        if (this.options.orderBy.isVisible === true) {
+          this.options.orderBy.isVisible = false
+        } else {
+          this.options.settings.overflow = true
+          this.options.orderBy.isVisible = true
+        }
+      },
+      openColumnOptions: throttle((e) => {
         this.options.settings.overflow = true
         this.options.columns.isVisible = true
-      }
-    },
-    toggleOptions () {
-      if (this.options.orderBy.isVisible === true) {
-        this.options.orderBy.isVisible = false
-      } else {
+      }, 500),
+      closeColumnOptions: throttle((e) => {
+        this.options.columns.isVisible = false
+      }, 500),
+      openOptions: throttle((e) => {
         this.options.settings.overflow = true
         this.options.orderBy.isVisible = true
-      }
-    },
-    openColumnOptions: throttle((e) => {
-      this.options.settings.overflow = true
-      this.options.columns.isVisible = true
-    }, 500),
-    closeColumnOptions: throttle((e) => {
-      this.options.columns.isVisible = false
-    }, 500),
-    openOptions: throttle((e) => {
-      this.options.settings.overflow = true
-      this.options.orderBy.isVisible = true
-    }, 500),
-    closeOptions: throttle((e) => {
-      this.options.orderBy.isVisible = false
-    }, 500),
-    getColumnTotal (column, scope) {
-      let total = 0
-      let isTotalable = true
-      if (column['format'] === 'formatString' || column['format'] === '') {
-        isTotalable = false
-      } else {
-        isTotalable = true
-      }
-      if (scope === 'page') {
-        for (let i = 0; i < this.getData.length; i++) {
-          total = total + this.getData[i][column['field']]
-        }
-      } else if (scope === 'all') {
-        for (let i = 0; i < this.getPayload.length; i++) {
-          total = total + this.getPayload[i][column['field']]
-        }
-      }
-      let value = total
-      if (column['format'] === 'formatPercent') {
-        value = value / this.getData.length
-      }
-      if (!isTotalable) {
-        value = ''
-      }
-      let item = {
-        'id': 1,
-        'value': value,
-        'type': 'total'
-      }
-      switch (column['format']) {
-        case 'seller':
-          return {}
-        case 'brand':
-          return {}
-        case 'product':
-          return {}
-        default:
-          return item
-      }
-    },
-    computeTotals () {
-      let isTotalable = true
-      for (let c = 0; c < this.state.columns.length; c++) {
+      }, 500),
+      closeOptions: throttle((e) => {
+        this.options.orderBy.isVisible = false
+      }, 500),
+      getColumnTotal (column, scope) {
         let total = 0
-        isTotalable = !(this.state.columns[c]['format'] === 'formatString' || this.state.columns[c]['format'] === '')
-        if (isTotalable) {
-          for (let i = 0; i < this.payload.length; i++) {
-            let value = this.payload[i][this.state.columns[c]['field']]
-            total = total + value
-          }
-          let value = total
-          if (this.state.columns[c]['format'] === 'formatPercent') {
-            value = value / this.payload.length
-          }
-          let item = {
-            'id': 1,
-            'value': value,
-            'type': 'total'
-          }
-          this.state.totals[this.state.columns[c]['field']] = item
+        let isTotalable = true
+        if (column['format'] === 'formatString' || column['format'] === '') {
+          isTotalable = false
         } else {
-          this.state.totals[this.state.columns[c]['field']] = {
-            'id': 1,
-            'value': 'N/A',
-            'type': 'total'
+          isTotalable = true
+        }
+        if (scope === 'page') {
+          for (let i = 0; i < this.getData.length; i++) {
+            total = total + this.getData[i][column['field']]
+          }
+        } else if (scope === 'all') {
+          for (let i = 0; i < this.getPayload.length; i++) {
+            total = total + this.getPayload[i][column['field']]
           }
         }
-      }
-    },
-    getColumnAlignment (column) {
-      let alignment = `has-text-${column['align']}`
-      let classes = {}
-      classes[alignment] = true
-      classes.borderless = !this.options.table.cellbordered
-      return classes
-    },
-    getSortDirection (field) {
-      let direction = this.getOrderBy.directions[this.getSortPosition(field)]
-      return direction
-    },
-    getSortPosition (field) {
-      let position = indexOf(this.getOrderBy.columns, field)
-      return position
-    },
-    saveEdits () {
-    },
-    getColumnState (field) {
-      let state = {
-        'fa': true,
-        'column__sort-indicator-asc': this.getSortDirection(field) === 'asc',
-        'column__sort-indicator-desc': this.getSortDirection(field) === 'desc'
-      }
-      return state
-    },
-    toggleSortDirection (field) {
-      let sortedColumns = 0
-      let wasUnsorted = false
-      let thisCol = {}
-      for (let i = 0; i < this.getDisplayColumns.length; i++) {
-        let col = this.getDisplayColumns[i]
-        if (col.field === field) {
-          thisCol = col
-          if (col.sort.direction === 'asc') {
-            col.sort.direction = 'desc'
-          } else if (col.sort.direction === 'desc') {
-            col.sort.direction = ''
-          } else if (col.sort.direction === '') {
-            wasUnsorted = true
-            col.sort.direction = 'asc'
+        let value = total
+        if (column['format'] === 'formatPercent') {
+          value = value / this.getData.length
+        }
+        if (!isTotalable) {
+          value = ''
+        }
+        let item = {
+          'id': 1,
+          'value': value,
+          'type': 'total'
+        }
+        switch (column['format']) {
+          case 'seller':
+            return {}
+          case 'brand':
+            return {}
+          case 'product':
+            return {}
+          default:
+            return item
+        }
+      },
+      computeTotals () {
+        let isTotalable = true
+        for (let c = 0; c < this.state.columns.length; c++) {
+          let total = 0
+          isTotalable = !(this.state.columns[c]['format'] === 'formatString' || this.state.columns[c]['format'] === '')
+          if (isTotalable) {
+            for (let i = 0; i < this.payload.length; i++) {
+              let value = this.payload[i][this.state.columns[c]['field']]
+              total = total + value
+            }
+            let value = total
+            if (this.state.columns[c]['format'] === 'formatPercent') {
+              value = value / this.payload.length
+            }
+            let item = {
+              'id': 1,
+              'value': value,
+              'type': 'total'
+            }
+            this.state.totals[this.state.columns[c]['field']] = item
+          } else {
+            this.state.totals[this.state.columns[c]['field']] = {
+              'id': 1,
+              'value': 'N/A',
+              'type': 'total'
+            }
           }
         }
-        if (col.sort.direction !== '' && col.sort.isSortable) {
-          sortedColumns++
+      },
+      getColumnAlignment (column) {
+        let alignment = `has-text-${column['align']}`
+        let classes = {}
+        classes[alignment] = true
+        classes.borderless = !this.options.table.cellbordered
+        return classes
+      },
+      getSortDirection (field) {
+        let direction = this.getOrderBy.directions[this.getSortPosition(field)]
+        return direction
+      },
+      getSortPosition (field) {
+        let position = indexOf(this.getOrderBy.columns, field)
+        return position
+      },
+      saveEdits () {
+      },
+      getColumnState (field) {
+        let state = {
+          'fa': true,
+          'column__sort-indicator-asc': this.getSortDirection(field) === 'asc',
+          'column__sort-indicator-desc': this.getSortDirection(field) === 'desc'
         }
+        return state
+      },
+      toggleSortDirection (field) {
+        let sortedColumns = 0
+        let wasUnsorted = false
+        let thisCol = {}
+        for (let i = 0; i < this.getDisplayColumns.length; i++) {
+          let col = this.getDisplayColumns[i]
+          if (col.field === field) {
+            thisCol = col
+            if (col.sort.direction === 'asc') {
+              col.sort.direction = 'desc'
+            } else if (col.sort.direction === 'desc') {
+              col.sort.direction = ''
+            } else if (col.sort.direction === '') {
+              wasUnsorted = true
+              col.sort.direction = 'asc'
+            }
+          }
+          if (col.sort.direction !== '' && col.sort.isSortable) {
+            sortedColumns++
+          }
+        }
+        if (sortedColumns === 1 && wasUnsorted) {
+          this.updateOrderBy([thisCol])
+        }
+      },
+      pageBack () {
+        this.state.offset = this.state.offset - 1 >= 0 ? this.state.offset - 1 : 0
+      },
+      pageForward () {
+        this.state.offset = this.state.offset + 1 < this.getPagination[this.getPagination.length - 1] ? this.state.offset + 1 : this.getPagination[this.getPagination.length - 1] - 1
       }
-      if (sortedColumns === 1 && wasUnsorted) {
-        this.updateOrderBy([thisCol])
-      }
-    },
-    pageBack () {
-      this.state.offset = this.state.offset - 1 >= 0 ? this.state.offset - 1 : 0
-    },
-    pageForward () {
-      this.state.offset = this.state.offset + 1 < this.getPagination[this.getPagination.length - 1] ? this.state.offset + 1 : this.getPagination[this.getPagination.length - 1] - 1
     }
   }
-}
 </script>
 
 <style lang="stylus">

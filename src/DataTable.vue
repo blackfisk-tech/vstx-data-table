@@ -160,7 +160,7 @@
           th(v-if="options.isRanked") #
           th(v-if="options.table.isSelectable")
             label.checkbox(title="Select All")
-              input(type="checkbox", @change="selectAll")
+              input(type="checkbox", @change="selectAll", v-model="state.isSelectAll")
           th.column__header(v-for="(column, idx) in getDisplayColumns", :key="`table-header-${idx}`", :class="getColumnAlignment(column)", style="position:relative;")
             //- Slot for Custom Headers
             slot(:name="`${column.field}-header`")
@@ -503,6 +503,7 @@
         state: {
           data: [],
           selected: [],
+          isSelectAll: false,
           search: '',
           hasCalculatedTotals: false,
           totals: {},
@@ -632,11 +633,11 @@
         let payloadIndex = findIndex(this.payload, item)
         let selectedIndex = indexOf(this.state.selected, payloadIndex)
         if (this.isSelected(item)) {
-          console.log(selectedIndex)
           this.state.selected.splice(selectedIndex, 1)
         } else {
           this.state.selected.push(payloadIndex)
         }
+        this.$emit('onSelect', this.state.selected)
       },
       isSelected (item) {
         // If in Selections
@@ -659,6 +660,11 @@
         } else {
           this.state.selected = []
         }
+        this.$emit('onSelect', this.state.selected)
+      },
+      clearSelects () {
+        this.state.isSelectAll = false
+        this.state.selected = []
       },
       filter: debounce(function (event = {}) {
         if (event.hasOwnProperty('search') && typeof event.search !== 'undefined') {
@@ -795,7 +801,6 @@
       getConfiguration () {
         let defaultsCopy = cloneDeep(defaults)
         let configuration = merge(defaultsCopy.configuration, this.configuration)
-        console.log(configuration.table)
         return configuration
       },
       updateOrderBy (columns) {

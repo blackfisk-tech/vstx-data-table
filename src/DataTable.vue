@@ -158,13 +158,18 @@
         //- Header
         tr.column__headers
           th(v-if="options.isRanked") #
+          th(v-if="options.table.isSelectable")
+            label.checkbox(title="Select All")
+              input(type="checkbox", @change="selectAll")
           th.column__header(v-for="(column, idx) in getDisplayColumns", :key="`table-header-${idx}`", :class="getColumnAlignment(column)", style="position:relative;")
-            div
-              span(v-if="column['sort']['isSortable']")
-                a(@click.passive="toggleSortDirection(column['field'])") {{ column['name'] }}&nbsp;
-                  span.icon.is-small(:class="getColumnState(column['field'])")
-                a.tag(v-if="options.sortIndicator.isVisible && getSortPosition(column['field']) !== -1", @click.passive="toggleSortDirection(column['field'])") {{ getSortPosition(column['field']) + 1 }}
-              span(v-else="") {{ column['name'] }}&nbsp;
+            //- Slot for Custom Headers
+            slot(:name="`${column.field}-header`")
+              div
+                span(v-if="column['sort']['isSortable']")
+                  a(@click.passive="toggleSortDirection(column['field'])") {{ column['name'] }}&nbsp;
+                    span.icon.is-small(:class="getColumnState(column['field'])")
+                  a.tag(v-if="options.sortIndicator.isVisible && getSortPosition(column['field']) !== -1", @click.passive="toggleSortDirection(column['field'])") {{ getSortPosition(column['field']) + 1 }}
+                span(v-else="") {{ column['name'] }}&nbsp;
             //- Column Settings
             .column__settings(v-if="options.columns.isAllowed && options.columns.isVisible")
               label.is-6 Format:
@@ -215,7 +220,10 @@
                     loader(:barCount="parseInt(5)", size="small")
         tr(v-if="!isLoading", v-for="(item, i) in getData", :key="`table-row-${i}`")
           td.data-table__row(:class="{'borderless': !options.table.cellbordered}", v-if="options.isRanked") {{ (i + 1) + (state.offset * options.pagination.rowsPerPage) }}
+          td.data-table__row(v-if="options.table.isSelectable", :class="{'borderless': !options.table.cellbordered}")
+            input(type="checkbox", :checked="isSelected(item)", @change="select(item)")
           td.data-table__row(v-for="(column, idx) in getDisplayColumns", :key="`table-column-${idx}`", :class="getColumnAlignment(column)")
+            //- Slot for Custom Fields
             slot(:name="column.field")&attributes({':item': 'item', ':index': 'i', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
               data-table-cell()&attributes({'@onFilter': 'filter($event)', ':item': 'item', ':index': 'i', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
 </template>
@@ -233,7 +241,8 @@
     isEqual,
     merge,
     cloneDeep,
-    debounce
+    debounce,
+    findIndex
   } from 'lodash'
   import SearchBar from 'vstx-search-bar'
   import Loader from 'vstx-loader'
@@ -255,7 +264,8 @@
         overflow: false,
         hoverable: true,
         fullwidth: true,
-        filename: ''
+        filename: '',
+        isSelectable: false
       },
       settings: {
         overflow: false,
@@ -492,6 +502,7 @@
         uniqueID: '',
         state: {
           data: [],
+          selected: [],
           search: '',
           hasCalculatedTotals: false,
           totals: {},
@@ -515,6 +526,9 @@
           this.configure()
         }
         return this.payload
+      },
+      getSelected () {
+        return this.state.selected
       },
       getColspan () {
         return this.options.isRanked ? this.state.columns.length + 1 : this.state.columns.length
@@ -614,6 +628,38 @@
       }
     },
     methods: {
+      select (item) {
+        let payloadIndex = findIndex(this.payload, item)
+        let selectedIndex = indexOf(this.state.selected, payloadIndex)
+        if (this.isSelected(item)) {
+          console.log(selectedIndex)
+          this.state.selected.splice(selectedIndex, 1)
+        } else {
+          this.state.selected.push(payloadIndex)
+        }
+      },
+      isSelected (item) {
+        // If in Selections
+        let payloadIndex = findIndex(this.payload, item)
+        let isSelected = indexOf(this.state.selected, payloadIndex)
+        if (isSelected === -1) {
+          return false
+        } else {
+          return true
+        }
+      },
+      selectAll (e) {
+        if (e.target.checked) {
+          let data = this.getData
+          for (let row in data) {
+            if (!this.isSelected(data[row])) {
+              this.select(data[row])
+            }
+          }
+        } else {
+          this.state.selected = []
+        }
+      },
       filter: debounce(function (event = {}) {
         if (event.hasOwnProperty('search') && typeof event.search !== 'undefined') {
           this.state.offset = 0
@@ -749,6 +795,7 @@
       getConfiguration () {
         let defaultsCopy = cloneDeep(defaults)
         let configuration = merge(defaultsCopy.configuration, this.configuration)
+        console.log(configuration.table)
         return configuration
       },
       updateOrderBy (columns) {

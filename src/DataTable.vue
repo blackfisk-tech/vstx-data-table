@@ -1,11 +1,13 @@
 <template lang="pug">
   .data-table
-    .data-table__filters__active(v-if="state.search.length",style="padding-bottom:10px;") 
+    .data-table__filters__active(v-if="state.search.length || state.filters.length",style="padding-bottom:10px;") 
       nav.breadcrumb(aria-label="filters")
         ul
           li Filtering by:&nbsp;&nbsp;
-            span.tag.is-primary {{ state.search }}
-              button(class="delete is-small", @click="filterClear")
+            span.tag.is-primary(v-if="state.search.length") Search: {{ state.search }}
+              button.delete.is-small(@click="searchRemove")
+            span.tag.is-primary(v-for="filter in getFilters") {{ filter.column }} : {{ filter.value }} 
+              button(class="delete is-small", @click="filterRemove(filter)")
     .level.data-table__head
       .level-left
         //- Table Title
@@ -14,7 +16,7 @@
         //- Filter Slot
         slot(name="filter", v-if="options.filter.isAllowed && options.filter.isVisible")
           vstx-search-bar.data-table__search(v-if="options.filter.isEvent", :value="state.search", :search="state.search", @onSearch="$emit('onSearch', $event)")
-          vstx-search-bar.data-table__search(v-else="", :value="state.search", :search="state.search", @onSearch="filter($event)")
+          vstx-search-bar.data-table__search(v-else="", :value="state.search", :search="state.search", @onSearch="search($event)")
         span.label.is-small(v-if="options.totals.isAllowed && options.totals.isVisible.count") {{ getRowCount }} Rows
         a.is-small.data-table__settings(title="Table Settings", @click.passive="toggleOptions", v-if="options.settings.isAllowed && options.settings.isVisible")
           span.icon
@@ -225,7 +227,7 @@
           td.data-table__row(v-for="(column, idx) in getDisplayColumns", :key="`table-column-${idx}`", :class="getColumnAlignment(column)")
             //- Slot for Custom Fields
             slot(:name="column.field")&attributes({':item': 'item', ':index': 'i', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
-              data-table-cell()&attributes({'@onFilter': 'filter($event)', ':item': 'item', ':index': 'i', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
+              data-table-cell()&attributes({'@onFilter': 'addFilter($event)', ':item': 'item', ':index': 'i', ':column': 'column', ':edit': 'state.editMode', ':editable': 'state.editMode'})
 </template>
 
 <script>
@@ -242,13 +244,14 @@
     merge,
     cloneDeep,
     debounce,
-    findIndex
+    findIndex,
+    remove
   } from 'lodash'
   import SearchBar from 'vstx-search-bar'
   import Loader from 'vstx-loader'
   import DraggableList from 'vstx-draggable-list'
   import joi from 'joi'
-  import localStore from 'store'
+  import localForage from 'localforage'
   import md5 from 'md5'
   import { downloadCSV } from './downloadCSV'
 
@@ -392,6 +395,7 @@
     description: '',
     token: `data-table-cell()&attributes({:payload: 'payload', :options: 'options'})`,
     created () {
+      this.configure()
       // Configure
       if (this.payload.length > 0) {
         this.configure()
@@ -399,20 +403,21 @@
       // Create Unique ID
       this.assignUniqueID()
       // Load Saved State from LocalStorage
-      let storedSettings = localStore.get(this.uniqueID)
-      if (typeof storedSettings === 'undefined') {
-        localStore.set(this.uniqueID, {
-          state: this.state,
-          options: this.options
-        })
-      } else {
-        this.state = storedSettings.state
-        this.options = storedSettings.options
-      }
+      localForage.getItem(this.uniqueID).then((value) => {
+        if (typeof value === 'undefined' || value === null) {
+          localForage.setItem(this.uniqueID, {
+            state: this.state,
+            options: this.options
+          })
+        } else {
+          this.state = value.state
+          this.options = value.options
+        }
+      })
     },
     destroyed () {
       // Persist State to LocalStorage
-      localStore.set(this.uniqueID, {
+      localForage.setItem(this.uniqueID, {
         state: this.state,
         options: this.options
       })
@@ -487,6 +492,7 @@
         if (this.isLoading) {
           this.state.data = []
           this.state.search = ''
+          this.state.filters = []
           this.hasCalculatedTotals = false
           this.state.totals = {}
           this.state.offset = 0
@@ -504,6 +510,7 @@
           data: [],
           selected: [],
           isSelectAll: false,
+          filters: [],
           search: '',
           hasCalculatedTotals: false,
           totals: {},
@@ -515,8 +522,11 @@
       }
     },
     computed: {
+      getFilters () {
+        return this.state.filters
+      },
       getRowCount () {
-        if (this.state.search.length) {
+        if ((this.state.search.length || this.state.filters.length) && this.state.data.length > 0) {
           return this.state.data.length
         } else {
           return this.payload.length
@@ -548,7 +558,7 @@
       },
       getPagination () {
         let data = []
-        if (this.state.search.length) {
+        if ((this.state.search.length || this.state.filters.length) && this.state.data.length > 0) {
           data = this.state.data
         } else {
           data = this.getPayload
@@ -608,7 +618,7 @@
         //   console.log('onmessage', event.data)
         // }
         let data = []
-        if (this.state.search.length) {
+        if ((this.state.search.length || this.state.filters.length) && this.state.data.length > 0) {
           data = this.state.data
         } else {
           data = this.getPayload
@@ -619,7 +629,7 @@
       },
       getRawData () {
         let data = []
-        if (this.state.search.length) {
+        if ((this.state.search.length || this.state.filters.length) && this.state.data.length > 0) {
           data = this.state.data
         } else {
           data = this.getPayload
@@ -666,17 +676,56 @@
         this.state.isSelectAll = false
         this.state.selected = []
       },
-      filter: debounce(function (event = {}) {
+      search: debounce(function (event = {}) {
+        this.state.search = event
+        this.addFilter()
+      }, 500),
+      searchRemove () {
+        this.state.search = ''
+        this.filterAndSearch(this.getPayload)
+      },
+      filterAndSearch (oldData) {
+        if (this.state.filters.length > 0) {
+          for (let i = 0; i < this.state.filters.length; i++) {
+            oldData = this.filter(oldData, this.state.filters[i])
+            if (this.state.search.length > 0 && i === this.state.filters.length - 1) {
+              oldData = this.filter(oldData, {
+                'value': this.state.search
+              })
+            }
+          }
+        } else if (this.state.search.length > 0) {
+          oldData = this.filter(oldData, {
+            'value': this.state.search
+          })
+        }
+        this.state.data = oldData
+      },
+      addFilter: debounce(function (event = {}) {
+        let oldData = this.state.filters.length ? this.state.data : this.getPayload
         if (event.hasOwnProperty('search') && typeof event.search !== 'undefined') {
-          this.state.offset = 0
-          this.state.search = event.search
-          let newData = filter(this.getPayload, (o) => {
+          if (event.hasOwnProperty('column') && event.column.length) {
+            this.state.filters.push({
+              'value': event.search,
+              'column': event.column
+            })
+          } else {
+            this.state.filters.push({
+              'value': event.search
+            })
+          }
+        }
+        this.filterAndSearch(oldData)
+      }, 275),
+      filter (data, criteria) {
+        if (criteria.hasOwnProperty('value') && typeof criteria.value !== 'undefined') {
+          let newData = filter(data, (o) => {
             let found = false
             for (let key in o) {
-              if (event.hasOwnProperty('column') && event.column.length) {
-                if (key === event.column) {
+              if (criteria.hasOwnProperty('column') && criteria.column.length) {
+                if (key === criteria.column) {
                   if (o[key] !== 'null' && o[key] !== null) {
-                    let match = o[key].toString().match(new RegExp(event.search, 'i'))
+                    let match = o[key].toString().match(new RegExp(criteria.value, 'i'))
                     if (match !== 'null' && match !== null && match.length > 0) {
                       found = true
                     }
@@ -684,7 +733,7 @@
                 }
               } else {
                 if (o[key] !== 'null' && o[key] !== null) {
-                  let match = o[key].toString().match(new RegExp(event.search, 'i'))
+                  let match = o[key].toString().match(new RegExp(criteria.value, 'i'))
                   if (match !== 'null' && match !== null && match.length > 0) {
                     found = true
                   }
@@ -693,11 +742,13 @@
             }
             return found
           })
-          this.state.data = newData
+          return newData
         }
-      }, 275),
-      filterClear () {
-        this.state.search = ''
+      },
+      filterRemove (filter) {
+        remove(this.state.filters, filter)
+        let oldData = this.getPayload
+        this.filterAndSearch(oldData)
       },
       assignUniqueID () {
         // let thisHash = md5(this.$parent.$options.name + JSON.stringify(this.state) + JSON.stringify(this.options))
@@ -705,7 +756,7 @@
         this.uniqueID = thisHash
       },
       clearLocalSettings () {
-        localStore.remove(this.uniqueID)
+        localForage.removeItem(this.uniqueID)
       },
       unsort () {
         forEach(this.getSortedColumns, (value) => {

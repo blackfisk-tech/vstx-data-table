@@ -7,20 +7,20 @@ span.data-table-cell
         a.cell--link(:href="replaceLink(getColumn['link'], getColumn['linkReplaceText'], getColumn['linkReplaceField'])", :target="getColumn['target']") {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
       //- Filter
       div(v-else-if="getColumn['type'] === 'filter'")
-        a.cell--link(@click.prevent="emitFilter(applyFilter(item[getColumn['field']], getColumn['format']), getColumn['field'])") {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
+        a.cell--link(@click.prevent="emitFilter(applyFilter(item[getColumn['field']], getColumn['format'], ...getColumn['formatArgs']), getColumn['field'])") {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
       //- Hover/Click Events
       div(v-else-if="getColumn['type'] === 'event'")
         a.cell--link(
           @hover.prevent="getColumn['onHover'] === true ? emitEvent(item[getColumn['eventName']], item[getColumn['eventPayload']], item[getColumn['eventBus']]) : ''",
           @click.prevent="getColumn['onClick'] === true ? emitEvent(item[getColumn['eventName']], item[getColumn['eventPayload']], item[getColumn['eventBus']]) : ''"
-        ) {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
+        ) {{ applyFilter(item[getColumn['field']], getColumn['format'], ...getColumn['formatArgs']) }}
       //- Editable Total
       div.field.is-narrow(v-else-if="editable && edit && item['type'] !== 'total'")
         input.input(:value.number="item[getColumn['field']]", @input="update")
       //- Total
-      div(v-else-if="item['type'] === 'total'"): strong {{ applyFilter(item['value'], getColumn['format']) }}
+      div(v-else-if="item['type'] === 'total'"): strong {{ applyFilter(item['value'], getColumn['format'], ...getColumn['formatArgs']) }}
       template(v-else="")
-        data-table-cell-default(:text="applyFilter(item[getColumn['field']], getColumn['format'])", :maxLength="125")
+        data-table-cell-default(:text="applyFilter(item[getColumn['field']], getColumn['format'], ...getColumn['formatArgs'])", :maxLength="125")
 
 </template>
 
@@ -84,11 +84,14 @@ export default {
         column
       })
     },
-    applyFilter (items, name) {
+    applyFilter (items, name, ...args) {
       if (name === undefined || name === null || name === '' || items === '') {
         return items
       }
-      return this.$root.$options.filters[name](items)
+      if (name === 'formatDate') {
+        console.log(args)
+      }
+      return this.$root.$options.filters[name](items, ...args)
     },
     replaceLink (link, text, val) {
       for (var i = 0; i < text.length; i++) {

@@ -220,7 +220,7 @@
                 slot(name="error")
                   p.subtitle &nbsp;Loading...&nbsp;
                     loader(:barCount="parseInt(5)", size="small")
-        tr(v-if="!isLoading", v-for="(item, i) in getData", :key="`table-row-${i}`")
+        tr(v-if="!isLoading", v-for="(item, i) in getData", :key="`table-row-${i}`", :class="{'is-altered': isAltered(item)}")
           td.data-table__row(:class="{'borderless': !options.table.cellbordered}", v-if="options.isRanked") {{ (i + 1) + (state.offset * options.pagination.rowsPerPage) }}
           td.data-table__row(v-if="options.table.isSelectable", :class="{'borderless': !options.table.cellbordered}")
             input(type="checkbox", :checked="isSelected(item)", @change="select(item)")
@@ -356,6 +356,9 @@
       schema: joi.array().items(joi.object().min(1)),
       options: {}
     },
+    altered: {
+      schema: joi.array()
+    },
     columns: {
       schema: joi.array().items(
         joi.object().keys({
@@ -475,6 +478,17 @@
           })
         }
       },
+      altered: {
+        note: 'An array of payload indexes that have been altered.',
+        type: Array,
+        required: false,
+        default: () => { return [] },
+        validator: value => {
+          return joi.validate(value, schemas.altered.schema, schemas.altered.options, (err, value) => {
+            return err ? () => { throw err } : true
+          })
+        }
+      },
       id: {
         note: '',
         type: String,
@@ -542,7 +556,14 @@
         return this.state.selected
       },
       getColspan () {
-        return this.options.isRanked ? this.state.columns.length + 1 : this.state.columns.length
+        let colspan = this.state.columns.length
+        if (this.options.isRanked) {
+          colspan++
+        }
+        if (this.options.table.isSelectable) {
+          colspan++
+        }
+        return colspan
       },
       getDisplayColumns () {
         let columns = sortBy(filter(this.state.columns, 'isVisible'), [ (c) => { return c.position } ])
@@ -675,6 +696,9 @@
       clearSelects () {
         this.state.isSelectAll = false
         this.state.selected = []
+      },
+      isAltered (item) {
+        return this.altered.includes(findIndex(this.payload, item))
       },
       search: debounce(function (event = {}) {
         this.state.search = event
@@ -1175,4 +1199,8 @@
     top 1px
   .table td.borderless, .table th
     border 0px
+  .is-altered:after
+    content '\00AB '
+    color red
+    font-weight 800
 </style>

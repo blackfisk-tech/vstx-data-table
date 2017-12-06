@@ -266,7 +266,7 @@
         cellbordered: false,
         overflow: false,
         hoverable: true,
-        fullwidth: true,
+        fullwidth: false,
         filename: '',
         isSelectable: false
       },

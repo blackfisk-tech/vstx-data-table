@@ -23,7 +23,7 @@ export default {
     getText () {
       if (this.isHovered) {
         return this.text
-      } else if (this.text !== null) {
+      } else if (this.text !== null && this.text !== undefined) {
         return (this.text.length > this.maxLength ? `${this.text.substring(0, this.maxLength)}...` : this.text)
       } else {
         return ''

@@ -700,10 +700,10 @@
       isAltered (item) {
         return this.altered.includes(findIndex(this.payload, item))
       },
-      search: debounce(function (event = {}) {
+      search (event = {}) {
         this.state.search = event
         this.addFilter()
-      }, 500),
+      },
       searchRemove () {
         this.state.search = ''
         this.filterAndSearch(this.getPayload)

@@ -1,3 +1,4 @@
+import { forEach } from 'lodash'
 export const downloadCSV = {
   methods: {
     downloadCSV (input = [], filename = `export-${new Date().toISOString().split('T')[0]}.csv`, columnDelimiter = ',', lineDelimiter = '\n') {
@@ -23,12 +24,21 @@ export const downloadCSV = {
       result += keys.join(columnDelimiter)
       result += lineDelimiter
       // 
-      data.forEach((item) => {
+      forEach(data, (item) => {
         let ctr = 0
-        keys.forEach((key) => {
+        forEach(keys, (key) => {
           if (ctr > 0) result += columnDelimiter
-
-          result += item[key]
+          let data = item[key]
+          if (typeof data === 'string') {
+            if (data.includes(',') || data.includes('"') || (data.match(/\r?\n|\r/g) !== null && data.match(/\r?\n|\r/g).length > 0)) {
+              if (data.includes('"')) {
+                let data = data.replace(/"/g, '""')
+              }
+              data = `"${data}"`
+            }
+            data = data.trim()
+          }
+          result += data
           ctr++
         })
         result += lineDelimiter

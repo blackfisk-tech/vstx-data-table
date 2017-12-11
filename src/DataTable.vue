@@ -709,6 +709,7 @@
         this.filterAndSearch(this.getPayload)
       },
       filterAndSearch (oldData) {
+        this.state.offset = 0
         if (this.state.filters.length > 0) {
           for (let i = 0; i < this.state.filters.length; i++) {
             oldData = this.filter(oldData, this.state.filters[i])

@@ -777,7 +777,8 @@
       },
       assignUniqueID () {
         // let thisHash = md5(this.$parent.$options.name + JSON.stringify(this.state) + JSON.stringify(this.options))
-        let thisHash = md5(`${this.id}`)
+        let thisHash = md5(`${process.env.npm_package_version
+}-${this.id}`)
         this.uniqueID = thisHash
       },
       clearLocalSettings () {

@@ -30,6 +30,8 @@ export const downloadCSV = {
           if (ctr > 0) result += columnDelimiter
           let data = item[key]
           if (typeof data === 'string') {
+            // data.match(/\r?\n|\r|\f/g)
+            // Include feed?
             if (data.includes(',') || data.includes('"') || (data.match(/\r?\n|\r/g) !== null && data.match(/\r?\n|\r/g).length > 0)) {
               if (data.includes('"')) {
                 let data = data.replace(/"/g, '""')

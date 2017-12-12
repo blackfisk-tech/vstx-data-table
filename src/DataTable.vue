@@ -398,6 +398,8 @@
     description: '',
     token: `data-table-cell()&attributes({:payload: 'payload', :options: 'options'})`,
     created () {
+      this.state.search = ''
+      this.state.filters = [] 
       this.configure()
       // Configure
       if (this.payload.length > 0) {

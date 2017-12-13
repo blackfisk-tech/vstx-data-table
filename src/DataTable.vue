@@ -399,7 +399,7 @@
     token: `data-table-cell()&attributes({:payload: 'payload', :options: 'options'})`,
     created () {
       this.state.search = ''
-      this.state.filters = [] 
+      this.state.filters = this.filters
       this.configure()
       // Configure
       if (this.payload.length > 0) {
@@ -419,6 +419,7 @@
           this.options = value.options
         }
       })
+      this.filterAndSearch(this.getPayload)
     },
     destroyed () {
       // Persist State to LocalStorage
@@ -491,6 +492,13 @@
           })
         }
       },
+      filters: {
+        type: Array,
+        required: false,
+        default: () => {
+          return []
+        }
+      },
       id: {
         note: '',
         type: String,
@@ -498,6 +506,18 @@
       }
     },
     watch: {
+      'options': {
+        handler: function () {
+          this.$emit('onOptionsChange', this.options)  
+        },
+        deep: true
+      },
+      'state.columns': {
+        handler: function () {
+          this.$emit('onColumnChange', this.state.columns)  
+        },
+        deep: true
+      },
       'options.totals.isVisible.all' () {
         // Calculate Totals Only when Necessary
         if (!this.state.hasCalculatedTotals) {
@@ -779,8 +799,7 @@
       },
       assignUniqueID () {
         // let thisHash = md5(this.$parent.$options.name + JSON.stringify(this.state) + JSON.stringify(this.options))
-        let thisHash = md5(`${process.env.npm_package_version
-}-${this.id}`)
+        let thisHash = md5(`${this.id}`)
         this.uniqueID = thisHash
       },
       clearLocalSettings () {

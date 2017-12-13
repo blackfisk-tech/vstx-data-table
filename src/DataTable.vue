@@ -245,7 +245,9 @@
     cloneDeep,
     debounce,
     findIndex,
-    remove
+    remove,
+    isDate,
+    isNumber
   } from 'lodash'
   import SearchBar from 'vstx-search-bar'
   import Loader from 'vstx-loader'
@@ -861,15 +863,17 @@
               let firstValue = firstRow[columnName]
               let columnFormat = 'formatString'
               let alignment = 'left'
-              if (typeof firstValue === 'number') {
+              if (isNumber(firstValue) === true) {
                 alignment = 'right'
                 if (columnName.toLowerCase().includes('percent') || columnName.includes('%')) {
                   columnFormat = 'formatPercent'
-                } else if (this.getDecimalPlaces(firstValue) === 2) {
+                } else if (this.getDecimalPlaces(firstValue) === 2 || columnName.includes('$') || columnName.includes('dollar')) {
                   columnFormat = 'formatMoney'
                 } else {
                   columnFormat = 'formatNumber'
                 }
+              } else if (isDate(firstValue) === true) {
+                columnFormat = 'formatDate'
               }
               let column = {
                 name: rowKeys[i],

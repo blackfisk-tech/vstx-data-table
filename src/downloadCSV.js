@@ -19,11 +19,11 @@ export const downloadCSV = {
         return
       }
       let keys = Object.keys(data[0])
-      // 
+      //
       let result = ''
       result += keys.join(columnDelimiter)
       result += lineDelimiter
-      // 
+      //
       forEach(data, (item) => {
         let ctr = 0
         forEach(keys, (key) => {
@@ -34,7 +34,7 @@ export const downloadCSV = {
             // Include feed?
             if (data.includes(',') || data.includes('"') || (data.match(/\r?\n|\r/g) !== null && data.match(/\r?\n|\r/g).length > 0)) {
               if (data.includes('"')) {
-                let data = data.replace(/"/g, '""')
+                data = data.replace(/"/g, '""')
               }
               data = `"${data}"`
             }

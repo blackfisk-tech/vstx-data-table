@@ -1,12 +1,12 @@
 <template lang="pug">
   .data-table
-    .data-table__filters__active(v-if="state.search.length || state.filters.length",style="padding-bottom:10px;") 
+    .data-table__filters__active(v-if="state.search.length || state.filters.length",style="padding-bottom:10px;")
       nav.breadcrumb(aria-label="filters")
         ul
           li Filtering by:&nbsp;&nbsp;
             span.tag.is-primary(v-if="state.search.length") Search: {{ state.search }}
               button.delete.is-small(@click="searchRemove")
-            span.tag.is-primary(v-for="filter in getFilters") {{ filter.column }} : {{ filter.value }} 
+            span.tag.is-primary(v-for="filter in getFilters") {{ filter.column }} : {{ filter.value }}
               button(class="delete is-small", @click="filterRemove(filter)")
     .level.data-table__head
       .level-left
@@ -410,25 +410,25 @@
       // Create Unique ID
       this.assignUniqueID()
       // Load Saved State from LocalStorage
-      localForage.getItem(this.uniqueID).then((value) => {
-        if (typeof value === 'undefined' || value === null) {
-          localForage.setItem(this.uniqueID, {
-            state: this.state,
-            options: this.options
-          })
-        } else {
-          this.state = value.state
-          this.options = value.options
-        }
-      })
+      // localForage.getItem(this.uniqueID).then((value) => {
+      //   if (typeof value === 'undefined' || value === null) {
+      //     localForage.setItem(this.uniqueID, {
+      //       state: this.state,
+      //       options: this.options
+      //     })
+      //   } else {
+      //     this.state = value.state
+      //     this.options = value.options
+      //   }
+      // })
       this.filterAndSearch(this.getPayload)
     },
     destroyed () {
       // Persist State to LocalStorage
-      localForage.setItem(this.uniqueID, {
-        state: this.state,
-        options: this.options
-      })
+      // localForage.setItem(this.uniqueID, {
+      //   state: this.state,
+      //   options: this.options
+      // })
     },
     components: {
       'data-table-cell': DataTableCell,
@@ -510,13 +510,13 @@
     watch: {
       'options': {
         handler: function () {
-          this.$emit('onOptionsChange', this.options)  
+          this.$emit('onOptionsChange', this.options)
         },
         deep: true
       },
       'state.columns': {
         handler: function () {
-          this.$emit('onColumnChange', this.state.columns)  
+          this.$emit('onColumnChange', this.state.columns)
         },
         deep: true
       },
@@ -805,7 +805,7 @@
         this.uniqueID = thisHash
       },
       clearLocalSettings () {
-        localForage.removeItem(this.uniqueID)
+        // localForage.removeItem(this.uniqueID)
       },
       unsort () {
         forEach(this.getSortedColumns, (value) => {

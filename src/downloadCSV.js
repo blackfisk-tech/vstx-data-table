@@ -1,4 +1,5 @@
 import { forEach } from 'lodash'
+
 export const downloadCSV = {
   methods: {
     downloadCSV (input = [], filename = `export-${new Date().toISOString().split('T')[0]}.csv`, columnDelimiter = ',', lineDelimiter = '\n') {
@@ -8,10 +9,15 @@ export const downloadCSV = {
         input = 'data:text/csv;charset=utf-8,' + input
       }
       let output = encodeURI(input)
-      let link = document.createElement('a')
-      link.setAttribute('href', output)
-      link.setAttribute('download', filename)
-      link.click()
+      let blob = new Blob([output], {type: 'text/csv'})
+      if (window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(blob, filename)
+      } else {
+        let link = document.createElement('a')
+        link.setAttribute('href', window.URL.createObjectURL(blob, {type: 'text/csv'}))
+        link.setAttribute('download', filename)
+        link.click()
+      }
     },
     convertCSV (input = [], columnDelimiter = ',', lineDelimiter = '\n') {
       let data = input

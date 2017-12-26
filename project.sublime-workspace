@@ -1,0 +1,1596 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"upsert",
+				"upsertGraph\t(index.js)"
+			],
+			[
+				"broadcastPr",
+				"broadcastProduct"
+			],
+			[
+				"diff",
+				"diffedData"
+			],
+			[
+				"merge",
+				"mergedData"
+			],
+			[
+				"reference",
+				"referenceId\t(broadcast.js)"
+			],
+			[
+				"jsonC",
+				"jsonConfiguration\t(report.js)"
+			],
+			[
+				"json",
+				"jsonConfiguration\t(report.js)"
+			],
+			[
+				"local",
+				"localForage"
+			],
+			[
+				"sele",
+				"selection"
+			],
+			[
+				"usbDe",
+				"usbDeviceConnected"
+			],
+			[
+				"sca",
+				"scaleDevice"
+			],
+			[
+				"category",
+				"categoryList"
+			],
+			[
+				"fetchAndUp",
+				"fetchAndUpdateChannelCategory"
+			],
+			[
+				"response",
+				"responseData"
+			],
+			[
+				"caeg",
+				"categoryId"
+			],
+			[
+				"resep",
+				"responseData"
+			],
+			[
+				"shipping",
+				"shippingTemplateId\t(channelListing.js)"
+			],
+			[
+				"salesC",
+				"salesChannelId"
+			],
+			[
+				"parentProd",
+				"parentProductId"
+			],
+			[
+				"blackfi",
+				"blackfiskDB"
+			],
+			[
+				"up",
+				"upsertGraph"
+			],
+			[
+				"query",
+				"queryContext"
+			],
+			[
+				"upser",
+				"upsertGraph"
+			],
+			[
+				"ChannelLis",
+				"ChannelListingError\t(channelListingError.js)"
+			],
+			[
+				"feed",
+				"feedContent"
+			],
+			[
+				"sub",
+				"submitFileContents"
+			],
+			[
+				"black",
+				"blackfiskDB"
+			],
+			[
+				"total",
+				"total-sales-by-brand\t(TotalSalesByBrand.vue)"
+			],
+			[
+				"Total",
+				"TotalSalesByBrand\t(TotalSalesByBrand.vue)"
+			],
+			[
+				"is",
+				"isChannelListingActive\t(index.js)"
+			],
+			[
+				"integrat",
+				"integrationData"
+			],
+			[
+				"chan",
+				"channelId"
+			],
+			[
+				"rese",
+				"response"
+			],
+			[
+				"reques",
+				"requestReportId"
+			],
+			[
+				"report",
+				"requestReportId"
+			],
+			[
+				"sales",
+				"salesChannelId"
+			],
+			[
+				"pack",
+				"packageLengthInch"
+			],
+			[
+				"ship",
+				"shipmentData"
+			],
+			[
+				"orderI",
+				"orderItems"
+			],
+			[
+				"last",
+				"lastSyncedAt"
+			],
+			[
+				"integr",
+				"integrationId\t(index.js)"
+			],
+			[
+				"integ",
+				"integration"
+			],
+			[
+				"crwal",
+				"crawlBatchID=0"
+			],
+			[
+				"thispro",
+				"thisProxyID"
+			],
+			[
+				"craw",
+				"crawlBatchID=0"
+			],
+			[
+				"sh",
+				"shutdown"
+			],
+			[
+				"phan",
+				"phantomArrParams"
+			],
+			[
+				"shutdown",
+				"shutdownSystem"
+			],
+			[
+				"seller",
+				"sellerscan"
+			],
+			[
+				"sleep",
+				"sleepTimeout"
+			],
+			[
+				"mo",
+				"map-compliance-report\t(ReportMAP.vue)"
+			],
+			[
+				"param",
+				"paramter"
+			],
+			[
+				"listT",
+				"listToArray"
+			],
+			[
+				"reRe",
+				"REReplaceNoCase\tfn (cfml)"
+			],
+			[
+				"ReRepla",
+				"REReplaceNoCase"
+			],
+			[
+				"replace",
+				"replaceNoCase\tfn (cfml)"
+			],
+			[
+				"phantom",
+				"phantomArrParams"
+			],
+			[
+				"Ident",
+				"Identifier"
+			],
+			[
+				"k",
+				"keyArray\tstruct.fn (cfml)"
+			],
+			[
+				"min",
+				"minInterval"
+			],
+			[
+				"therad",
+				"threadID"
+			],
+			[
+				"cooki",
+				"cookieData"
+			],
+			[
+				"coo",
+				"cookieData"
+			],
+			[
+				"find",
+				"find\tarray.fn (cfml)"
+			],
+			[
+				"review",
+				"reviewCount"
+			],
+			[
+				"reMatch",
+				"REMatchNoCase\tfn (cfml)"
+			],
+			[
+				"reReplace",
+				"REReplaceNoCase\tfn (cfml)"
+			],
+			[
+				"Serize",
+				"serializeJSON\tfn (cfml)"
+			],
+			[
+				"lsNu",
+				"LSParseNumber\tfn (cfml)"
+			],
+			[
+				"lsN",
+				"lsParseNumber"
+			],
+			[
+				"heae",
+				"headerAccept"
+			],
+			[
+				"crawI",
+				"crawlIDArray"
+			],
+			[
+				"crawlID",
+				"crawlIDArray"
+			],
+			[
+				"data",
+				"datasource"
+			],
+			[
+				"throw",
+				"cfthrow\ttag (cfml)"
+			],
+			[
+				"install",
+				"install_linode"
+			],
+			[
+				"mon",
+				"monitor-password"
+			],
+			[
+				"mont",
+				"monitor-username"
+			],
+			[
+				"cluster-ap",
+				"cluster-app-password"
+			],
+			[
+				"cluster",
+				"cluster-password"
+			],
+			[
+				"apo",
+				"apophisapp"
+			],
+			[
+				"aph",
+				"apophisapp"
+			],
+			[
+				"amazon",
+				"amazon_transactions"
+			],
+			[
+				"allow",
+				"allow_intl_all"
+			],
+			[
+				"all",
+				"allow_intl_canada"
+			],
+			[
+				"categ",
+				"category_id"
+			],
+			[
+				"call",
+				"callEbay"
+			],
+			[
+				"category_de",
+				"category_dept_name"
+			],
+			[
+				"inventory_and",
+				"inventory_and_channel_connections_extended_data"
+			],
+			[
+				"product",
+				"product_id"
+			],
+			[
+				"quan",
+				"quantity_in_stock"
+			],
+			[
+				"v",
+				"vertical-align"
+			],
+			[
+				"quant",
+				"quantity_in_stock"
+			],
+			[
+				"slamwe",
+				"slamwebShipping"
+			],
+			[
+				"inter",
+				"interceptData"
+			],
+			[
+				"jwt",
+				"jwtToken"
+			],
+			[
+				"quantity",
+				"quantity_adjusted"
+			],
+			[
+				"quanti",
+				"quantity_adjusted"
+			],
+			[
+				"soli",
+				"soliData"
+			],
+			[
+				"date_",
+				"date_first_scanned"
+			],
+			[
+				"qty",
+				"quantity_scanned"
+			],
+			[
+				"qua",
+				"quantity_in_stock"
+			],
+			[
+				"queryDat",
+				"buildQueryData"
+			],
+			[
+				"amazonMa",
+				"amazonMaxOrderIDs"
+			],
+			[
+				"orers",
+				"orders"
+			],
+			[
+				"displa",
+				"display_price_each"
+			],
+			[
+				"lsParseNu",
+				"LSParseCurrency\tfn (cfml)"
+			],
+			[
+				"need",
+				"needleResponse"
+			],
+			[
+				"nee",
+				"needleResponse"
+			],
+			[
+				"onRequest",
+				"onRequestEnd\tfn (cfml)"
+			],
+			[
+				"reRepla",
+				"REReplace\tfn (cfml)"
+			],
+			[
+				"cah",
+				"cacheTimeout"
+			],
+			[
+				"depend",
+				"dependentFiles"
+			],
+			[
+				"hidden",
+				"hidden-xs"
+			],
+			[
+				"fa-caret",
+				"fa-caret-down\tfa-caret-down"
+			],
+			[
+				"fa-down",
+				"fa-arrow-down\tfa-arrow-down"
+			],
+			[
+				"hidd",
+				"hidden-xs"
+			],
+			[
+				"purchase",
+				"purchase_orders"
+			],
+			[
+				"purchase_or",
+				"purchase_order_line_items"
+			],
+			[
+				"tracking",
+				"tracking-display\t(slamwebChaos-module.js)"
+			],
+			[
+				"salesOrder",
+				"salesOrderID"
+			],
+			[
+				"barcode",
+				"barcode"
+			],
+			[
+				"track",
+				"tracking-number-fedex\t(barcodeUtilities.js)"
+			],
+			[
+				"usps",
+				"uspsBarcode"
+			],
+			[
+				"fa-off",
+				"fa-power-off\tfa-power-off"
+			],
+			[
+				"x-te",
+				"x-template"
+			],
+			[
+				"purchase_order",
+				"purchase_order_line_items"
+			],
+			[
+				"unkn",
+				"unknown-upc"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "Packages/Golang Build/Go.sublime-build",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/Golang Build/Go.sublime-build",
+					""
+				],
+				[
+					"Packages/Golang Build/Go.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/Golang Build/Go.sublime-build",
+					"Test"
+				],
+				[
+					"Packages/Golang Build/Go.sublime-build",
+					"Install"
+				],
+				[
+					"Packages/Golang Build/Go.sublime-build",
+					"Cross-Compile (Interactive)"
+				],
+				[
+					"Packages/Golang Build/Go.sublime-build",
+					"Clean"
+				]
+			],
+			[
+				"Packages/Golang Build/Go.sublime-build",
+				"Run"
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 104.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"enable",
+				"Package Control: Enable Package"
+			],
+			[
+				"dis",
+				"Package Control: Disable Package"
+			],
+			[
+				"packinst",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: List Packages"
+			],
+			[
+				"en",
+				"Package Control: Enable Package"
+			],
+			[
+				"upgrade",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"enab",
+				"Package Control: Enable Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"enabl",
+				"Package Control: Enable Package"
+			],
+			[
+				"disable",
+				"Package Control: Disable Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"theme",
+				"UI: Select Theme"
+			],
+			[
+				"package",
+				"Package Control: List Packages"
+			],
+			[
+				"re",
+				"Package Control: Remove Package"
+			],
+			[
+				"alignt",
+				"AlignTab"
+			],
+			[
+				"align",
+				"AlignTab: Live Preview Mode"
+			],
+			[
+				"prett",
+				"HTMLPrettify"
+			],
+			[
+				"came",
+				"Convert Case: camelCase"
+			],
+			[
+				"lower",
+				"Convert Case: Lower Case"
+			],
+			[
+				"low",
+				"Convert Case: Lower Case"
+			],
+			[
+				"camel",
+				"Convert Case: camelCase"
+			],
+			[
+				"six",
+				"Set Syntax: Six"
+			],
+			[
+				"list",
+				"Package Control: List Packages"
+			],
+			[
+				"terminal",
+				"Terminality: Browse Commands..."
+			],
+			[
+				"termin",
+				"Terminal: Open"
+			],
+			[
+				"sort",
+				"Sort Lines"
+			],
+			[
+				"cam",
+				"Convert Case: camelCase"
+			],
+			[
+				"disable pa",
+				"Package Control: Disable Package"
+			],
+			[
+				"install package",
+				"Package Control: Install Package"
+			],
+			[
+				"package con",
+				"Package Control: Install Package"
+			],
+			[
+				"quick",
+				"File: Quick File Open"
+			],
+			[
+				"upper",
+				"Convert Case: Upper Case"
+			],
+			[
+				"conve",
+				"Convert Case: Title Case"
+			],
+			[
+				"package control",
+				"Package Control: Install Package"
+			],
+			[
+				"doc",
+				"DocBlockr: Decorate line comment"
+			],
+			[
+				"snippet",
+				"Snippet: bs3-container"
+			],
+			[
+				"manager",
+				"SnippetManager: Create"
+			],
+			[
+				"sync",
+				"Sync Settings: Download"
+			],
+			[
+				"",
+				"Sync Settings: Create and Upload"
+			],
+			[
+				"svn",
+				"TortoiseSVN: Commit"
+			],
+			[
+				"pvr",
+				"PackageResourceViewer: Open Resource"
+			],
+			[
+				"packa",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"package cont",
+				"Package Control: Install Package"
+			],
+			[
+				"colored",
+				"Color Scheme Editor: Edit current color scheme"
+			],
+			[
+				"color",
+				"Color Scheme Editor: Edit current color scheme"
+			],
+			[
+				"colorsch",
+				"Color Scheme Editor: Edit current color scheme"
+			],
+			[
+				"colorsu",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"colors",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"package ",
+				"Package Control: List Packages"
+			],
+			[
+				"sub",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"pacakge",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: List Packages"
+			],
+			[
+				"colorsub",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"packge",
+				"Package Control: Install Package"
+			],
+			[
+				"pac",
+				"Package Control: Remove Package"
+			],
+			[
+				"sublim",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"pret",
+				"HTMLPrettify"
+			],
+			[
+				"pretty",
+				"HTMLPrettify"
+			],
+			[
+				"Package Control: l",
+				"Package Control: List Packages"
+			],
+			[
+				"html",
+				"HTMLPrettify: Prettify"
+			],
+			[
+				"co",
+				"Package Control: Install Package"
+			],
+			[
+				"handler",
+				"Snippet: ColdBox Event Handler"
+			],
+			[
+				"coldfusion",
+				"Set Syntax: ColdFusion Component"
+			],
+			[
+				"sql",
+				"Set Syntax: SQL"
+			],
+			[
+				"wire",
+				"Snippet: WireBox Configuration Object"
+			],
+			[
+				"coldbox",
+				"Snippet: Create a ColdBox Virtual Entity Service"
+			],
+			[
+				"cold",
+				"Snippet: Create a ColdBox Generic ORM Entity Service"
+			],
+			[
+				"coldbo",
+				"Snippet: ColdBox Interceptor"
+			],
+			[
+				"action\t",
+				"Snippet: Create an Active ORM Entity"
+			]
+		],
+		"width": 492.0
+	},
+	"console":
+	{
+		"height": 463.0,
+		"history":
+		[
+			"view.run_command(\"unfold_all\")",
+			"prv",
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"index_files=False;",
+			";",
+			"index_files=False",
+			"index_files=false;",
+			"sublime.index_files(False)",
+			"index_files(false)",
+			"index_files=false",
+			"sublime.index_files(false)",
+			"sublime.log_input(False)",
+			"sublime.log_commands(True)",
+			"sublime.log_input(True)",
+			"view.window().run_command('close_cftag')",
+			"update",
+			"upgrade",
+			"sublime.log_commands(True)",
+			"sublime.log_input(True)",
+			"view.window().run_command('close_cftag')",
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/D/Dropbox/Websites/vstx-data-table"
+	],
+	"file_history":
+	[
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/api/routes/productData/reports/brand.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/task/skubana/index.js",
+		"/D/Dropbox/Websites/Blackfisk/base-deployment/linode/linode-deploy-db-4.sh",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/api/api.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/api/plugins/blackfisk-api.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/api/routes/productData/brandProduct/index.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/task/amazon/index.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/helper/helper.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/api/routes/blackfisk/product/index.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/api/routes/index.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/broadcast.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/base.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/product.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/test/database.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/sellers/NoUPCReport.vue",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/api/routes/blackfisk/account/index.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/schemas/product.js",
+		"/D/Dropbox/Websites/Blackfisk/base-deployment/linode/linode-deploy-vpn.sh",
+		"/D/Dropbox/Websites/Blackfisk/base-deployment/linode/linode-primary-deployment.sh",
+		"/D/Dropbox/Websites/Blackfisk/base-deployment/cf-server/handlers/iptables.cfc",
+		"/D/Dropbox/Websites/Blackfisk/base-deployment/linode/openvpn-convert.py",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/reports/demo.vue",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/mixins/reports/baseReport.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/productData/reports/brand/productOffers.vue",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/test.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/package.json",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/reports/wrapper.vue",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/node_modules/vstx-data-table/src/DataTable.vue",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/report.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/api/routes/blackfisk/report/index.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/README.md",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/.travis.yml",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/productData/reports/brand/marketplaceProducts.vue",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/routes/reports.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/productData/reports/brand/products.vue",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/api/routes/vendors/index.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/routes/productData.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/menus/report.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/api/routes/productData/reports/index.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/routes.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/menus/productData.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/api/routes/productData/index.js",
+		"/D/Dropbox/Websites/Blackfisk/base-deployment/linode/mysql-endless-loop.sh",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/routes/tools.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/site.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/site/build/webpack.prod.conf.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/tools/shipping.vue",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/site/build/webpack.base.conf.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/site/dist/static/js/app.3755f7bf5fe924b825aa.js.map",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/tools/barcode-scanner.vue",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/mixins/webHub.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/menus/tools.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/lib/webHub.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/site/index.html",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/api/routes/blackfisk/account/mor.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/accounts/MyReportBuyBoxMOR.vue",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/routes/myaccount.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/accounts/AccountEdit.vue",
+		"/D/My Sublime/Data/Packages/SyntaxHighlightTools/README.rst",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/brands/compliance/ReportMAP.vue",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/site/src/fontawesome.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/brands/compliance/ReportBuyBoxMAP.vue",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/brands/compliance/BrowseMAP.vue",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/task/shopify/index.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/task/ebay/index.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/node_modules/ebay-2-api/lib/errors.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/task/scribble/index.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/task/slam/index.js",
+		"/D/My Sublime/Data/Packages/SyntaxFold/syntax_fold.sublime-settings",
+		"/D/My Sublime/Data/Packages/User/syntax_fold.sublime-settings",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/task/startup.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/node_modules/ebay-2-api/lib/xml-request.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/node_modules/clone/test.html",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/channelSiteCategory.js",
+		"/D/Dropbox/Websites/Blackfisk/base-deployment/linode/mysql-import-subscriptionList.sh",
+		"/D/Dropbox/Websites/Blackfisk/base-deployment/linode/slam-autopricing.sh",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/api/routes/blackfisk/account/pricing.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/channelListing.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/channelListingData.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/ebayData/models/ebayListing.js",
+		"/D/Dropbox/Websites/Blackfisk/base-deployment/cf-server/modules_app/sellerscan/handlers/task.cfc",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/config/db.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/task/index.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/competitive/config/db.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/tools/pricing.vue",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/node_modules/ebay-2-api/lib/deep-to-array.js",
+		"/D/Dropbox/Websites/nodejs-ebay-api/lib/deep-to-array.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/ebayData/config/db.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/ebayData/models/base.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/productData/models/product.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/productData/models/productSimilarASIN.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/productData/models/productBrowseNode.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/productData/models/productEAN.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/channel.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/channelShippingTemplate.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/node_modules/amdefine/amdefine.js",
+		"/D/Dropbox/Websites/Blackfisk/base-deployment/api-server/node_modules/acorn-jsx/node_modules/acorn/dist/acorn.es.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/tools/listings.vue",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/tools/brandChannel.vue",
+		"/D/Dropbox/Websites/loc.sellerscan.com/task/amazon/amazon.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/site/src/main.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/warehouse.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/customer.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/channelOrderItem.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/channelOrder.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/channelListingError.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/brandChannel.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/brand.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/integration.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/userRole.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/userIntegration.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/userAccount.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/user.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/productBundle.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/inventoryLocation.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/inventory.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/integrationType.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/integrationState.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/task/amazon/aws/amazonProductAPI.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/task/amazon/aws/utils.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/productData/models/productUPC.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/task/amazon/amazonProductAPI.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/api/routes/blackfisk/brand/index.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/db/blackfisk/models/testProduct.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/api/routes/users/index.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/task/amazon/mws/mws.js",
+		"/D/Dropbox/Websites/Blackfisk/blackfisk.com/config/components/sellers/TotalSalesByBrand.vue"
+	],
+	"find":
+	{
+		"height": 42.0
+	},
+	"find_in_files":
+	{
+		"height": 114.0,
+		"where_history":
+		[
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\routes",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api",
+			"D:\\Dropbox\\Websites\\Blackfisk\\base-deployment",
+			"D:\\Dropbox\\Websites\\Blackfisk\\base-deployment\\config",
+			"D:\\Dropbox\\Websites\\Blackfisk\\base-deployment\\linode",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\routes",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\site",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\config",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\routes",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\task",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\config\\db\\blackfisk\\models",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\task",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\task\\amazon",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\plugins",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\task",
+			"D:\\Dropbox\\Websites\\loc.sellerscan.com\\config",
+			"D:\\Dropbox\\Websites\\loc.sellerscan.com\\api",
+			"D:\\Dropbox\\Websites\\loc.sellerscan.com\\task",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\task",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\task",
+			"D:\\Dropbox\\Websites\\loc.sellerscan.com\\task",
+			"D:\\Dropbox\\Websites\\loc.sellerscan.com",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\task",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\task\\amazon\\mws",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\task",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\task",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\node_modules\\vstx-data-table\\src",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\config",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\task",
+			"D:\\Dropbox\\Websites\\Blackfisk\\base-deployment\\linode",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\task",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\config",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\config",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\config\\components\\admin",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\node_modules\\hapi-auth-jwt2\\example",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\node_modules\\hapi-auth-jwt2\\lib",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\node_modules\\hapi-auth-jwt2",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api",
+			"D:\\Dropbox\\Websites\\nodejs-ebay-api\\lib",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\config",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api",
+			"D:\\Dropbox\\Websites\\Blackfisk\\base-deployment\\cf-server",
+			"D:\\Dropbox\\Websites\\Blackfisk\\base-deployment\\cf-server\\modules_app",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\node_modules\\hapi",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\node_modules\\hash.js",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\site",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\site\\build",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\config",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\site",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\site\\src\\stores",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com,-*/dist/*",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\config",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\site",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\site\\build",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\site\\config",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\site\\src",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\site",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\config",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\site",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\site\\dist",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\site\\build",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\plugins",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\routes",
+			"D:\\Dropbox\\Websites\\Blackfisk\\base-deployment\\config",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api,-*/node_modules/*",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\services",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\runtime",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\routes\\validations",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\routes\\handlers",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\routes\\config",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\routes",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\models",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\methods",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\lib",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\jobs",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\db",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\config",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\auth",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api,-D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\node_modules\\",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api,-D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api\\node_modules\\*",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com",
+			"D:\\Dropbox\\Websites\\Blackfisk\\blackfisk.com\\api",
+			"C:\\Users\\jerem\\AppData\\Roaming\\npm\\node_modules\\generator-hapi-api-stack",
+			"D:\\Dropbox\\Websites\\Blackfisk\\base-deployment\\cf-server\\modules_app",
+			"D:\\Dropbox\\Websites\\Blackfisk\\base-deployment\\cf-server",
+			"D:\\Dropbox\\Websites\\Blackfisk\\base-deployment\\cf-server\\modules\\cfcouchbase",
+			"D:\\Dropbox\\Websites\\Blackfisk\\crawler\\node_modules\\couchbase\\lib",
+			"D:\\Dropbox\\Websites\\Blackfisk\\base-deployment\\config",
+			"D:\\Dropbox\\Websites\\Blackfisk\\base-deployment",
+			"D:\\Dropbox\\Websites\\Blackfisk\\base-deployment\\linode",
+			"D:\\Dropbox\\Websites\\Blackfisk\\base-deployment",
+			"D:\\Dropbox\\Websites\\Blackfisk\\base-deployment\\linode",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com",
+			"D:\\Dropbox\\Websites\\apophisapp.com\\config",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\models",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\models",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\modules\\slamweb\\modules\\slamwebAmazon",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\modules\\tasks",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\modules\\slamweb\\modules\\slamwebShipping",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\modules\\tasks\\handlers",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\modules\\ebay\\models",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\modules\\reverb\\handlers",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\modules\\slamweb\\modules\\slamwebAmazon",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\modules\\reverb",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\modules\\slamweb\\modules\\slamwebShipping",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\modules\\slamweb",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\modules\\tasks",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\modules\\tasks",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\modules\\slamweb",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\modules\\tasks\\handlers",
+			"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\modules\\slamweb\\modules\\slamwebAmazon\\handlers"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"offset",
+			"parseLowestPricedOffersAPICalls",
+			"offset",
+			"refresh",
+			"skubana.download.products",
+			"reply(",
+			"channellistings",
+			"productBroadcast",
+			"broadcastLog",
+			"channelListing",
+			"host",
+			"hapi.",
+			"new",
+			"create",
+			"failAction",
+			"server.route",
+			"client_max_body_size",
+			"patchData",
+			"model",
+			"Model",
+			"model",
+			"Model",
+			"model",
+			"broadcast",
+			"original",
+			"new",
+			"/blackfisk/product",
+			"promise",
+			"\"",
+			"','",
+			"[0][i]",
+			"no-upc",
+			"note",
+			"no-upc",
+			"staging",
+			"account",
+			"path: '/",
+			"blackfisk",
+			"put",
+			"/29",
+			"/31",
+			"/30",
+			"pqServerType",
+			"pq",
+			"PQ",
+			"$ sudo ",
+			"\\n",
+			"}, {",
+			"md5",
+			"assignUniqueID",
+			"localForage",
+			"assignUniqueID",
+			"hash",
+			"numeric",
+			"options",
+			"upsertGraph",
+			"console",
+			"\"",
+			"saveJSON",
+			"emit",
+			"console.lo",
+			"\\n",
+			"setActiveBrand",
+			"configuration",
+			"select.configuration",
+			"getBrandOptions",
+			"getUniqueID",
+			"this.id",
+			"getURL",
+			"buyBoxOfferNextUpdate",
+			"CONCAT",
+			"concat",
+			"latestModifiedAt",
+			"formatArgs",
+			"brandId",
+			"/productData/reports/brand/products/${(this.params.brandId)}",
+			"this.brandId",
+			"ProductDataMenu",
+			"MyAccountMenu",
+			"centimeters",
+			"inches",
+			"vendor",
+			"Vendor",
+			"\\n",
+			"downloadProductData",
+			"\\n",
+			"pound",
+			"amazonProductDataSave",
+			"Hundredths",
+			"pound",
+			"compliance",
+			"\\n",
+			"\\n000",
+			"000",
+			"manifest",
+			"requestDevice",
+			"findScalingDevice",
+			"device",
+			"scaleDevice",
+			"this.loop",
+			"this.scale.device",
+			"thisDevice",
+			"info",
+			"true",
+			"monitorStatus",
+			"vm",
+			"this",
+			"this.$bus",
+			"getInformation",
+			"barcode, type, typeText",
+			"simulate",
+			"Tpz3!^8#6J2Cc6XK",
+			"proxysql",
+			"root",
+			"root@",
+			"functionName",
+			"    ",
+			"document.body",
+			"WebHub",
+			"webHub",
+			"WebHub",
+			"InterfaceController",
+			"interface",
+			"fromCamera",
+			"\"",
+			"pricing",
+			"length",
+			"diff"
+		],
+		"highlight": false,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"const dbCacheLite = new NodeCache({ stdTTL: 120, checkperiod: 120 })",
+			"cb-2-new.blackfisk.com",
+			" ",
+			"@sslam\"",
+			"inject=\"eBayService@eeebay\";",
+			"https://i.#event.getValue('cloudinaryURI')#.com",
+			"i.#event.getValue('cloudinaryURI')#.com",
+			"",
+			"geartree",
+			"jquery.3.1.1.js",
+			"label-outlandusa",
+			"!",
+			"logo.jpg",
+			"Save@GearTree.com",
+			"save@geartree.com",
+			"GearTree",
+			"geartree",
+			"save@geartree.com",
+			"18007057095",
+			"(800) 705-7095",
+			"#event.getValue('nsStore',{\"comanyName\":\"Online Store\"})['companyName']#",
+			"#event.getValue('nsStore','btn-primary')['successButton']#",
+			"navbar-checkout",
+			"table-checkout",
+			"#event.getValue('nsStore')['primaryDomain']#",
+			"#event.getValue('nsStore','btn-primary')['successButton']#",
+			"#event.getValue(\"cloudinaryURI\")#",
+			"select a size",
+			"geartree",
+			"security",
+			"controller.getSetting('nsgSocialLogin',false,structNew())",
+			"product",
+			"module='searchSolr'",
+			"geartree",
+			"(800) 975-9715",
+			"8009759715",
+			"(800) 975-9715",
+			"OutlandUSA",
+			"outlandusa",
+			"module=\"nsg-module-checkout\"",
+			"datasource=\"omoes\"",
+			"getIsBillingShipping",
+			"slam",
+			"product",
+			"orderStatus",
+			"/*",
+			"",
+			"#renderView(view=\"includes/authEditor\",module=\"products\")#",
+			"prc.page.cart",
+			" generator=\"native\" setter=\"false\";",
+			"getModel('category.categoryService').getAmmoCategories()",
+			"getModel('category.categoryService').getGunCategories()",
+			"ihyfflNsZKdkRT65Ax1x3A==",
+			"",
+			"coldbox.modules.cborm.model.VirtualEntityService",
+			"results/includes/",
+			"specials/includes/",
+			"fa fa-",
+			"fa fa-barcode",
+			"fa fa-inbox",
+			"fa fa-shopping-cart",
+			"fa fa-shoping-cart",
+			"fa fa-credit-card",
+			"fa fa-bar-chart",
+			"fa fa-phone-square",
+			"fa fa-tachometer",
+			"web8.vencommerce.com",
+			"<cfoutput>\n\t<cfif couponData.getIsActive() == false>\n\t\t#renderView('page/out-of-stock')#\n\t<cfelse>\n\t\t#renderView('page/template2')#\n\t</cfif>\n</cfoutput>",
+			"12484",
+			"133431",
+			"riflesforsale",
+			"pistol",
+			"rifles",
+			"riflesforsale",
+			"pistol",
+			"rifles",
+			"pistol",
+			"riflesforsale",
+			"rifles",
+			"Rifles",
+			"rifles",
+			"riflesforsale",
+			"utm_medium",
+			"col-md-6",
+			"col-md-3",
+			"col-md-",
+			"order('points','DESC')",
+			"##",
+			"property name=\"modifiedAt\" notnull=\"true\" ormtype=\"timestamp\" update=\"false\" default=\"#now()#\";",
+			"property name=\"modifiedBy\" notnull=\"true\" ormtype=\"integer\" default=\"0\" dbdefault=\"0\";",
+			"property name=\"createdBy\" notnull=\"true\" ormtype=\"integer\" default=\"0\" dbdefault=\"0\";"
+		],
+		"reverse": false,
+		"show_context": false,
+		"use_buffer2": false,
+		"whole_word": false,
+		"wrap": false
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 28.0
+	},
+	"input":
+	{
+		"height": 44.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.CSS Extended Completions":
+	{
+		"height": 0.0
+	},
+	"output.exec":
+	{
+		"height": 373.0
+	},
+	"output.find_results":
+	{
+		"height": 370.0
+	},
+	"output.sftp":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/Golang Build/Go.sublime-build",
+	"project": "project.sublime-project",
+	"replace":
+	{
+		"height": 75.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"coldbox.cfc",
+				"s | Config\\Coldbox.cfc"
+			],
+			[
+				"orderservice",
+				"s | models\\orm\\order\\orderService.cfc"
+			],
+			[
+				"cart/index.cfm",
+				"VenCommerce/modules/vencommerce/views/cart/index.cfm"
+			],
+			[
+				"cart.cfc",
+				"VenCommerce/model/cart/cart.cfc"
+			],
+			[
+				"carti",
+				"VenCommerce/model/cart/cartItem.cfc"
+			],
+			[
+				"nav",
+				"views/sites/usicna/nav.cfm"
+			],
+			[
+				"coldbox",
+				"config/Coldbox.cfc"
+			],
+			[
+				"scraper",
+				"handlers/automated/scraper.cfc"
+			],
+			[
+				"gather",
+				"botfly/plugins/gatherLinks.cfc"
+			],
+			[
+				"cache",
+				"config/CacheBox.cfc"
+			],
+			[
+				"gathe",
+				"botfly/plugins/gatherEmails.cfc"
+			],
+			[
+				"config/r",
+				"botfly/modules/coldbox-relax/config/Routes.cfm"
+			],
+			[
+				"botfly/plugins/gat",
+				"botfly/plugins/gatherLinks.cfc"
+			],
+			[
+				"views/age",
+				"views/agent/index.cfm"
+			],
+			[
+				"views/agent",
+				"views/agent/index.cfm"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"D:\\Dropbox\\Websites\\loc.slam.outlandusa.com\\slamweb.sublime-project"
+			],
+			[
+				"chan",
+				"D:\\Dropbox\\Websites\\loc.channelconnection.co\\ChannelConnection.sublime-project"
+			],
+			[
+				"emop",
+				"D:\\Dropbox\\Websites\\emop.be\\eMop-be.sublime-project"
+			],
+			[
+				"we",
+				"D:\\Dropbox\\Websites\\loc.outlandusa.com\\MainWeb.sublime-project"
+			],
+			[
+				"slam",
+				"D:\\Dropbox\\My Sublime Projects\\SLAM.sublime-project"
+			],
+			[
+				"s",
+				"D:\\Dropbox\\My Sublime Projects\\SLAM.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 584.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 376.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

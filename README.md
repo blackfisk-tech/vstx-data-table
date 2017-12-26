@@ -40,7 +40,7 @@ npm install vstx-data-table
 > We use pug & stylus in all of our code and examples. Please make adjustments if you wish you get the example below to work without installing support for pug or stylus.
 > The below example will render a simple data-table with 3 columns. More complex examples are available at [www.vuestacks.com/data-table](https://www.vuestacks.com/data-table)
 
-```
+```javascript
 <template lang="pug">
   .sample-data-table
     data-table(
@@ -72,7 +72,6 @@ export default {
 
 <style lang="stylus">
 </style>
-
 ```
 
 ## Contributing
@@ -95,4 +94,4 @@ export default {
 
 ## License
 
-> All code provided within this report is licensed with a [GNU GPLv3 License](https://www.gnu.org/licenses/quick-guide-gplv3.en.html)
+> All code provided within is licensed with a [GNU GPLv3 License](https://www.gnu.org/licenses/quick-guide-gplv3.en.html)

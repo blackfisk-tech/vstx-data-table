@@ -41,21 +41,15 @@ npm install vstx-data-table
 > The below example will render a simple data-table with 3 columns. More complex examples are available at [www.vuestacks.com/data-table](https://www.vuestacks.com/data-table)
 
 
-```html
+```javascript
 <template lang="pug">
-```
-```css
   .sample-data-table
     data-table(
       :payload="data",
       :filename="`sample-export.csv`"
     )
-```
-```html
 </template>
 <script>
-```
-```javascript
 import DataTable from 'vstx-data-table'
 
 export default {
@@ -74,8 +68,6 @@ export default {
     }
   }
 }
-```
-```html
 </script>
 <style lang="stylus">
 </style>

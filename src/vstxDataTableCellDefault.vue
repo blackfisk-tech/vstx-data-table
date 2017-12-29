@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import {delay} from 'lodash'
+import { delay, isNil } from 'lodash'
 export default {
   name: 'data-table-cell-default',
   props: {
@@ -23,7 +23,7 @@ export default {
     getText () {
       if (this.isHovered) {
         return this.text
-      } else if (this.text !== null && this.text !== undefined) {
+      } else if (!isNil(this.text)) {
         return (this.text.length > this.maxLength ? `${this.text.substring(0, this.maxLength)}...` : this.text)
       } else {
         return ''

@@ -30,7 +30,7 @@ var config = {
     lodash: 'lodash',
     localStore: 'store',
     md5: 'md5',
-    SearchBar: 'vue-stacks-search-bar',
+    SearchBar: 'vstx-search-bar',
     // DraggableList: 'vue-stacks-draggable-list',
     // LoaderWaveBars: 'vue-stacks-wave-bars'
   },
@@ -53,15 +53,15 @@ module.exports = [
     output: {
       filename: 'vstx-data-table.min.js',
       libraryTarget: 'window',
-      library: 'DataTable',
+      library: 'vstxDataTable',
     }
   }),
   merge(config, {
-    entry: path.resolve(__dirname + '/src/DataTable.vue'),
+    entry: path.resolve(__dirname + '/src/vstxDataTable.vue'),
     output: {
       filename: 'vstx-data-table.js',
       libraryTarget: 'umd',
-      library: 'data-table',
+      library: 'vstx-data-table',
       umdNamedDefine: true
     }
   })

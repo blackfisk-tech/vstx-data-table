@@ -1,14 +1,15 @@
 import { forEach } from 'lodash'
 
-export const downloadCSV = {
+export const csvMixin = {
   methods: {
     downloadCSV (input = [], filename = `export-${new Date().toISOString().split('T')[0]}.csv`, columnDelimiter = ',', lineDelimiter = '\n') {
       if (!input.length) return
       input = this.convertCSV(input, columnDelimiter, lineDelimiter)
-      if (!input.match(/^data:text\/csv/i)) {
-        input = 'data:text/csv;charset=utf-8,' + input
-      }
-      let output = encodeURI(input)
+      // if (!input.match(/^data:text\/csv/i)) {
+      //   input = 'data:text/csv;charset=utf-8,' + input
+      // }
+      // let output = encodeURI(input)
+      let output = input
       let blob = new Blob([output], {type: 'text/csv'})
       if (window.navigator.msSaveOrOpenBlob) {
         window.navigator.msSaveOrOpenBlob(blob, filename)

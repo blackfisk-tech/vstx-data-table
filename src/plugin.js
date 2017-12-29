@@ -1,7 +1,7 @@
-import DataTable from './DataTable.vue';
+import vstxDataTable from './vstxDataTable.vue';
 
 module.exports = {
   install: function (Vue, options) {
-    Vue.component('data-table', DataTable);
+    Vue.component('vstx-data-table', vstxDataTable);
   }
 };

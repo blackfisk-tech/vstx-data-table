@@ -1,0 +1,51 @@
+export const defaults = {
+  configuration: {
+    collapsePages: false,
+    isRanked: false,
+    table: {
+      bordered: false,
+      striped: true,
+      cellbordered: false,
+      overflow: false,
+      hoverable: true,
+      fullwidth: false,
+      filename: '',
+      isSelectable: false
+    },
+    settings: {
+      isVisible: true,
+      isAllowed: true,
+      offset: 0
+    },
+    sortIndicator: {
+      isVisible: true,
+      isAllowed: true
+    },
+    filter: {
+      isVisible: false,
+      isAllowed: true,
+      isEvent: false
+    },
+    columns: {
+      isVisible: false,
+      isAllowed: true
+    },
+    pagination: {
+      rowsPerPage: 10,
+      isAllowed: true,
+      isVisible: true
+    },
+    orderBy: {
+      isVisible: false,
+      isAllowed: true
+    },
+    totals: {
+      isVisible: {
+        all: false,
+        page: false,
+        count: false
+      },
+      isAllowed: true
+    }
+  }
+}

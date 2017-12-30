@@ -80,7 +80,7 @@ export const searchFilterMixin = {
         return filter(data, (o) => {
           let found = false
           forEach(o, (key) => {
-            let match = key.toString().match(new RegExp(criteria.value, 'i'))
+            let match = isNil(key) ? [] : key.toString().match(new RegExp(criteria.value, 'i'))
             found = !isNil(key) && !isNil(match) && match.length > 0
             return !found
           })

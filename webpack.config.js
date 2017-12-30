@@ -10,25 +10,21 @@ var config = {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         include: __dirname,
         exclude: /node_modules/
       },
       {
         test: /\.vue$/,
-        loader: 'vue'
-      },
-      {
-        test: /\.vue$/,
-        loader: 'vue'
+        loader: 'vue-loader'
       },
       {
         test: /\.css$/,
-        loader: 'style!less!css'
+        loader: 'css-loader'
       },
       {
         test: /\.sass$/,
-        loader: 'style!sass!css'
+        loader: 'sass-loader'
       }
     ]
   },

@@ -19,8 +19,16 @@ var config = {
         loader: 'vue'
       },
       {
+        test: /\.vue$/,
+        loader: 'vue'
+      },
+      {
         test: /\.css$/,
         loader: 'style!less!css'
+      },
+      {
+        test: /\.sass$/,
+        loader: 'style!sass!css'
       }
     ]
   },

@@ -1,0 +1,49 @@
+{
+  "collapsePages": false,
+  "isRanked": false,
+  "table": {
+    "bordered": "Allows a border to be visible",
+    "striped": "Allows alternative striped rows",
+    "cellbordered": "Allows each cell to be bordered",
+    "overflow": "Hides cells if the Table overflows it's container",
+    "hoverable": "Allows mouse hovering on rows",
+    "fullwidth": "Allows the table to be forced full-width",
+    "filename": "Override the default filename of the CSV Exporting",
+    "isSelectable": false
+  },
+  "settings": {
+    "isVisible": true,
+    "isAllowed": true,
+    "offset": 0
+  },
+  "sortIndicator": {
+    "isVisible": true,
+    "isAllowed": true
+  },
+  "filter": {
+    "isVisible": false,
+    "isAllowed": true,
+    "isEvent": false
+  },
+  "columns": {
+    "isVisible": false,
+    "isAllowed": true
+  },
+  "pagination": {
+    "rowsPerPage": 10,
+    "isAllowed": true,
+    "isVisible": true
+  },
+  "orderBy": {
+    "isVisible": false,
+    "isAllowed": true
+  },
+  "totals": {
+    "isVisible": {
+      "all": false,
+      "page": false,
+      "count": false
+    },
+    "isAllowed": true
+  }
+}

@@ -584,11 +584,13 @@
         let min = (this.state.offset - 4 < 0 ? 0 : this.state.offset - 4)
         let pagesShown = 10
         let max = min + pagesShown
-        forEach(totalPages, (p, i) => {
+        let i = 0
+        while(i < totalPages) {
           if ((returnData.length < this.listPages && this.state.offset === 0) || (i >= min && i <= max)) {
             returnData.push(i + 1)
           }
-        })
+          i++
+        }
         if (min >= 1) {
           returnData[0] = 1
           returnData.splice(1, 1, '...')
@@ -946,6 +948,8 @@
   .data-table
     overflow-x auto
     min-height 20rem
+  .data-table .table
+    background none
   .data-table .data-table__controls
     padding-top 0.5rem
   .data-table .data-table__controls .column.is-narrow

@@ -24,7 +24,7 @@ export const searchFilterMixin = {
       return this.getData.slice(this.state.offset * this.options.pagination.rowsPerPage, this.options.pagination.rowsPerPage + this.state.offset * this.options.pagination.rowsPerPage)
     },
     getData () {
-      // Use Worker to Compute Order and Slice
+      // Use Worker to Compute Order and Slice to prevent UI Lag
       /*
         Workers are ASYNC. This cannot be in a computed property.
       */
@@ -41,7 +41,7 @@ export const searchFilterMixin = {
       // worker.onmessage = (event) => {
       //   console.log('onmessage', event.data)
       // }
-      let data = ((this.state.search.length || this.state.filters.length) && this.state.data.length > 0 ? this.state.data : this.getPayload)
+      let data = ((this.state.search.length || this.getFilters.length) && this.state.data.length > 0 ? this.state.data : this.getPayload)
       let sortedData = orderBy(data, this.getOrderBy.columns, this.getOrderBy.directions)
       return sortedData
     }
@@ -57,9 +57,9 @@ export const searchFilterMixin = {
     },
     filterAndSearch (oldData) {
       this.state.offset = 0
-      if (this.state.filters.length > 0) {
-        forEach(this.state.filters, (filter, i) => {
-          oldData = (this.state.search.length > 0 && i === this.state.filters.length - 1 ? this.filter(oldData, {'value': this.state.search}) : this.filter(oldData, filter))
+      if (this.getFilters.length > 0) {
+        forEach(this.getFilters, (filter, i) => {
+          oldData = (this.state.search.length > 0 && i === this.getFilters.length - 1 ? this.filter(oldData, {'value': this.state.search}) : this.filter(oldData, filter))
         })
       } else if (this.state.search.length > 0) {
         oldData = this.filter(oldData, {'value': this.state.search})
@@ -73,7 +73,7 @@ export const searchFilterMixin = {
           ...(event.hasOwnProperty('column') && event.column.length > 0) && {'column': event.column}
         })
       }
-      this.filterAndSearch((this.state.filters.length ? this.state.data : this.getPayload))
+      this.filterAndSearch((this.getFilters.length && this.state.data.length > 0 ? this.state.data : this.getPayload))
     }, 275),
     filter (data, criteria) {
       if (criteria.hasOwnProperty('value') && !isNil(criteria.value)) {
@@ -91,7 +91,7 @@ export const searchFilterMixin = {
       }
     },
     filterRemove (filter) {
-      remove(this.state.filters, filter)
+      remove(this.getFilters, filter)
       this.filterAndSearch(this.getPayload)
     },
     getFilterId (filter) {

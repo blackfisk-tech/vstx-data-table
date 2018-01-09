@@ -22,13 +22,31 @@ span.data-table-cell
 </template>
 
 <script>
-import { isNil, forEach } from 'lodash'
+import accounting from 'accounting'
+import { isNil, forEach, round } from 'lodash'
 import DataTableCellDefault from './vstxDataTableCellDefault.vue'
 
 export default {
   name: 'data-table-cell',
   components: {
     'data-table-cell-default': DataTableCellDefault
+  },
+  filters: {
+    formatTest: (num) => {
+      return `${num} Test`
+    },
+    formatNumber: (num) => {
+      return accounting.formatNumber(num)
+    },
+    formatMoney: (num) => {
+      return accounting.formatMoney(num)
+    },
+    formatPercent: (num) => {
+      return `${round(num, 2)}%`
+    },
+    formatString: (string) => {
+      return string
+    }
   },
   props: {
     column: {
@@ -72,11 +90,12 @@ export default {
       })
     },
     applyFilter (items, name, ...args) {
-      if (isNil(name) || name === '' || items === '') {
+      if (isNil(name) || name === '' || isNil(items) || items === '') {
         return items
-      }
-      if (!isNil(arguments[2])) {
-        return this.$root.$options.filters[name](items, args)
+      } else if (name in this.$options.filters) {
+        return this.$options.filters[name](items, ...args)
+      } else if (name in this.$root.$options.filters) {
+        return this.$root.$options.filters[name](items, ...args)
       } else {
         return items
       }

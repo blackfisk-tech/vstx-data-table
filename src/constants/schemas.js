@@ -54,10 +54,6 @@ export const schemas = {
     schema: joi.array().items(
       joi.object().keys({
         name: joi.string().min(1).required(),
-        editing: joi.object().keys({
-          edit: joi.boolean(),
-          isAllowed: joi.boolean()
-        }),
         align: joi.string().lowercase().valid(['left', 'right', 'centered']),
         field: joi.string(),
         format: joi.string(),

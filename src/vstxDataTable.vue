@@ -369,7 +369,7 @@
                   p.subtitle Error
         //- Unavoidable? Use of v-if with v-for
         tr(
-          v-if="!isLoading"
+          v-else=""
           v-for="(item, i) in getPagedData"
           :key="`table-row-${i}`"
           :class="{'is-altered': isAltered(item)}"
@@ -530,8 +530,9 @@
           // End
           // TotalsMixin
           hasCalculatedTotals: false,
-          totals: {}
-          // End
+          totals: {},
+          // End,
+          dimmed: false
         },
         options: this.getConfiguration()
       }
@@ -658,10 +659,6 @@
                 align: alignment,
                 position: i,
                 isVisible: true,
-                editing: {
-                  edit: false,
-                  isAllowed: false
-                },
                 sort: {
                   isSortable: true,
                   direction: '',
@@ -842,7 +839,7 @@
         }
         return {
           'id': 1,
-          'value': total,
+          'value': round(total, 2),
           'type': 'total'
         }
       },
@@ -861,7 +858,7 @@
             }
             let item = {
               'id': 1,
-              'value': value,
+              'value': round(value, 2),
               'type': 'total'
             }
             this.state.totals[column['field']] = item

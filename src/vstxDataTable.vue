@@ -269,7 +269,10 @@
               div
                 span(v-if="column['sort']['isSortable']")
                   a(@click.passive="toggleColumnSortDirection(column['field'])") {{ column['name'] }}&nbsp;
-                    span.icon.is-small(:class="getColumnState(column['field'])")
+                    span.icon.is-small(
+                      v-if="getColumnState(column['field']).length > 0"
+                      :class="getColumnState(column['field'])"
+                    )
                   a.tag(
                     v-if="options.sortIndicator.isVisible && getSortPosition(column['field']) !== -1"
                     @click.passive="toggleColumnSortDirection(column['field'])"
@@ -366,7 +369,6 @@
                       size="small"
                     )
                 slot(name="error")
-                  p.subtitle Error
         //- Unavoidable? Use of v-if with v-for
         tr(
           v-else=""

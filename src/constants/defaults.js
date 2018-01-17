@@ -22,7 +22,7 @@ export const defaults = {
       isAllowed: true
     },
     filter: {
-      isVisible: false,
+      isVisible: true,
       isAllowed: true,
       isEvent: false
     },

@@ -35,8 +35,7 @@ var config = {
     localStore: 'store',
     md5: 'md5',
     SearchBar: 'vstx-search-bar',
-    // DraggableList: 'vue-stacks-draggable-list',
-    // LoaderWaveBars: 'vue-stacks-wave-bars'
+    xlsx: 'xlsx'
   },
   plugins: [
     new webpack.optimize.UglifyJsPlugin( {

@@ -74,16 +74,26 @@
               slot(name="slot-icon__clearSort")
                 span.icon
                   i.fa.fa-sort
+          //- .level-item
+          //-   //- Download CSV
+          //-   a.is-small.data-table__download-csv(
+          //-     title="Download as CSV"
+          //-     @click.passive="downloadCSV(getData, filename)"
+          //-     v-if="options.settings.isAllowed && options.settings.isVisible && getPagedData.length"
+          //-   )
+          //-     slot(name="slot-icon__downloadCSV")
+          //-       span.icon
+          //-         i.fa.fa-download
           .level-item
-            //- Download CSV
-            a.is-small.data-table__download-csv(
-              title="Download as CSV"
-              @click.passive="downloadCSV(getData, filename)"
+            //- Download XLSX
+            a.is-small.data-table__download-xlsx(
+              title="Download as XLSX"
+              @click.passive="downloadXLSX(getData, filename)"
               v-if="options.settings.isAllowed && options.settings.isVisible && getPagedData.length"
             )
-              slot(name="slot-icon__downloadCSV")
+              slot(name="slot-icon__downloadXLSX")
                 span.icon
-                  i.fa.fa-download
+                  i.fa.fa-file-excel
     //- Controls
     table.table.is-narrow.is-relative-position(
       v-bind:class="{'is-overflow-hidden': options.table.overflow, 'is-bordered': options.table.bordered, 'is-striped': options.table.striped, 'is-hoverable': options.table.hoverable, 'is-fullwidth': options.table.fullwidth}"
@@ -267,10 +277,10 @@
             //- Slot for Custom Headers
             slot(:name="`${column.field}-header`")
               div
-                span(v-if="column['sort']['isSortable']")
+                span(v-if="column['sort']['isSortable'] === true")
                   a(@click.passive="toggleColumnSortDirection(column['field'])") {{ column['name'] }}&nbsp;
                     span.icon.is-small(
-                      v-if="getColumnState(column['field']).length > 0"
+                      v-if="Object.keys(getColumnState(column['field'])).length > 0"
                       :class="getColumnState(column['field'])"
                     )
                   a.tag(
@@ -414,6 +424,7 @@
   import DraggableList from 'vstx-draggable-list'
   // Mixins
   import { csvMixin } from './mixins/csvMixin'
+  import { downloadXLSX } from './mixins/downloadXLSX'
   import { selectMixin } from './mixins/selectMixin'
   import { searchFilterMixin } from './mixins/searchFilterMixin'
   // Constants
@@ -469,7 +480,7 @@
       filename: {
         type: String,
         required: false,
-        default: `export-${new Date().toISOString().split('T')[0]}.csv`
+        default: `export-${new Date().toISOString().split('T')[0]}.xlsx`
       },
       altered: {
         note: 'An array of payload indexes that have been altered.',
@@ -495,7 +506,7 @@
         default: () => { return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) }
       }
     },
-    mixins: [csvMixin, selectMixin, searchFilterMixin],
+    mixins: [csvMixin, downloadXLSX, selectMixin, searchFilterMixin],
     components: {
       'data-table-cell': DataTableCell,
       'draggable-list': DraggableList,

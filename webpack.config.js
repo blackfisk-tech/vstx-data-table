@@ -35,7 +35,8 @@ var config = {
     localStore: 'store',
     md5: 'md5',
     SearchBar: 'vstx-search-bar',
-    xlsx: 'xlsx'
+    xlsx: 'xlsx',
+    Select: 'vstx-select'
   },
   plugins: [
     new webpack.optimize.UglifyJsPlugin( {

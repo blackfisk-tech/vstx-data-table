@@ -35,12 +35,20 @@
                 :search="state.search"
                 @onSearch="$emit('onSearch', $event)"
               )
-              vstx-search-bar.data-table__search(
-                v-else=""
-                :value="state.search"
-                :search="state.search"
-                @onSearch="search($event)"
-              )
+              .field.has-addons(v-else="")
+                .control
+                  vstx-select.data-table__select(
+                    size="small"
+                    :options="getColumnOptions"
+                    :value="[state.searchColumn]"
+                    @input="setSearchColumn"
+                  )
+                .control
+                  vstx-search-bar.data-table__search(
+                    :value="state.search"
+                    :search="state.search"
+                    @onSearch="search($event)"
+                  )
           .level-item
             //- RowCount
             span.label.is-small(v-if="options.totals.isAllowed && options.totals.isVisible.count") {{ getRowCount }} Rows
@@ -360,8 +368,8 @@
               ul.pagination-list.data-table__pagination-list
                 li(
                   class="data-table__pagination-list-item"
-                  v-for="i in getPagination"
-                  :key="`table-pagination-${i}`"
+                  v-for="i, index in getPagination"
+                  :key="`table-pagination-${index}`"
                 )
                   a(
                     v-bind:class="{'pagination-ellipsis':isNaN(i),'pagination-link':!isNaN(i),'is-current': i - 1 === state.offset ? true : false}"
@@ -420,6 +428,7 @@
   // Components
   import DataTableCell from './vstxDataTableCell.vue'
   import SearchBar from 'vstx-search-bar'
+  import Select from 'vstx-select'
   import Loader from 'vstx-loader'
   import DraggableList from 'vstx-draggable-list'
   // Mixins
@@ -511,7 +520,8 @@
       'data-table-cell': DataTableCell,
       'draggable-list': DraggableList,
       'loader': Loader,
-      'vstx-search-bar': SearchBar
+      'vstx-search-bar': SearchBar,
+      'vstx-select': Select
     },
     created () {
       this.configure()
@@ -574,9 +584,24 @@
         }
         return colspan
       },
+      getColumns () {
+        return sortBy(this.state.columns, [ (c) => { return c.position } ])
+      },
+      getColumnOptions () {
+        let options = [{
+          value: 'all',
+          text: 'All Columns'
+        }]
+        forEach(this.getColumns, (column) => {
+          options.push({
+            value: column.field,
+            text: column.name
+          })
+        })
+        return options
+      },
       getDisplayColumns () {
-        let columns = sortBy(filter(this.state.columns, 'isVisible'), [ (c) => { return c.position } ])
-        return columns
+        return sortBy(filter(this.state.columns, 'isVisible'), [ (c) => { return c.position } ])
       },
       getSortedColumns () {
         let sortedCols = sortBy(filter(this.state.columns, column => {
@@ -1033,6 +1058,8 @@
     background: white
   .data-table .data-table__search
     margin-right 5px
+  .data-table .data-table__select
+    margin 0
   .data-table .pagination-next
     background white
   .data-table .pagination-previous

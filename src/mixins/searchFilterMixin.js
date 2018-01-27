@@ -11,12 +11,16 @@ export const searchFilterMixin = {
       state: {
         data: [],
         search: '',
+        searchColumn: 'all',
         filters: [],
         offset: 0
       }
     }
   },
   computed: {
+    getSearchColumn () {
+      return [this.state.searchColumn]
+    },
     getFilters () {
       return this.state.filters
     },
@@ -47,9 +51,19 @@ export const searchFilterMixin = {
     }
   },
   methods: {
+    setSearchColumn (e) {
+      this.state.searchColumn = e[0]
+    },
     search (event = {}) {
-      this.state.search = event
-      this.addFilter()
+      if (this.state.searchColumn === 'all') {
+        this.state.search = event
+        this.addFilter()
+      } else {
+        this.addFilter({
+          search: event,
+          column: this.state.searchColumn
+        })
+      }
     },
     searchRemove () {
       this.state.search = ''
@@ -59,6 +73,7 @@ export const searchFilterMixin = {
       this.state.offset = 0
       if (this.getFilters.length > 0) {
         forEach(this.getFilters, (filter, i) => {
+          console.log('Filtering by:', filter)
           oldData = (this.state.search.length > 0 && i === this.getFilters.length - 1 ? this.filter(oldData, {'value': this.state.search}) : this.filter(oldData, filter))
         })
       } else if (this.state.search.length > 0) {
@@ -76,12 +91,15 @@ export const searchFilterMixin = {
       this.filterAndSearch((this.getFilters.length && this.state.data.length > 0 ? this.state.data : this.getPayload))
     }, 275),
     filter (data, criteria) {
-      if (criteria.hasOwnProperty('value') && !isNil(criteria.value)) {
+      if ('value' in criteria && !isNil(criteria.value)) {
+        if (criteria.column === 'sellerName' && criteria.value === 'Amazon.com') {
+          console.log('Finding Amazon.com Seller')
+        }
         return filter(data, (o) => {
           let found = false
-          forEach(o, (key) => {
-            let match = isNil(key) ? [] : key.toString().match(new RegExp(criteria.value, 'i'))
-            found = !isNil(key) && !isNil(match) && match.length > 0
+          forEach(o, (value, key) => {
+            let match = isNil(value) ? [] : isNil(criteria.column) || criteria.column === key ? value.toString().match(new RegExp(criteria.value, 'i')) : []
+            found = !isNil(value) && !isNil(match) && match.length > 0
             return !found
           })
           return found

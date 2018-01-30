@@ -8,13 +8,13 @@
         ul
           li Filtering by:&nbsp;&nbsp;
             span.tag.is-primary(v-if="state.search.length") Search: {{ state.search }}
-              button.delete.is-small(@click="searchRemove")
+              button.delete(@click="searchRemove", :class="getSizeClass")
             span.tag.is-primary(
               v-for="filter in getFilters"
               :key="getFilterId(filter)"
             ) {{ filter.column }} : {{ filter.value }}
-              button(
-                class="delete is-small"
+              button.delete(
+                :class="getSizeClass"
                 @click="filterRemove(filter)"
               )
     .level.data-table__head
@@ -28,16 +28,21 @@
             name="filter"
             v-if="options.filter.isAllowed && options.filter.isVisible"
           )
-            vstx-search-bar.data-table__search(
+            .field.has-addons.is-marginless(
               v-if="options.filter.isEvent"
-              :value="state.search"
-              :search="state.search"
-              @onSearch="$emit('onSearch', $event)"
             )
-            .field.has-addons.is-marginless(v-else="")
+              .control
+                vstx-search-bar.data-table__search(
+                  :value="state.search"
+                  @input="$emit('onSearch', $event)"
+                  :size="options.size"
+                )
+            .field.has-addons.is-marginless(
+              v-else=""
+            )
               .control
                 vstx-select.data-table__select(
-                  size="small"
+                  :size="options.size"
                   :options="getColumnOptions"
                   :value="[state.searchColumn]"
                   @input="setSearchColumn"
@@ -45,50 +50,57 @@
               .control
                 vstx-search-bar.data-table__search(
                   :value="state.search"
-                  :search="state.search"
-                  @onSearch="search($event)"
+                  @input="search($event)"
+                  :size="options.size"
                 )
           //- RowCount
-          a.button.is-static.is-small(v-if="options.totals.isAllowed && options.totals.isVisible.count") {{ getRowCount }} Rows
+          a.button.is-static(
+            v-if="options.totals.isAllowed && options.totals.isVisible.count"
+            :class="getSizeClass"
+          ) {{ getRowCount }} Rows
           //- Table Settings
-          a.button.is-small.data-table__settings(
+          a.button.data-table__settings(
             title="Table Settings"
             @click.passive="toggleOptions"
             v-if="options.settings.isAllowed && options.settings.isVisible"
+            :class="getSizeClass"
           )
             slot(name="slot-icon__tableOptions")
               span.icon
                 i.fa.fa-table
           //- Column Settings
-          a.button.is-small.data-table__column-settings(
+          a.button.data-table__column-settings(
             title="Column Settings"
             @click.passive="toggleColumnOptions"
             v-if="options.settings.isAllowed && options.settings.isVisible && options.columns.isAllowed"
+            :class="getSizeClass"
           )
             slot(name="slot-icon__columnOptions")
               span.icon
                 i.fa.fa-columns
           //- Clear Sort
-          a.button.is-small.data-table__clear-sorts(
+          a.button.data-table__clear-sorts(
             title="Remove All Column Sorting"
             @click.passive="unsort"
             v-if="options.settings.isAllowed && options.settings.isVisible"
+            :class="getSizeClass"
           )
             slot(name="slot-icon__clearSort")
               span.icon
                 i.fa.fa-sort
           //- Download XLSX
-          a.button.is-small.data-table__download-xlsx(
+          a.button.data-table__download-xlsx(
             title="Download as XLSX"
             @click.passive="downloadXLSX(getData, filename)"
             v-if="options.settings.isAllowed && options.settings.isVisible && getPagedData.length"
+            :class="getSizeClass"
           )
             slot(name="slot-icon__downloadXLSX")
               span.icon
                 i.fa.fa-file-excel
           //- .level-item
           //-   //- Download CSV
-          //-   a.is-small.data-table__download-csv(
+          //-   a.data-table__download-csv(
           //-     title="Download as CSV"
           //-     @click.passive="downloadCSV(getData, filename)"
           //-     v-if="options.settings.isAllowed && options.settings.isVisible && getPagedData.length"
@@ -122,12 +134,13 @@
                 //-     i.fa.fa-times
 
                 //- Close Options
-                a.is-danger.button.is-small.options__toggleOptions(
+                a.is-danger.button.options__toggleOptions(
                   title="Close Options"
                   @click.passive="toggleOptions"
+                  :class="getSizeClass"
                 )
                   slot(name="slot-icon__closeTableOptions")
-                    span.icon.is-small
+                    span.icon(:class="getSizeClass")
                       i.fa.fa-times
 
                 //- Add Columns
@@ -141,7 +154,7 @@
                 div.column.is-narrow
                   .field.is-grouped.data-table__rowsPerPage
                     p.control.has-icons-left
-                      span.select.is-small
+                      span.select(:class="getSizeClass")
                         select(
                           id="data-table__rows-per-page"
                           v-model.number="options.pagination.rowsPerPage"
@@ -153,7 +166,7 @@
                           option(value="250") 250 Rows Per Page
                           option(:value="options.pagination.rowsPerPage") {{ options.pagination.rowsPerPage }} Rows Per Page
                       slot(name="slot-icon__rowsPerPage")
-                        span.icon.is-small.is-left
+                        span.icon.is-left(:class="getSizeClass")
                           i.fa.fa-list
                 //- All
                 div.column.is-narrow
@@ -224,7 +237,7 @@
                       slot-scope="props"
                     )
                       div.draggable__level(v-if="props !== null")
-                        span.label.is-small.orderByItem {{ props.item.name }} {{ props.item.sort.direction }}
+                        span.label.orderByItem(:class="getSizeClass") {{ props.item.name }} {{ props.item.sort.direction }}
                 .level-item
                   //- Column Order
                   draggable-list(
@@ -237,17 +250,18 @@
                       slot-scope="props"
                     )
                       div.draggable__level(v-if="props !== null")
-                        span.label.is-small.orderByItem {{ props.item.name }}
+                        span.label.orderByItem(:class="getSizeClass") {{ props.item.name }}
                 .level-item
                   div
                     //- Clear Saved State
                     div
-                      a.is-default.button.is-small.options__deleteSavedState(
+                      a.is-default.button.options__deleteSavedState(
                         title="Delete Saved Settings"
                         @click.passive="deleteSavedSettings"
+                        :click="getSizeClass"
                       )
                         slot(name="slot-icon__deleteSavedSettings")
-                          span.icon.is-small
+                          span.icon(:class="getSizeClass")
                             i.fa.fa-times
                         span Delete Saved Settings
                     //- br
@@ -281,9 +295,9 @@
               div
                 span(v-if="column['sort']['isSortable'] === true")
                   a(@click.passive="toggleColumnSortDirection(column['field'])") {{ column['name'] }}&nbsp;
-                    span.icon.is-small(
+                    span.icon(
                       v-if="Object.keys(getColumnState(column['field'])).length > 0"
-                      :class="getColumnState(column['field'])"
+                      :class="getColumnState(column['field']), getSizeClass"
                     )
                   a.tag(
                     v-if="options.sortIndicator.isVisible && getSortPosition(column['field']) !== -1"
@@ -295,7 +309,7 @@
               label.is-6 Format:
               .field.is-grouped.data-table__field.data-table__rowsPerPage
                 p.control.has-icons-left
-                  span.select.is-small
+                  span.select(:class="getSizeClass")
                     select(
                       id="column__format"
                       v-model="column.format"
@@ -306,7 +320,7 @@
                       option(value="formatString")  String
                       option(value="formatDate")  Date
                   slot(name="slot-icon__columnFormat")
-                    span.icon.is-small.is-left
+                    span.icon.is-left(:class="getSizeClass")
                       i.fa.fa-wrench
               .field.data-table__field
                 div.control
@@ -346,7 +360,7 @@
         //- Pagination
         tr(v-if="options.pagination.isAllowed && options.pagination.isVisible")
           td.pagination__controls(:colspan="getColspan")
-            nav.pagination.is-left.is-small
+            nav.pagination.is-left(:class="getSizeClass")
               a.pagination-previous(
                 @click.passive="pageBack"
                 :disabled="state.offset - 1 >= 0 ? false : true"
@@ -555,6 +569,14 @@
       }
     },
     computed: {
+      getSizeClass () {
+        return {
+          'is-small': this.options.size === 'small',
+          'is-normal': this.options.size === 'normal',
+          'is-medium': this.options.size === 'medium',
+          'is-large': this.options.size === 'large'
+        }
+      },
       getRowCount () {
         if ((this.state.search.length || this.state.filters.length) && this.state.data.length > 0) {
           return this.state.data.length
@@ -1069,7 +1091,7 @@
     font-size .85rem
   .data-table .data-table__rowsPerPage.field
     margin-bottom 0
-  .data-table .control.has-icons-left .icon.is-small, .data-table .control.has-icons-right .icon.is-small
+  .data-table .control.has-icons-left .icon, .data-table .control.has-icons-right .icon
     width 1rem
     height 1rem
     top 6px
@@ -1116,7 +1138,7 @@
     padding 1px 3px
     background #fafafa
     border 1px solid #cccccc
-  .data-table span.label.is-small
+  .data-table span.label
     font-size .75rem
     padding 3px 6px
     margin 0 2px;

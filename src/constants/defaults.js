@@ -1,5 +1,6 @@
 export const defaults = {
   configuration: {
+    size: 'normal',
     collapsePages: false,
     isRanked: false,
     table: {

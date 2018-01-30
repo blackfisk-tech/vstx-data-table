@@ -1,5 +1,5 @@
 import md5 from 'md5'
-import { debounce, remove, orderBy, filter, isNil, forEach } from 'lodash'
+import { debounce, remove, orderBy, filter, isNil, forEach, isObject } from 'lodash'
 
 export const searchFilterMixin = {
   created () {
@@ -73,11 +73,13 @@ export const searchFilterMixin = {
       this.state.offset = 0
       if (this.getFilters.length > 0) {
         forEach(this.getFilters, (filter, i) => {
-          console.log('Filtering by:', filter)
-          oldData = (this.state.search.length > 0 && i === this.getFilters.length - 1 ? this.filter(oldData, {'value': this.state.search}) : this.filter(oldData, filter))
+          oldData = this.filter(oldData, filter)
         })
-      } else if (this.state.search.length > 0) {
+      }
+      if (this.state.search.length > 0) {
+        console.log('Before Search', this.state.search, oldData.length)
         oldData = this.filter(oldData, {'value': this.state.search})
+        console.log('After Search', this.state.search, oldData.length)
       }
       this.state.data = oldData
     },
@@ -90,19 +92,32 @@ export const searchFilterMixin = {
       }
       this.filterAndSearch((this.getFilters.length && this.state.data.length > 0 ? this.state.data : this.getPayload))
     }, 275),
+    find (o, criteria) {
+      // Todo --- support deep column search
+      let found = false
+      forEach(o, (value, key) => {
+        if (!isObject(value) && found === false) {
+          let match = isNil(value) ? [] : isNil(criteria.column) || criteria.column === key ? value.toString().match(new RegExp(criteria.value, 'i')) : []
+          let isMatch = !isNil(value) && !isNil(match) && match.length > 0
+          if (isMatch) {
+            found = true
+          }
+        } else if (found === false) {
+          let isMatch = this.find(value, criteria)
+          if (isMatch) {
+            found = true
+          }
+        }
+      })
+      return found
+    },
     filter (data, criteria) {
       if ('value' in criteria && !isNil(criteria.value)) {
         if (criteria.column === 'sellerName' && criteria.value === 'Amazon.com') {
           console.log('Finding Amazon.com Seller')
         }
         return filter(data, (o) => {
-          let found = false
-          forEach(o, (value, key) => {
-            let match = isNil(value) ? [] : isNil(criteria.column) || criteria.column === key ? value.toString().match(new RegExp(criteria.value, 'i')) : []
-            found = !isNil(value) && !isNil(match) && match.length > 0
-            return !found
-          })
-          return found
+          return this.find(o, criteria)
         })
       } else {
         // Exception Criteria Structure

@@ -22,66 +22,70 @@
         //- Table Title
         slot(name="slot-title")
       .level-right
-        .level.data-table__controls
-          .level-item
-            //- Filter Slot
-            slot(
-              name="filter"
-              v-if="options.filter.isAllowed && options.filter.isVisible"
+        .buttons.has-addons
+          //- Filter Slot
+          slot(
+            name="filter"
+            v-if="options.filter.isAllowed && options.filter.isVisible"
+          )
+            vstx-search-bar.data-table__search(
+              v-if="options.filter.isEvent"
+              :value="state.search"
+              :search="state.search"
+              @onSearch="$emit('onSearch', $event)"
             )
-              vstx-search-bar.data-table__search(
-                v-if="options.filter.isEvent"
-                :value="state.search"
-                :search="state.search"
-                @onSearch="$emit('onSearch', $event)"
-              )
-              .field.has-addons(v-else="")
-                .control
-                  vstx-select.data-table__select(
-                    size="small"
-                    :options="getColumnOptions"
-                    :value="[state.searchColumn]"
-                    @input="setSearchColumn"
-                  )
-                .control
-                  vstx-search-bar.data-table__search(
-                    :value="state.search"
-                    :search="state.search"
-                    @onSearch="search($event)"
-                  )
-          .level-item
-            //- RowCount
-            span.label.is-small(v-if="options.totals.isAllowed && options.totals.isVisible.count") {{ getRowCount }} Rows
-          .level-item
-            //- Table Settings
-            a.is-small.data-table__settings(
-              title="Table Settings"
-              @click.passive="toggleOptions"
-              v-if="options.settings.isAllowed && options.settings.isVisible"
-            )
-              slot(name="slot-icon__tableOptions")
-                span.icon
-                  i.fa.fa-table
-          .level-item
-            //- Column Settings
-            a.is-small.data-table__column-settings(
-              title="Column Settings"
-              @click.passive="toggleColumnOptions"
-              v-if="options.settings.isAllowed && options.settings.isVisible && options.columns.isAllowed"
-            )
-              slot(name="slot-icon__columnOptions")
-                span.icon
-                  i.fa.fa-columns
-          .level-item
-            //- Clear Sort
-            a.is-small.data-table__clear-sorts(
-              title="Remove All Column Sorting"
-              @click.passive="unsort"
-              v-if="options.settings.isAllowed && options.settings.isVisible"
-            )
-              slot(name="slot-icon__clearSort")
-                span.icon
-                  i.fa.fa-sort
+            .field.has-addons.is-marginless(v-else="")
+              .control
+                vstx-select.data-table__select(
+                  size="small"
+                  :options="getColumnOptions"
+                  :value="[state.searchColumn]"
+                  @input="setSearchColumn"
+                )
+              .control
+                vstx-search-bar.data-table__search(
+                  :value="state.search"
+                  :search="state.search"
+                  @onSearch="search($event)"
+                )
+          //- RowCount
+          a.button.is-static.is-small(v-if="options.totals.isAllowed && options.totals.isVisible.count") {{ getRowCount }} Rows
+          //- Table Settings
+          a.button.is-small.data-table__settings(
+            title="Table Settings"
+            @click.passive="toggleOptions"
+            v-if="options.settings.isAllowed && options.settings.isVisible"
+          )
+            slot(name="slot-icon__tableOptions")
+              span.icon
+                i.fa.fa-table
+          //- Column Settings
+          a.button.is-small.data-table__column-settings(
+            title="Column Settings"
+            @click.passive="toggleColumnOptions"
+            v-if="options.settings.isAllowed && options.settings.isVisible && options.columns.isAllowed"
+          )
+            slot(name="slot-icon__columnOptions")
+              span.icon
+                i.fa.fa-columns
+          //- Clear Sort
+          a.button.is-small.data-table__clear-sorts(
+            title="Remove All Column Sorting"
+            @click.passive="unsort"
+            v-if="options.settings.isAllowed && options.settings.isVisible"
+          )
+            slot(name="slot-icon__clearSort")
+              span.icon
+                i.fa.fa-sort
+          //- Download XLSX
+          a.button.is-small.data-table__download-xlsx(
+            title="Download as XLSX"
+            @click.passive="downloadXLSX(getData, filename)"
+            v-if="options.settings.isAllowed && options.settings.isVisible && getPagedData.length"
+          )
+            slot(name="slot-icon__downloadXLSX")
+              span.icon
+                i.fa.fa-file-excel
           //- .level-item
           //-   //- Download CSV
           //-   a.is-small.data-table__download-csv(
@@ -92,16 +96,6 @@
           //-     slot(name="slot-icon__downloadCSV")
           //-       span.icon
           //-         i.fa.fa-download
-          .level-item
-            //- Download XLSX
-            a.is-small.data-table__download-xlsx(
-              title="Download as XLSX"
-              @click.passive="downloadXLSX(getData, filename)"
-              v-if="options.settings.isAllowed && options.settings.isVisible && getPagedData.length"
-            )
-              slot(name="slot-icon__downloadXLSX")
-                span.icon
-                  i.fa.fa-file-excel
     //- Controls
     table.table.is-narrow.is-relative-position(
       v-bind:class="{'is-overflow-hidden': options.table.overflow, 'is-bordered': options.table.bordered, 'is-striped': options.table.striped, 'is-hoverable': options.table.hoverable, 'is-fullwidth': options.table.fullwidth}"

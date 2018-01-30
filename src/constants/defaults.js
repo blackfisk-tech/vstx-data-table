@@ -43,7 +43,7 @@ export const defaults = {
       isVisible: {
         all: false,
         page: false,
-        count: false
+        count: true
       },
       isAllowed: true
     }

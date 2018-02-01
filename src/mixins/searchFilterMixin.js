@@ -87,7 +87,7 @@ export const searchFilterMixin = {
       if (event.hasOwnProperty('search') && !isNil(event.search) && event.search.length > 0) {
         this.state.filters.push({
           'value': event.search,
-          ...(event.hasOwnProperty('column') && event.column.length > 0) && {'column': event.column}
+          ...(event.hasOwnProperty('column') && event.column.length > 0) ? {'column': event.column} : null
         })
       }
       this.filterAndSearch((this.getFilters.length && this.state.data.length > 0 ? this.state.data : this.getPayload))

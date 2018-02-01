@@ -22,6 +22,9 @@
   "devDependencies": {
     "babel-core": "^6.10.4",
     "babel-loader": "^7.1.2",
+    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
+    "babel-plugin-transform-es2015-parameters": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.9.0",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-stage-2": "^6.11.0",
@@ -32,13 +35,13 @@
     "pug-loader": "^2.3.0",
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.6",
-    "style-loader": "^0.19.1",
+    "style-loader": "^0.20.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "vue": "^2.5.13",
     "vue-html-loader": "^1.2.3",
-    "vue-loader": "^13.7.0",
-    "vue-style-loader": "^3.0.3",
+    "vue-loader": "^14.1.0",
+    "vue-style-loader": "^3.1.2",
     "vue-template-compiler": "^2.5.13",
     "webpack": "^3.10.0",
     "webpack-merge": "^4.1.1"
@@ -54,7 +57,7 @@
     "vstx-draggable-list": "0.0.1",
     "vstx-loader": "0.0.1",
     "vstx-search-bar": "0.0.11",
-    "vstx-select": "0.0.10",
+    "vstx-select": "0.0.11",
     "xlsx": "^0.11.18"
   }
 }

@@ -296,7 +296,7 @@
                 span(v-if="column['sort']['isSortable'] === true")
                   a(@click.passive="toggleColumnSortDirection(column['field'])") {{ column['name'] }}&nbsp;
                     span.icon(
-                      v-if="Object.keys(getColumnState(column['field'])).length > 0"
+                      v-if="isSorted(column['field'])"
                       :class="getColumnState(column['field']), getSizeClass"
                     )
                   a.tag(
@@ -839,6 +839,9 @@
           this.updateOrderBy([thisCol])
         }
       },
+      isSorted (field) {
+        return this.getSortDirection(field) === 'asc' ||  this.getSortDirection(field) === 'desc'
+      },
       getSortDirection (field) {
         let direction = this.getOrderBy.directions[this.getSortPosition(field)]
         return direction
@@ -1020,6 +1023,10 @@
     z-index 999999
   .data-table .column__headers
     white-space: nowrap
+  .table th.column__header.has-text-left
+    padding-left 0
+  .table th.column__header.has-text-right
+    padding-right 0
   .data-table .inline-block
     display: inline-block
   .data-table .level.data-table__head

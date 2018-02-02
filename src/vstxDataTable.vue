@@ -18,10 +18,10 @@
                 @click="filterRemove(filter)"
               )
     .columns.is-multiline.data-table__head
-      .column.is-narrow
+      .column.is-narrow.is-paddingless.title-column
         //- Table Title
         slot(name="slot-title")
-      .column.is-narrow
+      .column.is-narrow.is-paddingless
         .buttons.has-addons
           //- Filter Slot
           slot(
@@ -1022,6 +1022,8 @@
     border-bottom: 1px solid #eeeeee
     box-shadow: 3px 3px 2px 0px rgba(0,0,0,0.15)
     z-index 999999
+  .data-table .title-column
+    padding-right 2.5rem !important
   .data-table .column__headers
     white-space: nowrap
   .table th.column__header.has-text-left

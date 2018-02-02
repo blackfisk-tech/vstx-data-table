@@ -17,7 +17,7 @@
                 :class="getSizeClass"
                 @click="filterRemove(filter)"
               )
-    .columns.is-multiline.data-table__head
+    .columns.is-multiline.is-marginless.data-table__head
       .column.is-narrow.is-paddingless.title-column
         //- Table Title
         slot(name="slot-title")

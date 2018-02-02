@@ -17,11 +17,11 @@
                 :class="getSizeClass"
                 @click="filterRemove(filter)"
               )
-    .level.data-table__head
-      .level-left
+    .columns.is-multiline.data-table__head
+      .column.is-narrow
         //- Table Title
         slot(name="slot-title")
-      .level-right
+      .column.is-narrow
         .buttons.has-addons
           //- Filter Slot
           slot(
@@ -1031,6 +1031,8 @@
     display: inline-block
   .data-table .level.data-table__head
     margin-bottom 10px
+  .data-table .level.data-table__head .columns .column
+    padding 0.5rem 0.75rem
   .data-table caption
     background-color white
     z-index 99999999

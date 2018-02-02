@@ -108,6 +108,7 @@
           //-     slot(name="slot-icon__downloadCSV")
           //-       span.icon
           //-         i.fa.fa-download
+    slot(name="slot-description")
     //- Controls
     table.table.is-narrow.is-relative-position(
       v-bind:class="{'is-overflow-hidden': options.table.overflow, 'is-bordered': options.table.bordered, 'is-striped': options.table.striped, 'is-hoverable': options.table.hoverable, 'is-fullwidth': options.table.fullwidth}"

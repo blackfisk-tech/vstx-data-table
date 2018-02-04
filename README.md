@@ -11,11 +11,11 @@
  - Config change call backs for data-configuration persistance
  - Pagination
  - Data-Totals by Page & by Total All Data
- - In-Data filtering
+ - In-Data filtering with deep scans of complex objects
  - Callback requerying filtering data to provide a new data-set
  - Hidden Columns
- - Support for data-sets with over 5k records
- - Client-size exporting of data in CSV
+ - Support for data-sets with over 25k records
+ - Client-size exporting of data in CSV & Excel
 
 ## Roadmap
  - Abstract the CSS layer to make is support any css framework
@@ -85,6 +85,7 @@ export default {
 > We are actively changing this data-table in our operations daily so please help us improve its usability.
 
 ## History
+- 0.0.57 - Added Excel exporting support, speed optimization to support even larger datasets & bug fixes
 - 0.0.43 - Fixed issue with CSV Exporting for large data-sets
 
 > This data-table project was built to support a need Blackfisk.com had however we quickly realized it needed to be open-sourced to help the community.

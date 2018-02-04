@@ -63,6 +63,8 @@ export const searchFilterMixin = {
           search: event,
           column: this.state.searchColumn
         })
+        this.state.search = ''
+        this.state.searchColumn = 'all'
       }
     },
     searchRemove () {
@@ -77,9 +79,7 @@ export const searchFilterMixin = {
         })
       }
       if (this.state.search.length > 0) {
-        console.log('Before Search', this.state.search, oldData.length)
         oldData = this.filter(oldData, {'value': this.state.search})
-        console.log('After Search', this.state.search, oldData.length)
       }
       this.state.data = oldData
     },
@@ -92,18 +92,19 @@ export const searchFilterMixin = {
       }
       this.filterAndSearch((this.getFilters.length && this.state.data.length > 0 ? this.state.data : this.getPayload))
     }, 275),
-    find (o, criteria) {
-      // Todo --- support deep column search
+    find (o, criteria, level = 0, topLevel = '') {
       let found = false
       forEach(o, (value, key) => {
+        if (level === 0) { topLevel = key }
         if (!isObject(value) && found === false) {
-          let match = isNil(value) ? [] : isNil(criteria.column) || criteria.column === key ? value.toString().match(new RegExp(criteria.value, 'i')) : []
+          let match = isNil(value) ? [] : isNil(criteria.column) || criteria.column === key || criteria.column === topLevel ? value.toString().match(new RegExp(criteria.value, 'i')) : []
           let isMatch = !isNil(value) && !isNil(match) && match.length > 0
           if (isMatch) {
             found = true
           }
         } else if (found === false) {
-          let isMatch = this.find(value, criteria)
+          level++
+          let isMatch = this.find(value, criteria, level, topLevel)
           if (isMatch) {
             found = true
           }
@@ -113,9 +114,6 @@ export const searchFilterMixin = {
     },
     filter (data, criteria) {
       if ('value' in criteria && !isNil(criteria.value)) {
-        if (criteria.column === 'sellerName' && criteria.value === 'Amazon.com') {
-          console.log('Finding Amazon.com Seller')
-        }
         return filter(data, (o) => {
           return this.find(o, criteria)
         })

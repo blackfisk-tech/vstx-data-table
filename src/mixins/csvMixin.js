@@ -46,6 +46,8 @@ export const csvMixin = {
               data = `"${data}"`
             }
             data = data.trim()
+          } else {
+            data = `"${JSON.stringify(data)}"`
           }
           result += data
           ctr++

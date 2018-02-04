@@ -1,24 +1,25 @@
 # VueStacks.com Data-Table
 
-> vstx-data-table is a powerful data grid that currently supports Vue.js 2.4+ however we are actively working on support native web components in future releases.
-> Currently vstx-data-table is built support bulma framework however with a few tweaking/extending of the css, other frameworks such as bootstrap can be supported.
+> The VSTX Data Table is a powerful data grid targeting Vue.js 2.4+ with planned support towards Native Web Components
+> Theme: VSTX Data Table is built using the Bulma (https://bulma.io/) CSS framework and FontAwesome icons. Support for other CSS frameworks like Bootstrap can be achieved using additional CSS. Other icon sets can currently be used by overriding the icons with named slots.
 
 ## Current Features
- - Sort multiple columns
- - Slot content overrides at the row/column/cell levels
- - Calculated fields using basic sum/averages formulas
- - On-page configs for column position
- - Config change call backs for data-configuration persistance
+ - Deep Filtering & Search with column support for complex datasets
+ - Multiple Column Sorting
+ - Support for large datasets (Tested with 25k rows of complex nested objects)
+ - Customize content display using Slots at the Row/Column/Cell Levels
+ - Client-side exports of data to CSV or Excel
+ - Optional Column Totals by Page & Total
  - Pagination
- - Data-Totals by Page & by Total All Data
- - In-Data filtering with deep scans of complex objects
- - Callback requerying filtering data to provide a new data-set
+ - On-page configurations for Column Position, Sort Order, and more
+ - Configuration Prop input and Emits configuration change events to support configuration persistence
  - Hidden Columns
- - Support for data-sets with over 25k records
- - Client-size exporting of data in CSV & Excel
 
 ## Roadmap
- - Abstract the CSS layer to make is support any css framework
+ - Abstract the CSS layer for supporting any css framework
+ - Improve mobile support (Fixed headers and first column)
+ - Add Calculated Fields using basic Sum/Averages Formulas
+ - Move thread-expensive Filtering to Web Worker to unblock UI in large datasets
  - Extend support for higher level math/formula functions
  - Incorporate [Native Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) in our 2.0 release
  - Build testing suite for both UX/UI & low level support for testing formulas/math functions
@@ -85,7 +86,10 @@ export default {
 > We are actively changing this data-table in our operations daily so please help us improve its usability.
 
 ## History
+- 0.0.58 - Reenabled CSV Exports, Added Deep Column Filtering
 - 0.0.57 - Added Excel exporting support, speed optimization to support even larger datasets & bug fixes
+- 0.0.51 - Added Bulma Size support, basic Mobile formatting
+- 0.0.48 - Table Filters as props, built-in Vue Filters (formatString, formatDate, formatMoney, formatNumber, formatPercent)
 - 0.0.43 - Fixed issue with CSV Exporting for large data-sets
 
 > This data-table project was built to support a need Blackfisk.com had however we quickly realized it needed to be open-sourced to help the community.

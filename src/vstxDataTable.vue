@@ -88,26 +88,25 @@
             slot(name="slot-icon__clearSort")
               span.icon
                 i.fa.fa-sort
-          //- Download XLSX
-          a.button.data-table__download-xlsx(
-            title="Download as XLSX"
-            @click.passive="downloadXLSX(getData, filename)"
-            v-if="options.settings.isAllowed && options.settings.isVisible && getPagedData.length"
-            :class="getSizeClass"
-          )
-            slot(name="slot-icon__downloadXLSX")
-              span.icon
-                i.fa.fa-file-excel
-          //- .level-item
-          //-   //- Download CSV
-          //-   a.data-table__download-csv(
-          //-     title="Download as CSV"
-          //-     @click.passive="downloadCSV(getData, filename)"
-          //-     v-if="options.settings.isAllowed && options.settings.isVisible && getPagedData.length"
-          //-   )
-          //-     slot(name="slot-icon__downloadCSV")
-          //-       span.icon
-          //-         i.fa.fa-download
+          .field.has-addons
+            .control
+            //- Download XLSX
+            a.button.data-table__download-xlsx(
+              :title="`Download as ${state.downloadAs.toUpperCase()}`"
+              @click.passive="download(state.downloadAs, getData, filename)"
+              v-if="options.settings.isAllowed && options.settings.isVisible && getPagedData.length"
+              :class="getSizeClass"
+            )
+              slot(name="slot-icon__downloadXLSX")
+                span.icon
+                  i.fa.fa-file-excel
+            .control
+              vstx-select.data-table__select(
+                :size="options.size"
+                :options="[{value: 'xlsx', text: 'XLSX'}, {value: 'csv', text: 'CSV'}]"
+                :value="[state.downloadAs]"
+                @input="state.downloadAs = $event[0]"
+              )
     slot(name="slot-description")
     //- Controls
     table.table.is-narrow.is-relative-position(
@@ -441,7 +440,7 @@
   import Loader from 'vstx-loader'
   import DraggableList from 'vstx-draggable-list'
   // Mixins
-  import { csvMixin } from './mixins/csvMixin'
+  // import { csvMixin } from './mixins/csvMixin'
   import { downloadXLSX } from './mixins/downloadXLSX'
   import { selectMixin } from './mixins/selectMixin'
   import { searchFilterMixin } from './mixins/searchFilterMixin'
@@ -498,7 +497,7 @@
       filename: {
         type: String,
         required: false,
-        default: `export-${new Date().toISOString().split('T')[0]}.xlsx`
+        default: `export-${new Date().toISOString().split('T')[0]}`
       },
       altered: {
         note: 'An array of payload indexes that have been altered.',
@@ -524,7 +523,7 @@
         default: () => { return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) }
       }
     },
-    mixins: [csvMixin, downloadXLSX, selectMixin, searchFilterMixin],
+    mixins: [downloadXLSX, selectMixin, searchFilterMixin],
     components: {
       'data-table-cell': DataTableCell,
       'draggable-list': DraggableList,
@@ -564,7 +563,8 @@
           hasCalculatedTotals: false,
           totals: {},
           // End,
-          dimmed: false
+          dimmed: false,
+          downloadAs: 'xlsx'
         },
         options: this.getConfiguration()
       }
@@ -682,6 +682,15 @@
         this.checkRequiresPagination()
         if (this.options.totals.isVisible.all) {
           this.computeTotals()
+        }
+      },
+      download (type, data, filename) {
+        switch (type) {
+          case 'csv':
+            this.downloadXLSX(data, `${filename}.${type}`, true)
+            break
+          case 'xlsx':
+            this.downloadXLSX(data, `${filename}.${type}`, false)
         }
       },
       populateColumnsFromPayload () {

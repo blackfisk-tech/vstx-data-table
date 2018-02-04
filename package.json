@@ -1,13 +1,15 @@
 {
   "name": "vstx-data-table",
-  "version": "0.0.58",
+  "version": "0.1.0",
   "description": "Data table component for the Vue Stacks Template",
   "main": "dist/vstx-data-table.js",
   "scripts": {
     "build": "rimraf ./dist && webpack --config ./webpack.config.js"
   },
   "author": "Garion Berg <garionberg@gmail.com>",
-  "contributors": ["Jeremy DeYoung <jeremy@blackfisk.com>"],
+  "contributors": [
+    "Jeremy DeYoung <jeremy@blackfisk.com>"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",

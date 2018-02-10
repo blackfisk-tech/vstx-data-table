@@ -61,15 +61,20 @@ export const schemas = {
         showLogo: joi.boolean(),
         position: joi.number().required(),
         isVisible: joi.boolean(),
+        // Link
         link: joi.string(),
         linkReplaceText: joi.string(),
         linkReplaceField: joi.string(),
+        // Events
         eventName: joi.string(),
         eventData: joi.any(),
+        // Sorting
         sort: joi.object().keys({
           isSortable: joi.boolean(),
           direction: joi.string().lowercase().allow('').valid(['asc', 'desc', '']),
-          order: joi.number().min(0)
+          order: joi.number().min(0),
+          sortByField: joi.string(),
+          sortByColumn: joi.string()
         }).and('order', 'isSortable', 'direction')
       }).and('linkReplaceText', 'linkReplaceField')
     ),

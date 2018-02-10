@@ -1,5 +1,5 @@
 import md5 from 'md5'
-import { debounce, remove, orderBy, filter, isNil, forEach, isObject } from 'lodash'
+import { debounce, remove, orderBy, filter, isNil, forEach, isObject, get } from 'lodash'
 
 export const searchFilterMixin = {
   created () {
@@ -46,7 +46,19 @@ export const searchFilterMixin = {
       //   console.log('onmessage', event.data)
       // }
       let data = ((this.state.search.length || this.getFilters.length) && this.state.data.length > 0 ? this.state.data : this.getPayload)
-      let sortedData = orderBy(data, this.getOrderBy.columns, this.getOrderBy.directions)
+      let sortedData = orderBy(
+        data,
+        // Columns
+        (item) => {
+          let cols = []
+          forEach(this.getOrderBy.columns, (column) => {
+            cols.push(get(item, column))
+          })
+          return cols
+        },
+        // Directions
+        this.getOrderBy.directions
+      )
       return sortedData
     }
   },
@@ -93,9 +105,14 @@ export const searchFilterMixin = {
       this.filterAndSearch((this.getFilters.length && this.state.data.length > 0 ? this.state.data : this.getPayload))
     }, 275),
     find (o, criteria, level = 0, topLevel = '') {
+      // if (topLevel === 'channel') {
+      //   console.log('Channel being searched')
+      // }
       let found = false
       forEach(o, (value, key) => {
-        if (level === 0) { topLevel = key }
+        if (level === 0) {
+          topLevel = key
+        }
         if (!isObject(value) && found === false) {
           let match = isNil(value) ? [] : isNil(criteria.column) || criteria.column === key || criteria.column === topLevel ? value.toString().match(new RegExp(criteria.value, 'i')) : []
           let isMatch = !isNil(value) && !isNil(match) && match.length > 0
@@ -103,8 +120,12 @@ export const searchFilterMixin = {
             found = true
           }
         } else if (found === false) {
-          level++
+          let oldLevel = level
+          if (!Array.isArray(value)) {
+            level++
+          }
           let isMatch = this.find(value, criteria, level, topLevel)
+          level = oldLevel
           if (isMatch) {
             found = true
           }

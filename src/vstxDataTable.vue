@@ -610,8 +610,9 @@
           text: 'All Columns'
         }]
         forEach(this.getColumns, (column) => {
+          // FINDME
           options.push({
-            value: column.field,
+            value: (column.field),
             text: column.name
           })
         })
@@ -659,15 +660,18 @@
         return returnData
       },
       getOrderBy () {
+        let topColumns = []
         let columns = []
         let directions = []
         forEach(this.getSortedColumns, (value) => {
           if (value.sort.direction !== '') {
-            columns.push(value.field)
+            topColumns.push( (!isNil(value.sort.sortByColumn) ? value.sort.sortByColumn : value.field) )
+            columns.push( (!isNil(value.sort.sortByField) ? value.sort.sortByField : value.field) )
             directions.push(value.sort.direction)
           }
         })
         let data = {
+          topColumns,
           columns,
           directions
         }
@@ -857,7 +861,7 @@
         return direction
       },
       getSortPosition (field) {
-        let position = indexOf(this.getOrderBy.columns, field)
+        let position = indexOf(this.getOrderBy.topColumns, field)
         return position
       },
       unsort () {

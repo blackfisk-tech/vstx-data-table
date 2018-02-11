@@ -59,7 +59,7 @@
     "store": "^2.0.12",
     "vstx-draggable-list": "0.0.1",
     "vstx-loader": "0.0.1",
-    "vstx-search-bar": "0.0.11",
+    "vstx-search-bar": "0.0.12",
     "vstx-select": "0.0.11",
     "xlsx": "^0.11.18"
   }

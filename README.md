@@ -41,7 +41,7 @@ The VSTX Data Table is a powerful data grid component (Vue.js 2.4+) for displayi
 ### Demo
 ![alt text][example-table-1]
 
-[example-table-1]: example-table-1.png "Example Preview of Data Table"
+[example-table-1]: example-table-1.PNG "Example Preview of Data Table"
 A live demo can be found at [www.vuestacks.com/data-table](https://www.vuestacks.com/data-table). This is still a work in progress and over the next few months we plan on adding dozens of features such as Data-fetching, caching, user preference persistance, data-table report collections, live data editing and much more!
 
 ### Installation

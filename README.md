@@ -42,7 +42,7 @@ The VSTX Data Table is a powerful data grid component (Vue.js 2.4+) for displayi
 ![alt text][example-table-1]
 
 [example-table-1]: example-table-1.PNG "Example Preview of Data Table"
-A live demo can be found at [www.vuestacks.com/data-table](https://www.vuestacks.com/data-table). This is still a work in progress and over the next few months we plan on adding dozens of features such as Data-fetching, caching, user preference persistance, data-table report collections, live data editing and much more!
+A live demo can be found at [www.vuestacks.com/data-table](https://www.vuestacks.com/data-table). This is still a work in progress and over the next few months we plan on adding dozens of features such as Data-fetching, caching, user preference persistence, data-table report collections, live data editing and much more!
 
 ### Installation
 
@@ -103,14 +103,14 @@ export default {
 - 0.1.2 - Updated Documentation, Added Default formatDate filter with Timezone support
 - 0.1.1 - Altered Search Bar behavior from Automatic to Manual (on Enter, on Click)
 - 0.1.0 - Deep Sorting and Deep Filtering configurations added to Columns prop Column Schema
-- 0.0.58 - Reenabled CSV Exports, Added Deep Column Filtering
+- 0.0.58 - Enabled CSV Exports, Added Deep Column Filtering
 - 0.0.57 - Added Excel exporting support, speed optimization to support even larger datasets & bug fixes
 - 0.0.51 - Added Bulma Size support, basic Mobile formatting
 - 0.0.48 - Table Filters as props, built-in Vue Filters (formatString, formatDate, formatMoney, formatNumber, formatPercent)
 - 0.0.43 - Fixed issue with CSV Exporting for large data-sets
 
 > This data-table project was built to support a need Blackfisk.com had however we quickly realized it needed to be open-sourced to help the community.
-> [Jeremy R DeYoung](mailto:jeremy@blackfisk.com) initial built the foundation
+> [Jeremy R DeYoung](mailto:jeremy@blackfisk.com) initially built the foundation
 > [Daniel Berg](mailto:daniel@blackfisk.com) is currently primary contributor to this project
 
 ### License

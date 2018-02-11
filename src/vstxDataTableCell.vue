@@ -23,6 +23,7 @@ span.data-table-cell
 
 <script>
 import accounting from 'accounting'
+import moment from 'moment'
 import { isNil, forEach, round } from 'lodash'
 import DataTableCellDefault from './vstxDataTableCellDefault.vue'
 
@@ -32,9 +33,6 @@ export default {
     'data-table-cell-default': DataTableCellDefault
   },
   filters: {
-    formatTest: (num) => {
-      return `${num} Test`
-    },
     formatNumber: (num) => {
       return accounting.formatNumber(num)
     },
@@ -42,10 +40,13 @@ export default {
       return accounting.formatMoney(num)
     },
     formatPercent: (num) => {
-      return `${round(num, 2)}%`
+      return `${num.toFixed(2)}%`
     },
     formatString: (string) => {
       return string
+    },
+    formatDate: (string = '', format = 'YYYY-MM-DD HH:mm', offset = '+0000') => {
+      return moment(string).utcOffset(offset).format(format)
     }
   },
   props: {

@@ -2,6 +2,7 @@ export default {
   configuration: {
     payload: {
       documentation: {
+          "size": "Controls the size of inputs/buttons/etc.",
           "collapsePages": "Hide pagination when records less than half of a default page",
           "isRanked": "Show or Hide Record Ranks",
           "table": {
@@ -53,6 +54,7 @@ export default {
       ,
       example: `
         {
+         "size": String ['small', 'normal', 'medium', 'large'],
          "collapsePages": Boolean,
          "isRanked": Boolean,
          "table": {
@@ -108,7 +110,8 @@ export default {
         "Array of Columns": {
           "Column": {
             "Name": "Column Title",
-            "Format": "Name of filter for formatting.",
+            "Format": "Name of Filter to be called for formatting.",
+            "FormatArgs": "Positional arguments passed to the Filter, e.g. ['HH:mm', '-08:00'] for formatDate(date, format, utcOffset)",
             "Field": "Key Name in Payload",
             "Align": "Alignment (left, right, centered)",
             "Position": "Numeric position of Column Display",
@@ -116,7 +119,9 @@ export default {
             "Sort": {
               "IsSortable": "Allow Sorting",
               "Direction": "Sort Direction (asc, desc)",
-              "Order": "Sort Order"
+              "Order": "Sort Order",
+              "SortByField": "The field or path to field to sort this column by. e.g. items[0].product.sku",
+              "SortByColumn": "The column to associate for sorting purposes. Defaults to Field name."
             }
           }
         }
@@ -124,15 +129,18 @@ export default {
       example: `
         {
           "name": String,
-          "format": String,
-          "field": String,
           "align": String,
+          "field": String,
+          "format": String,
+          "formatArgs": Array,
           "position": Number,
           "isVisible": Boolean,
           "sort": {
             "isSortable": Boolean,
             "direction": String,
-            "order": Number
+            "order": Number,
+            "sortByField": String,
+            "sortByColumn": String
           }
         }
       `

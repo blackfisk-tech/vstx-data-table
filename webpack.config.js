@@ -29,14 +29,18 @@ var config = {
     ]
   },
   externals: {
+    accounting: 'accounting',
     joi: 'joi',
-    joiBrowser: 'joi-browser',
+    joi-browser: 'joi-browser',
+    localforage: 'localforage',
     lodash: 'lodash',
-    localStore: 'store',
     md5: 'md5',
-    SearchBar: 'vstx-search-bar',
-    xlsx: 'xlsx',
-    Select: 'vstx-select'
+    moment: 'moment'
+    vstx-draggable-list: 'vstx-draggable-list',
+    vstx-loader: 'vstx-loader',
+    vstx-search-bar: 'vstx-search-bar',
+    vstx-select: 'vstx-select',
+    xlsx: 'xlsx'
   },
   plugins: [
     new webpack.optimize.UglifyJsPlugin( {

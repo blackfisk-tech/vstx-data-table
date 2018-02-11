@@ -1,28 +1,41 @@
 # VueStacks.com Data-Table
 
-> The VSTX Data Table is a powerful data grid targeting Vue.js 2.4+ with planned support towards Native Web Components
-> Theme: VSTX Data Table is built using the Bulma (https://bulma.io/) CSS framework and FontAwesome icons. Support for other CSS frameworks like Bootstrap can be achieved using additional CSS. Other icon sets can currently be used by overriding the icons with named slots.
+> The VSTX Data Table is a powerful data grid component (Vue.js 2.4+) for displaying, sorting, searching, filtering, and interacting with large and deeply nested data sets. As simple as passing a Prop containing an array of objects, as complex you need it to be.
+>
+> Theme (Look & Feel):
+> We rely on the Bulma (https://bulma.io/) CSS framework and FontAwesome icons for themeing. Support for other CSS frameworks like Bootstrap can be achieved using additional CSS. Other icon sets can currently be used by overriding the icons with named slots.
 
 ## Current Features
- - Deep Filtering & Search with column support for complex datasets
- - Multiple Column Sorting
- - Support for large datasets (Tested with 25k rows of complex nested objects)
- - Customize content display using Slots at the Row/Column/Cell Levels
- - Client-side exports of data to CSV or Excel
- - Optional Column Totals by Page & Total
- - Pagination
- - On-page configurations for Column Position, Sort Order, and more
+ - Deep (nested) Sorting, Filtering, and Searching by All/Column
+ - Multi-Column Sorts with Sort By configuration
+ - Works with large datasets (Tested with 25k rows of complex nested objects)
+ - Customize Row/Column/Cell content using Vue.js Named & Scoped Slots
+ - Customize Title, Description, Icons, Loading Animation, Errors, and more using Slots
+ - Selectable rows with @onSelect event
+ - Built-in Loading animation controlled through Prop
+ - Client-side exports of data to CSV and Excel
+ - Optional Column Totals by Page & All
+ - Automatic Pagination with configurable page size
+ - On-page configurations for Column Position, Sort Order, and much more
  - Configuration Prop input and Emits configuration change events to support configuration persistence
+ - Built-in Filters for Outputting Money, Numbers, and Dates (including timezone support)
+ - Support for Custom Filters with multiple parameters
+ - Text Replacement for variable Links
  - Hidden Columns
 
 ## Roadmap
- - Abstract the CSS layer for supporting any css framework
+ - Move thread-expensive Filtering to Web Worker to reduce UI blocking
+ - Add Weighted Multi-Column Sorting
+ - Abstract the CSS layer for supporting any CSS Framework/Icon Set
  - Improve mobile support (Fixed headers and first column)
- - Add Calculated Fields using basic Sum/Averages Formulas
- - Move thread-expensive Filtering to Web Worker to unblock UI in large datasets
+ - Add Calculated Fields using basic Sum/Averages Formulas (can currently be achieved using Slots)
  - Extend support for higher level math/formula functions
  - Incorporate [Native Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) in our 2.0 release
  - Build testing suite for both UX/UI & low level support for testing formulas/math functions
+ - ~~Support Complex Objects in Sort, Filter, and Search~~
+ - ~~Export to CSV/XLSX~~
+ - ~~Multi-column Sorting~~
+ - ~~Selectable Rows~~ 
 
 ## Demo
 ![alt text][example-table-1]
@@ -46,8 +59,7 @@ npm install vstx-data-table
 <template lang="pug">
   .sample-data-table
     data-table(
-      :payload="data",
-      :filename="`sample-export.csv`"
+      :payload="data"
     )
 </template>
 <script>
@@ -86,6 +98,10 @@ export default {
 > We are actively changing this data-table in our operations daily so please help us improve its usability.
 
 ## History
+- 0.1.3 - Added Web Worker option in Filtering to reduce UI blocking
+- 0.1.2 - Updated Documentation, Added Default formatDate filter with Timezone support
+- 0.1.1 - Altered Search Bar behavior from Automatic to Manual (on Enter, on Click)
+- 0.1.0 - Deep Sorting and Deep Filtering configurations added to Columns prop Column Schema
 - 0.0.58 - Reenabled CSV Exports, Added Deep Column Filtering
 - 0.0.57 - Added Excel exporting support, speed optimization to support even larger datasets & bug fixes
 - 0.0.51 - Added Bulma Size support, basic Mobile formatting

@@ -361,12 +361,14 @@
           td.pagination__controls(:colspan="getColspan")
             nav.pagination.is-left(:class="getSizeClass")
               a.pagination-previous(
+                title="Previous Page"
                 @click.passive="pageBack"
                 :disabled="state.offset - 1 >= 0 ? false : true"
               )
                 slot(name="slot-icon__pageBack")
                   i.fa.fa-angle-left
               a.pagination-next(
+                title="Next Page"
                 @click.passive="pageForward"
                 :disabled="state.offset + 1 < getPagination[getPagination.length - 1] ? false : true"
               )
@@ -379,6 +381,7 @@
                   :key="`table-pagination-${index}`"
                 )
                   a(
+                    :title="`Page ${i}`"
                     v-bind:class="{'pagination-ellipsis':isNaN(i),'pagination-link':!isNaN(i),'is-current': i - 1 === state.offset ? true : false}"
                     @click.passive="state.offset = i - 1"
                   ) {{ i }}

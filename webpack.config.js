@@ -31,15 +31,15 @@ var config = {
   externals: {
     accounting: 'accounting',
     joi: 'joi',
-    joi-browser: 'joi-browser',
+    joiBrowser: 'joi-browser',
     localforage: 'localforage',
     lodash: 'lodash',
     md5: 'md5',
-    moment: 'moment'
-    vstx-draggable-list: 'vstx-draggable-list',
-    vstx-loader: 'vstx-loader',
-    vstx-search-bar: 'vstx-search-bar',
-    vstx-select: 'vstx-select',
+    moment: 'moment',
+    vstxDraggableList: 'vstx-draggable-list',
+    vstxLoader: 'vstx-loader',
+    vstxSearchBar: 'vstx-search-bar',
+    vstxSelect: 'vstx-select',
     xlsx: 'xlsx'
   },
   plugins: [

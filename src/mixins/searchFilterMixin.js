@@ -18,6 +18,9 @@ export const searchFilterMixin = {
     }
   },
   computed: {
+    getSearch () {
+      return this.state.search
+    },
     getSearchColumn () {
       return [this.state.searchColumn]
     },

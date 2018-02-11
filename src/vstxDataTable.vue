@@ -33,7 +33,7 @@
             )
               .control
                 vstx-search-bar.data-table__search(
-                  :value="state.search"
+                  :value="getSearch"
                   @input="$emit('onSearch', $event)"
                   :size="options.size"
                 )
@@ -49,7 +49,7 @@
                 )
               .control
                 vstx-search-bar.data-table__search(
-                  :value="state.search"
+                  :value="getSearch"
                   @input="search($event)"
                   :size="options.size"
                 )
@@ -88,13 +88,12 @@
             slot(name="slot-icon__clearSort")
               span.icon
                 i.fa.fa-sort
-          .field.has-addons
+          .field.has-addons(v-if="options.settings.isAllowed && options.settings.isVisible && getPagedData.length")
             .control
             //- Download XLSX
             a.button.data-table__download-xlsx(
               :title="`Download as ${state.downloadAs.toUpperCase()}`"
               @click.passive="download(state.downloadAs, getData, filename)"
-              v-if="options.settings.isAllowed && options.settings.isVisible && getPagedData.length"
               :class="getSizeClass"
             )
               slot(name="slot-icon__downloadXLSX")

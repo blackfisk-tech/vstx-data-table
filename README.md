@@ -1,11 +1,12 @@
 # VueStacks.com Data-Table
 
-> The VSTX Data Table is a powerful data grid component (Vue.js 2.4+) for displaying, sorting, searching, filtering, and interacting with large and deeply nested data sets. As simple as passing a Prop containing an array of objects, as complex you need it to be.
->
-> Theme (Look & Feel):
-> We rely on the Bulma (https://bulma.io/) CSS framework and FontAwesome icons for themeing. Support for other CSS frameworks like Bootstrap can be achieved using additional CSS. Other icon sets can currently be used by overriding the icons with named slots.
+### About:
+The VSTX Data Table is a powerful data grid component (Vue.js 2.4+) for displaying, sorting, searching, filtering, and interacting with large and deeply nested data sets. As simple as passing a Prop containing an array of objects, as complex you need it to be.
 
-## Current Features
+> Theme (Look & Feel):
+> We rely on the Bulma (https://bulma.io/) CSS framework and FontAwesome icons for themeing. These are needed for the component to display properly. Support for other CSS frameworks like Bootstrap can be achieved using additional CSS. Other icon sets can currently be used by overriding the icons with named slots.
+
+### Current Features
  - Deep (nested) Sorting, Filtering, and Searching by All/Column
  - Multi-Column Sorts with Sort By configuration
  - Works with large datasets (Tested with 25k rows of complex nested objects)
@@ -23,7 +24,7 @@
  - Text Replacement for variable Links
  - Hidden Columns
 
-## Roadmap
+### Roadmap
  - Move thread-expensive Filtering to Web Worker to reduce UI blocking
  - Add Weighted Multi-Column Sorting
  - Abstract the CSS layer for supporting any CSS Framework/Icon Set
@@ -37,19 +38,19 @@
  - ~~Multi-column Sorting~~
  - ~~Selectable Rows~~ 
 
-## Demo
+### Demo
 ![alt text][example-table-1]
 
-[example-table-1]: example-table-1.jpg "Example Preview of Data Table"
+[example-table-1]: example-table-1.png "Example Preview of Data Table"
 A live demo can be found at [www.vuestacks.com/data-table](https://www.vuestacks.com/data-table). This is still a work in progress and over the next few months we plan on adding dozens of features such as Data-fetching, caching, user preference persistance, data-table report collections, live data editing and much more!
 
-## Installation
+### Installation
 
 ```
 npm install vstx-data-table
 ```
 
-## Usage
+### Usage
 
 > We use pug & stylus in all of our code and examples. Please make adjustments if you wish you get the example below to work without installing support for pug or stylus.
 > The below example will render a simple data-table with 3 columns. More complex examples are available at [www.vuestacks.com/data-table](https://www.vuestacks.com/data-table)
@@ -86,7 +87,7 @@ export default {
 </style>
 ```
 
-## Contributing
+### Contributing
 
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
@@ -97,8 +98,8 @@ export default {
 > You can also contribute, ask us questions, or suggest features by emailing us at [dev@blackfisk.com](mailto:dev@blackfisk.com)
 > We are actively changing this data-table in our operations daily so please help us improve its usability.
 
-## History
-- 0.1.3 - Added Web Worker option in Filtering to reduce UI blocking
+### History
+- 0.1.4 - Added Web Worker option in Filtering to reduce UI blocking
 - 0.1.2 - Updated Documentation, Added Default formatDate filter with Timezone support
 - 0.1.1 - Altered Search Bar behavior from Automatic to Manual (on Enter, on Click)
 - 0.1.0 - Deep Sorting and Deep Filtering configurations added to Columns prop Column Schema
@@ -112,6 +113,6 @@ export default {
 > [Jeremy R DeYoung](mailto:jeremy@blackfisk.com) initial built the foundation
 > [Daniel Berg](mailto:daniel@blackfisk.com) is currently primary contributor to this project
 
-## License
+### License
 
 > All code provided within is licensed with a [GNU GPLv3 License](https://www.gnu.org/licenses/quick-guide-gplv3.en.html)

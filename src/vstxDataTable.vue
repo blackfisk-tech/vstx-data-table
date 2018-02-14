@@ -453,7 +453,7 @@
   import { defaults } from './constants/defaults' // The defaults should be set here so they can used for the merge function and the prop defaults.
   import { schemas } from './constants/schemas' // Joi Validation Schemas
 
-  import fontawesomeDataTable from '@fortawesome/fontawesome'
+  import { library } from '@fortawesome/fontawesome'
   import faUser from '@fortawesome/fontawesome-free-solid/faUser'
   import faTable from '@fortawesome/fontawesome-free-solid/faTable'
   import faColumns from '@fortawesome/fontawesome-free-solid/faColumns'
@@ -465,16 +465,16 @@
   import faAngleLeft from '@fortawesome/fontawesome-free-solid/faAngleLeft'
   import faAngleRight from '@fortawesome/fontawesome-free-solid/faAngleRight'
 
-  fontawesomeDataTable.library.add(faUser)
-  fontawesomeDataTable.library.add(faTable)
-  fontawesomeDataTable.library.add(faColumns)
-  fontawesomeDataTable.library.add(faSort)
-  fontawesomeDataTable.library.add(faFileExcel)
-  fontawesomeDataTable.library.add(faTimes)
-  fontawesomeDataTable.library.add(faList)
-  fontawesomeDataTable.library.add(faWrench)
-  fontawesomeDataTable.library.add(faAngleLeft)
-  fontawesomeDataTable.library.add(faAngleRight)
+  library.add(faUser)
+  library.add(faTable)
+  library.add(faColumns)
+  library.add(faSort)
+  library.add(faFileExcel)
+  library.add(faTimes)
+  library.add(faList)
+  library.add(faWrench)
+  library.add(faAngleLeft)
+  library.add(faAngleRight)
 
   export default {
     name: 'data-table',

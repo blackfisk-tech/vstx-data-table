@@ -1002,7 +1002,6 @@
       },
       getColumnState (field) {
         let state = {
-          'fa': true,
           'column__sort-indicator-asc': this.getSortDirection(field) === 'asc',
           'column__sort-indicator-desc': this.getSortDirection(field) === 'desc'
         }

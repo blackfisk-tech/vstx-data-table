@@ -23,6 +23,7 @@
         slot(name="slot-title")
       .column.is-narrow.is-paddingless
         .buttons.has-addons
+          slot(name="slot-pre-controls")
           //- Filter Slot
           slot(
             name="filter"
@@ -106,7 +107,9 @@
                 :value="[state.downloadAs]"
                 @input="state.downloadAs = $event[0]"
               )
+          slot(name="slot-post-controls")
     slot(name="slot-description")
+    slot(name="slot-toolbar")
     //- Controls
     table.table.is-narrow.is-relative-position(
       v-bind:class="{'is-overflow-hidden': options.table.overflow, 'is-bordered': options.table.bordered, 'is-striped': options.table.striped, 'is-hoverable': options.table.hoverable, 'is-fullwidth': options.table.fullwidth}"
@@ -434,7 +437,7 @@
   // import localForage from 'localforage'
   import joi from 'joi'
   import md5 from 'md5'
-  import { sortBy, filter, forEach, throttle, indexOf, differenceWith, isEqual, merge, cloneDeep, isDate, isNumber, round, isNil } from 'lodash'
+  import { sortBy, filter, forEach, throttle, indexOf, differenceWith, isEqual, merge, cloneDeep, isDate, isNumber, round, isNil, get, isString } from 'lodash'
   // Components
   import DataTableCell from './vstxDataTableCell.vue'
   import SearchBar from 'vstx-search-bar'
@@ -449,6 +452,29 @@
   // Constants
   import { defaults } from './constants/defaults' // The defaults should be set here so they can used for the merge function and the prop defaults.
   import { schemas } from './constants/schemas' // Joi Validation Schemas
+
+  import fontawesome from '@fortawesome/fontawesome'
+  import faUser from '@fortawesome/fontawesome-free-solid/faUser'
+  import faTable from '@fortawesome/fontawesome-free-solid/faTable'
+  import faColumns from '@fortawesome/fontawesome-free-solid/faColumns'
+  import faSort from '@fortawesome/fontawesome-free-solid/faSort'
+  import faFileExcel from '@fortawesome/fontawesome-free-solid/faFileExcel'
+  import faTimes from '@fortawesome/fontawesome-free-solid/faTimes'
+  import faList from '@fortawesome/fontawesome-free-solid/faList'
+  import faWrench from '@fortawesome/fontawesome-free-solid/faWrench'
+  import faAngleLeft from '@fortawesome/fontawesome-free-solid/faAngleLeft'
+  import faAngleRight from '@fortawesome/fontawesome-free-solid/faAngleRight'
+
+  fontawesome.library.add(faUser)
+  fontawesome.library.add(faTable)
+  fontawesome.library.add(faColumns)
+  fontawesome.library.add(faSort)
+  fontawesome.library.add(faFileExcel)
+  fontawesome.library.add(faTimes)
+  fontawesome.library.add(faList)
+  fontawesome.library.add(faWrench)
+  fontawesome.library.add(faAngleLeft)
+  fontawesome.library.add(faAngleRight)
 
   export default {
     name: 'data-table',
@@ -668,7 +694,29 @@
         forEach(this.getSortedColumns, (value) => {
           if (value.sort.direction !== '') {
             topColumns.push( (!isNil(value.sort.sortByColumn) ? value.sort.sortByColumn : value.field) )
-            columns.push( (!isNil(value.sort.sortByField) ? value.sort.sortByField : value.field) )
+            let column = (!isNil(value.sort.sortByField) ? value.sort.sortByField : value.field)
+            let sortByColumn = ''
+            if (value.format === 'formatString') {
+              sortByColumn = (item) => {
+                if (isNil(item[column])) {
+                  let value = get(item, column)
+                  return isString(value) ? value.toLowerCase() : value
+                } else if (item[column].hasOwnProperty('toLowerCase') ) {
+                  return item[column].toLowerCase()
+                } else {
+                  return item[column]
+                }
+              }
+            } else {
+              sortByColumn = (item) => {
+                if(isNil(item[column])) {
+                  return get(item, column)
+                } else {
+                  return item[column]
+                }
+              }
+            }
+            columns.push( sortByColumn )
             directions.push(value.sort.direction)
           }
         })

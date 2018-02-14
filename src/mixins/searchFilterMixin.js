@@ -1,5 +1,5 @@
 import md5 from 'md5'
-import { debounce, remove, orderBy, filter, isNil, forEach, isObject, get } from 'lodash'
+import { debounce, remove, orderBy, filter, isNil, forEach, isObject } from 'lodash'
 
 export const searchFilterMixin = {
   created () {
@@ -52,13 +52,7 @@ export const searchFilterMixin = {
       let sortedData = orderBy(
         data,
         // Columns
-        (item) => {
-          let cols = []
-          forEach(this.getOrderBy.columns, (column) => {
-            cols.push(get(item, column))
-          })
-          return cols
-        },
+        this.getOrderBy.columns,
         // Directions
         this.getOrderBy.directions
       )

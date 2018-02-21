@@ -93,7 +93,7 @@ export const searchFilterMixin = {
       this.state.data = oldData
     },
     addFilter: debounce(function (event = {}) {
-      if (event.hasOwnProperty('search') && !isNil(event.search) && event.search.length > 0) {
+      if ('search' in event && !isNil(event.search)) {
         this.state.filters.push({
           'value': event.search,
           ...(event.hasOwnProperty('column') && event.column.length > 0) ? {'column': event.column} : null

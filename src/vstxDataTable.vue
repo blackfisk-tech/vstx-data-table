@@ -426,7 +426,7 @@
             :class="getColumnAlignment(column)"
           )
             //- Slot for Custom Fields
-            slot(:name="column.field")&attributes({':item': 'item', ':index': 'i', ':column': 'column'})
+            slot(:name="column.sort.sortByField ? column.sort.sortByField : column.field")&attributes({':item': 'item', ':index': 'i', ':column': 'column'})
               data-table-cell()&attributes({'@onFilter': 'addFilter($event)', ':item': 'item', ':index': 'i', ':column': 'column'})
 </template>
 

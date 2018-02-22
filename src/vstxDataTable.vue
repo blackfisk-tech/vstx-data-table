@@ -72,7 +72,7 @@
             slot(name="slot-icon__clearSort")
               span.icon
                 i.fa.fa-sort
-          .field.has-addons(v-if="options.settings.isAllowed && options.settings.isVisible && getPagedData.length")
+          .field.has-addons.is-marginless(v-if="options.settings.isAllowed && options.settings.isVisible && getPagedData.length")
             .control
             //- Download XLSX
             a.button.data-table__download-xlsx(

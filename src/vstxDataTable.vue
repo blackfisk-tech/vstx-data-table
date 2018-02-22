@@ -1,22 +1,5 @@
 <template lang="pug">
   .data-table
-    .data-table__filters__active(
-      v-if="state.search.length || state.filters.length"
-      style="padding-bottom:10px;"
-    )
-      nav.breadcrumb(aria-label="filters")
-        ul
-          li Filtering by:&nbsp;&nbsp;
-            span.tag.is-primary(v-if="state.search.length") Search: {{ state.search }}
-              button.delete(@click="searchRemove", :class="getSizeClass")
-            span.tag.is-primary(
-              v-for="filter in getFilters"
-              :key="getFilterId(filter)"
-            ) {{ filter.column }} : {{ filter.value }}
-              button.delete(
-                :class="getSizeClass"
-                @click="filterRemove(filter)"
-              )
     .columns.is-multiline.is-marginless.data-table__head
       .column.is-narrow.is-paddingless.title-column
         //- Table Title
@@ -109,6 +92,25 @@
               )
           slot(name="slot-post-controls")
     slot(name="slot-description")
+    .data-table__filters__active(
+      v-if="state.search.length || state.filters.length"
+      style="padding-bottom:10px;"
+    )
+      nav.breadcrumb(aria-label="filters")
+        ul
+          li Filtering by:&nbsp;&nbsp;
+            span.tag.is-primary(v-if="state.search.length") Search: {{ state.search }}
+              button.delete(@click="searchRemove", :class="getSizeClass")
+            span.tag.is-primary.filter-tag(
+              v-for="filter in getFilters"
+              :key="getFilterId(filter)"
+            )
+              span.icon.is-small
+                i.fa.fa-filter.fa-xs
+              span {{ (filter.text || filter.column) }} : {{ filter.value }}
+              button.delete.is-small(
+                @click="filterRemove(filter)"
+              )
     slot(name="slot-toolbar")
     //- Controls
     table.table.is-narrow.is-relative-position(
@@ -454,27 +456,8 @@
   import { schemas } from './constants/schemas' // Joi Validation Schemas
 
   import { library } from '@fortawesome/fontawesome'
-  import faUser from '@fortawesome/fontawesome-free-solid/faUser'
-  import faTable from '@fortawesome/fontawesome-free-solid/faTable'
-  import faColumns from '@fortawesome/fontawesome-free-solid/faColumns'
-  import faSort from '@fortawesome/fontawesome-free-solid/faSort'
-  import faFileExcel from '@fortawesome/fontawesome-free-solid/faFileExcel'
-  import faTimes from '@fortawesome/fontawesome-free-solid/faTimes'
-  import faList from '@fortawesome/fontawesome-free-solid/faList'
-  import faWrench from '@fortawesome/fontawesome-free-solid/faWrench'
-  import faAngleLeft from '@fortawesome/fontawesome-free-solid/faAngleLeft'
-  import faAngleRight from '@fortawesome/fontawesome-free-solid/faAngleRight'
-
-  library.add(faUser)
-  library.add(faTable)
-  library.add(faColumns)
-  library.add(faSort)
-  library.add(faFileExcel)
-  library.add(faTimes)
-  library.add(faList)
-  library.add(faWrench)
-  library.add(faAngleLeft)
-  library.add(faAngleRight)
+  import { faUser, faTable, faColumns, faSort, faFileExcel, faTimes, faList, faWrench, faAngleLeft, faAngleRight, faFilter } from '@fortawesome/fontawesome-free-solid'
+  library.add(faUser, faTable, faColumns, faSort, faFileExcel, faTimes, faList, faWrench, faAngleLeft, faAngleRight, faFilter)
 
   export default {
     name: 'data-table',
@@ -1170,6 +1153,12 @@
     height 1rem
     top 6px
     left 6px
+  .data-table .filter-tag
+    padding 0 0.25rem 0 0.5rem
+  .data-table .filter-tag:nth-of-type(1) ~ .filter-tag
+    margin-left 0.25rem
+  .data-table .filter-tag .delete
+    margin-left 0.35rem
   // Animation CSS
   .data-table .slideUp-enter-active
     animation fadeInUp .125s

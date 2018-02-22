@@ -1,5 +1,5 @@
 import md5 from 'md5'
-import { debounce, remove, orderBy, filter, isNil, forEach, isObject } from 'lodash'
+import { debounce, remove, orderBy, filter, find, isNil, forEach, isObject } from 'lodash'
 
 export const searchFilterMixin = {
   created () {
@@ -12,6 +12,7 @@ export const searchFilterMixin = {
         data: [],
         search: '',
         searchColumn: 'all',
+        searchColumnText: '',
         filters: [],
         offset: 0
       }
@@ -62,6 +63,12 @@ export const searchFilterMixin = {
   methods: {
     setSearchColumn (e) {
       this.state.searchColumn = e[0]
+      let column = find(this.getColumns, (column) => {
+        console.log(column.field)
+        return column.field === e[0]
+      })
+      console.log(column, e[0])
+      this.state.searchColumnText = column.name
     },
     search (event = {}) {
       if (this.state.searchColumn === 'all') {
@@ -70,7 +77,8 @@ export const searchFilterMixin = {
       } else {
         this.addFilter({
           search: event,
-          column: this.state.searchColumn
+          column: this.state.searchColumn,
+          text: this.state.searchColumnText
         })
         this.state.search = ''
         this.state.searchColumn = 'all'
@@ -96,7 +104,8 @@ export const searchFilterMixin = {
       if ('search' in event && !isNil(event.search)) {
         this.state.filters.push({
           'value': event.search,
-          ...(event.hasOwnProperty('column') && event.column.length > 0) ? {'column': event.column} : null
+          ...(event.hasOwnProperty('column') && event.column.length > 0) ? {'column': event.column} : null,
+          ...(event.hasOwnProperty('text') && event.text.length > 0) ? {'text': event.text} : null
         })
       }
       this.filterAndSearch((this.getFilters.length && this.state.data.length > 0 ? this.state.data : this.getPayload))

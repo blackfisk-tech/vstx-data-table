@@ -7,7 +7,10 @@ span.data-table-cell
         a.cell--link(:href="replaceLink(getColumn['link'], getColumn['linkReplaceText'], getColumn['linkReplaceField'])", :target="getColumn['target']") {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
       //- Filter
       div(v-else-if="getColumn['type'] === 'filter'")
-        a.cell--link(@click.prevent="emitFilter(applyFilter(item[getColumn['field']], getColumn['format'], ...getColumn['formatArgs']), getColumn['field'])") {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
+        a.cell--link(@click.prevent="emitFilter(applyFilter(item[getColumn['field']], getColumn['format'], ...getColumn['formatArgs']), getColumn['field'], getColumn['name'])")
+          span.icon.is-small
+            i.fa.fa-filter.fa-xs
+          span {{ applyFilter(item[getColumn['field']], getColumn['format']) }}
       //- Hover/Click Events
       div(v-else-if="getColumn['type'] === 'event'")
         a.cell--link(
@@ -84,10 +87,11 @@ export default {
         }
       }
     },
-    emitFilter (search, column) {
+    emitFilter (search, column, text) {
       this.$emit('onFilter', {
         search,
-        column
+        column,
+        text
       })
     },
     applyFilter (items, name, ...args) {

@@ -1,5 +1,5 @@
 <template lang="pug">
-  .data-table
+  .data-table(:class="{'is-scrolled': this.state.isScrolled}")
     .columns.is-multiline.is-marginless.data-table__head
       .column.is-narrow.is-paddingless.title-column
         //- Table Title
@@ -277,7 +277,64 @@
                     //-         i.fa.fa-times
                     //-     span Remove Sorting
 
-      thead
+      thead.fixed-header(v-if="state.isScrolled")
+        //- Header
+        tr.column__headers
+          th(v-if="options.isRanked") #
+          th(v-if="options.table.isSelectable")
+            label.checkbox(title="Select All")
+              input(
+                type="checkbox"
+                @change="selectAll"
+                v-model="state.isSelectAll"
+              )
+          th.column__header(
+            v-for="(column, idx) in getDisplayColumns"
+            :key="`table-header-${idx}`"
+            :class="getColumnAlignment(column)"
+            style="position:relative;"
+          )
+            //- Slot for Custom Headers
+            slot(:name="`${column.field}-header`")
+              div
+                span(v-if="column['sort']['isSortable'] === true")
+                  a(@click.passive="toggleColumnSortDirection(column['field'])") {{ column['name'] }}&nbsp;
+                    span.icon(
+                      v-if="isSorted(column['field'])"
+                      :class="getColumnState(column['field']), getSizeClass"
+                    )
+                  a.tag(
+                    v-if="options.sortIndicator.isVisible && getSortPosition(column['field']) !== -1"
+                    @click.passive="toggleColumnSortDirection(column['field'])"
+                  ) {{ getSortPosition(column['field']) + 1 }}
+                span(v-else="") {{ column['name'] }}&nbsp;
+            //- Column Settings
+            .column__settings(v-if="options.columns.isAllowed && options.columns.isVisible")
+              label.is-6 Format:
+              .field.is-grouped.data-table__field.data-table__rowsPerPage
+                p.control.has-icons-left
+                  span.select(:class="getSizeClass")
+                    select(
+                      id="column__format"
+                      v-model="column.format"
+                    )
+                      option(value="formatNumber")  Number
+                      option(value="formatMoney")  Money
+                      option(value="formatPercent")  Percent
+                      option(value="formatString")  String
+                      option(value="formatDate")  Date
+                  slot(name="slot-icon__columnFormat")
+                    span.icon.is-left(:class="getSizeClass")
+                      i.fa.fa-wrench
+              .field.data-table__field
+                div.control
+                  label.is-6(class="checkbox")
+                    input(
+                      type="checkbox"
+                      v-model="column['sort']['isSortable']"
+                    )
+                    | &nbsp;Sortable
+      thead.static-header(v-show="!state.isScrolled")
         //- Header
         tr.column__headers
           th(v-if="options.isRanked") #
@@ -417,11 +474,12 @@
             v-if="options.table.isSelectable"
             :class="{'borderless': !options.table.cellbordered}"
           )
-            input(
-              type="checkbox"
-              :checked="isSelected(item)"
-              @change="select(item)"
-            )
+            label.checkbox(title="`Select${'name' in item ? ' ' + item.name : ''}`")
+              input(
+                type="checkbox"
+                :checked="isSelected(item)"
+                @change="select(item)"
+              )
           td.data-table__row(
             v-for="(column, idx) in getDisplayColumns"
             :key="`table-column-${idx}`"
@@ -548,7 +606,15 @@
       this.loadSavedSettings()
       this.filterAndSearch(this.getPayload)
     },
+    mounted () {
+      if (this.options.hasFixedHeaders) {
+        window.addEventListener('scroll', this.handleScroll)
+      }
+    },
     destroyed () {
+      if (this.options.hasFixedHeaders) {
+        window.removeEventListener('scroll', this.handleScroll)
+      }
       // Persist State to LocalStorage
       // localForage.setItem(this.uniqueID, {
       //   state: this.state,
@@ -559,6 +625,7 @@
       return {
         uniqueID: '',
         state: {
+          isScrolled: false,
           data: [],
           columns: [],
           // SelectMixin
@@ -712,6 +779,34 @@
       }
     },
     methods: {
+      getPosition (element) {
+        let xPosition = 0
+        let yPosition = 0
+        while(element) {
+          xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft)
+          yPosition += (element.offsetTop - element.scrollTop + element.clientTop)
+          element = element.offsetParent
+        }
+        return { x: xPosition, y: yPosition }
+      },
+      handleScroll: throttle( function (e) {
+        const headColumns = document.querySelectorAll('.data-table.is-scrolled thead.fixed-header tr th')
+        const firstColumns = document.querySelectorAll('.data-table.is-scrolled tbody tr:first-of-type td')
+        const headers = document.querySelector('.data-table thead.static-header')
+        const offset = this.getPosition(document.querySelector('.data-table tbody tr:first-of-type')).y
+        console.log(window.scrollY + 50, offset, ((window.scrollY + 60) > offset))
+        this.state.isScrolled = ( ((window.scrollY + 50) > offset) && this.options.table.hasFixedHeaders && this.getPagedData.length > 0)
+        if (this.state.isScrolled) {
+          if (!_.isNil(headColumns) && !_.isNil(firstColumns)) {
+            for (let i = 0; i < headColumns.length; i++) {
+              let el = headColumns[i]
+              if (!_.isNil(firstColumns[i])) {
+                el.style.width = `${firstColumns[i].clientWidth}px`
+              }
+            }
+          }
+        }
+      }, 100),
       // Helpers
       configure () {
         this.populateColumnsFromPayload()
@@ -1214,4 +1309,23 @@
     content '\00AB '
     color red
     font-weight 800
+
+// Fixed Header
+.data-table.is-scrolled thead.fixed-header tr
+  display block
+  padding 0 0.75rem
+.data-table.is-scrolled thead.fixed-header tr th
+  padding 0.25em 0.5em
+.data-table.is-scrolled thead.fixed-header
+  position fixed
+  z-index 3
+  top 3rem
+  left 0
+  right 0
+  width 100%
+  height 1.5rem
+  line-height 2rem
+  display table
+  background-color rgba(255, 255, 255, 1)
+  box-shadow 3px 3px 2px 0px rgba(0,0,0,0.075)
 </style>

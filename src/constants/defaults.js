@@ -11,7 +11,8 @@ export const defaults = {
       hoverable: true,
       fullwidth: false,
       filename: '',
-      isSelectable: false
+      isSelectable: false,
+      hasFixedHeaders: false
     },
     settings: {
       isVisible: true,

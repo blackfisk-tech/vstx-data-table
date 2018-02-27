@@ -1168,7 +1168,7 @@
     padding 5px
     border-bottom: 1px solid #eeeeee
     box-shadow: 3px 3px 2px 0px rgba(0,0,0,0.15)
-    z-index 999999
+    z-index 9
   .data-table .title-column
     padding-right 2.5rem !important
   .data-table .column__headers
@@ -1185,7 +1185,7 @@
     padding 0.5rem 0.75rem
   .data-table caption
     background-color white
-    z-index 99999999
+    z-index 99
     border grey
   .data-table caption.is-overlay
     margin-top 34px
@@ -1325,7 +1325,7 @@
   padding 0.25em 0.5em
 .data-table.is-scrolled thead.fixed-header
   position fixed
-  z-index 3
+  z-index 5
   top 3rem
   left 0
   right 0

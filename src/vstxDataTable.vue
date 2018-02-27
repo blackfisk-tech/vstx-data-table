@@ -790,13 +790,19 @@
         return { x: xPosition, y: yPosition }
       },
       handleScroll: throttle( function (e) {
+        const headRow = document.querySelector('.data-table.is-scrolled thead.fixed-header tr.column__headers')
         const headColumns = document.querySelectorAll('.data-table.is-scrolled thead.fixed-header tr th')
         const firstColumns = document.querySelectorAll('.data-table.is-scrolled tbody tr:first-of-type td')
         const headers = document.querySelector('.data-table thead.static-header')
-        const offset = this.getPosition(document.querySelector('.data-table tbody tr:first-of-type')).y
-        console.log(window.scrollY + 50, offset, ((window.scrollY + 60) > offset))
-        this.state.isScrolled = ( ((window.scrollY + 50) > offset) && this.options.table.hasFixedHeaders && this.getPagedData.length > 0)
-        if (this.state.isScrolled) {
+        const firstRow = document.querySelector('.data-table tbody tr:first-of-type')
+        const offset = this.getPosition(firstRow)
+        const yOffset = offset.y
+        const xOffset = offset.x
+        const isScrolled = ( ((window.scrollY + 50) > yOffset) && this.options.table.hasFixedHeaders && this.getPagedData.length > 0)
+        if (isScrolled) {
+          if (!_.isNil(headRow)) {
+            headRow.style.paddingLeft = headRow.style.paddingLeft + xOffset + 'px'
+          }
           if (!_.isNil(headColumns) && !_.isNil(firstColumns)) {
             for (let i = 0; i < headColumns.length; i++) {
               let el = headColumns[i]
@@ -806,6 +812,7 @@
             }
           }
         }
+        this.state.isScrolled = isScrolled
       }, 100),
       // Helpers
       configure () {

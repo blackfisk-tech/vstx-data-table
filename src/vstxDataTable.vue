@@ -607,12 +607,12 @@
       this.filterAndSearch(this.getPayload)
     },
     mounted () {
-      if (this.options.hasFixedHeaders) {
+      if (this.options.table.hasFixedHeaders) {
         window.addEventListener('scroll', this.handleScroll)
       }
     },
     destroyed () {
-      if (this.options.hasFixedHeaders) {
+      if (this.options.table.hasFixedHeaders) {
         window.removeEventListener('scroll', this.handleScroll)
       }
       // Persist State to LocalStorage

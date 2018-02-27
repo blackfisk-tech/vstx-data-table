@@ -12,7 +12,7 @@ export const defaults = {
       fullwidth: false,
       filename: '',
       isSelectable: false,
-      hasFixedHeaders: false
+      hasFixedHeaders: true
     },
     settings: {
       isVisible: true,

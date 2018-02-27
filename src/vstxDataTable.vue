@@ -334,7 +334,7 @@
                       v-model="column['sort']['isSortable']"
                     )
                     | &nbsp;Sortable
-      thead.static-header(v-show="!state.isScrolled")
+      thead.static-header
         //- Header
         tr.column__headers
           th(v-if="options.isRanked") #

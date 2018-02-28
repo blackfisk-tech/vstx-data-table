@@ -814,8 +814,7 @@
         const isScrolled = ( ((window.scrollY + 52) >= yOffset) && this.options.table.hasFixedHeaders && this.getPagedData.length > 0)
         if (isScrolled) {
           if (!_.isNil(fixedHeadRow)) {
-            fixedHeadRow.style.position = 'relative'
-            fixedHeadRow.style.right = dataTable.scrollLeft + 'px'
+            fixedHeadRow.style.transform = `translateX(${dataTable.scrollLeft * -1}px)`
             fixedHeadRow.style.paddingLeft = xOffset + 'px'
           }
           if (!_.isNil(headColumns) && headColumns.length && !_.isNil(firstColumns) && firstColumns.length) {
@@ -1370,4 +1369,6 @@
   will-change transform, opacity
 .data-table.is-scrolled thead.fixed-header.is-visible
   opacity 1
+.data-table.is-scrolled thead.fixed-header tr.column__headers
+  will-change transform
 </style>

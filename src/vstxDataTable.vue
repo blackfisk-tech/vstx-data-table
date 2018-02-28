@@ -1,5 +1,5 @@
 <template lang="pug">
-  .data-table(:class="{'is-scrolled': this.state.isScrolled}")
+  .data-table(:class="{'is-scrolled': this.state.isScrolled}", @scroll="handleScroll")
     .columns.is-multiline.is-marginless.data-table__head
       .column.is-narrow.is-paddingless.title-column
         //- Table Title
@@ -606,7 +606,10 @@
     },
     mounted () {
       if (this.options.table.hasFixedHeaders) {
-        window.addEventListener('scroll', () => {this.state.hasScrolled = true}, {
+        window.addEventListener('scroll', (e) => {
+          this.state.scroll = e
+          this.state.hasScrolled = true
+        }, {
           passive: true
         })
         setInterval(() => {
@@ -631,6 +634,7 @@
       return {
         uniqueID: '',
         state: {
+          scroll: {},
           hasScrolled: false,
           isScrolled: false,
           isFixedHeaderVisible: false,
@@ -798,7 +802,8 @@
         return { x: xPosition, y: yPosition }
       },
       handleScroll (e) {
-        const headRow = document.querySelector('.data-table.is-scrolled thead.fixed-header tr.column__headers')
+        const dataTable = document.querySelector('.data-table')
+        const fixedHeadRow = document.querySelector('.data-table.is-scrolled thead.fixed-header tr.column__headers')
         const headColumns = document.querySelectorAll('.data-table.is-scrolled thead.fixed-header tr th')
         const firstColumns = document.querySelectorAll('.data-table.is-scrolled tbody tr:first-of-type td')
         const headers = document.querySelector('.data-table thead.static-header')
@@ -808,8 +813,10 @@
         const xOffset = offset.x
         const isScrolled = ( ((window.scrollY + 52) >= yOffset) && this.options.table.hasFixedHeaders && this.getPagedData.length > 0)
         if (isScrolled) {
-          if (!_.isNil(headRow)) {
-            headRow.style.paddingLeft = headRow.style.paddingLeft + xOffset + 'px'
+          if (!_.isNil(fixedHeadRow)) {
+            fixedHeadRow.style.position = 'relative'
+            fixedHeadRow.style.right = dataTable.scrollLeft + 'px'
+            fixedHeadRow.style.paddingLeft = xOffset + 'px'
           }
           if (!_.isNil(headColumns) && headColumns.length && !_.isNil(firstColumns) && firstColumns.length) {
             for (let i = 0; i < headColumns.length; i++) {

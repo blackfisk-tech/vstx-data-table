@@ -278,9 +278,9 @@
 
       thead.fixed-header(:class="{'is-visible': state.isFixedHeaderVisible, 'is-hidden': !state.isFixedHeaderVisible}")
         //- Header
-        tr.column__headers
-          th(v-if="options.isRanked") #
-          th(v-if="options.table.isSelectable")
+        tr.column__headers(ref="fixed-column__headers")
+          th(v-if="options.isRanked", ref="fixed-column__header-th") #
+          th(v-if="options.table.isSelectable", ref="fixed-column__header-th")
             label.checkbox(title="Select All")
               input(
                 type="checkbox"
@@ -288,6 +288,7 @@
                 v-model="state.isSelectAll"
               )
           th.column__header(
+            ref="fixed-column__header-th"
             v-for="(column, idx) in getDisplayColumns"
             :key="`table-header-${idx}`"
             :class="getColumnAlignment(column)"
@@ -605,7 +606,15 @@
     },
     mounted () {
       if (this.options.table.hasFixedHeaders) {
-        window.addEventListener('scroll', this.handleScroll)
+        window.addEventListener('scroll', () => {this.state.hasScrolled = true}, {
+          passive: true
+        })
+        setInterval(() => {
+          if (this.state.hasScrolled) {
+            this.handleScroll()
+            this.state.hasScrolled = false
+          }
+        }, 50)
       }
     },
     destroyed () {
@@ -622,6 +631,7 @@
       return {
         uniqueID: '',
         state: {
+          hasScrolled: false,
           isScrolled: false,
           isFixedHeaderVisible: false,
           data: [],
@@ -805,12 +815,14 @@
             for (let i = 0; i < headColumns.length; i++) {
               let el = headColumns[i]
               if (!_.isNil(firstColumns[i])) {
-                el.style.width = `${firstColumns[i].clientWidth}px`
+                el.style.minWidth = `${firstColumns[i].clientWidth}px`
               }
             }
-            this.$nextTick(function () {
-              this.state.isFixedHeaderVisible = true
-            })
+            if (this.state.isFixedHeaderVisible === false) {
+              this.$nextTick(function () {
+                this.state.isFixedHeaderVisible = true
+              })
+            }
           } else {
             this.state.isFixedHeaderVisible = false
           }
@@ -1334,10 +1346,6 @@
   padding 0 0.75rem
 .data-table.is-scrolled thead.fixed-header tr th
   padding 0.25em 0.5em
-.data-table.is-scrolled thead.fixed-header.is-hidden
-  opacity 0
-.data-table.is-scrolled thead.fixed-header.is-visible
-  opacity 1
 .data-table.is-scrolled thead.fixed-header
   opacity 0
   position fixed
@@ -1351,5 +1359,8 @@
   display table
   background-color rgba(255, 255, 255, 1)
   box-shadow 3px 3px 2px 0px rgba(0,0,0,0.075)
-  transition opacity 0.5s
+  opacity 0
+  will-change transform, opacity
+.data-table.is-scrolled thead.fixed-header.is-visible
+  opacity 1
 </style>

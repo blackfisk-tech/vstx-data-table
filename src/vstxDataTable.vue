@@ -94,7 +94,6 @@
     slot(name="slot-description")
     .data-table__filters__active(
       v-if="state.search.length || state.filters.length"
-      style="padding-bottom:10px;"
     )
       nav.breadcrumb(aria-label="filters")
         ul
@@ -277,7 +276,7 @@
                     //-         i.fa.fa-times
                     //-     span Remove Sorting
 
-      thead.fixed-header(v-if="state.isScrolled")
+      thead.fixed-header(:class="{'is-visible': state.isFixedHeaderVisible, 'is-hidden': !state.isFixedHeaderVisible}")
         //- Header
         tr.column__headers
           th(v-if="options.isRanked") #
@@ -292,7 +291,6 @@
             v-for="(column, idx) in getDisplayColumns"
             :key="`table-header-${idx}`"
             :class="getColumnAlignment(column)"
-            style="position:relative;"
           )
             //- Slot for Custom Headers
             slot(:name="`${column.field}-header`")
@@ -349,7 +347,6 @@
             v-for="(column, idx) in getDisplayColumns"
             :key="`table-header-${idx}`"
             :class="getColumnAlignment(column)"
-            style="position:relative;"
           )
             //- Slot for Custom Headers
             slot(:name="`${column.field}-header`")
@@ -626,6 +623,7 @@
         uniqueID: '',
         state: {
           isScrolled: false,
+          isFixedHeaderVisible: false,
           data: [],
           columns: [],
           // SelectMixin
@@ -789,31 +787,39 @@
         }
         return { x: xPosition, y: yPosition }
       },
-      handleScroll: throttle( function (e) {
+      handleScroll (e) {
         const headRow = document.querySelector('.data-table.is-scrolled thead.fixed-header tr.column__headers')
         const headColumns = document.querySelectorAll('.data-table.is-scrolled thead.fixed-header tr th')
         const firstColumns = document.querySelectorAll('.data-table.is-scrolled tbody tr:first-of-type td')
         const headers = document.querySelector('.data-table thead.static-header')
         const firstRow = document.querySelector('.data-table tbody tr:first-of-type')
-        const offset = this.getPosition(firstRow)
+        const offset = this.getPosition(headers)
         const yOffset = offset.y
         const xOffset = offset.x
-        const isScrolled = ( ((window.scrollY + 50) > yOffset) && this.options.table.hasFixedHeaders && this.getPagedData.length > 0)
+        const isScrolled = ( ((window.scrollY + 52) >= yOffset) && this.options.table.hasFixedHeaders && this.getPagedData.length > 0)
         if (isScrolled) {
           if (!_.isNil(headRow)) {
             headRow.style.paddingLeft = headRow.style.paddingLeft + xOffset + 'px'
           }
-          if (!_.isNil(headColumns) && !_.isNil(firstColumns)) {
+          if (!_.isNil(headColumns) && headColumns.length && !_.isNil(firstColumns) && firstColumns.length) {
             for (let i = 0; i < headColumns.length; i++) {
               let el = headColumns[i]
               if (!_.isNil(firstColumns[i])) {
                 el.style.width = `${firstColumns[i].clientWidth}px`
               }
             }
+            this.$nextTick(function () {
+              this.state.isFixedHeaderVisible = true
+            })
+          } else {
+            this.state.isFixedHeaderVisible = false
           }
         }
+        if (!isScrolled) {
+          this.state.isFixedHeaderVisible = false
+        }
         this.state.isScrolled = isScrolled
-      }, 100),
+      },
       // Helpers
       configure () {
         this.populateColumnsFromPayload()
@@ -1173,10 +1179,13 @@
     padding-right 2.5rem !important
   .data-table .column__headers
     white-space: nowrap
-  .table th.column__header.has-text-left
-    padding-left 0
-  .table th.column__header.has-text-right
-    padding-right 0
+  // .table th.column__header.has-text-left
+  //   padding-left 0
+  // .table th.column__header.has-text-right
+  //   padding-right 0
+  .data-table .column__header
+    position relative
+    right 2px
   .data-table .inline-block
     display: inline-block
   .data-table .level.data-table__head
@@ -1288,6 +1297,8 @@
       background-color white
   */
   //
+  .data-table__filters__active
+    padding-bottom 10px
 
 
   // Custom Label CSS
@@ -1323,7 +1334,12 @@
   padding 0 0.75rem
 .data-table.is-scrolled thead.fixed-header tr th
   padding 0.25em 0.5em
+.data-table.is-scrolled thead.fixed-header.is-hidden
+  opacity 0
+.data-table.is-scrolled thead.fixed-header.is-visible
+  opacity 1
 .data-table.is-scrolled thead.fixed-header
+  opacity 0
   position fixed
   z-index 5
   top 3rem
@@ -1335,4 +1351,5 @@
   display table
   background-color rgba(255, 255, 255, 1)
   box-shadow 3px 3px 2px 0px rgba(0,0,0,0.075)
+  transition opacity 0.5s
 </style>

@@ -395,7 +395,7 @@
           td.data-table__row(
             v-for="(column, idx) in getDisplayColumns"
             :key="`table-total-top-${idx}`"
-            :class="getColumnAlignment(column)"
+            :class="[getColumnAlignment(column), getWhitespace(column)]"
           )
             data-table-cell(
               v-if="column['format'] !== 'seller' && column['format'] !== 'brand' && column['format'] !== 'product'"
@@ -481,7 +481,7 @@
           td.data-table__row(
             v-for="(column, idx) in getDisplayColumns"
             :key="`table-column-${idx}`"
-            :class="getColumnAlignment(column)"
+            :class="[getColumnAlignment(column), getWhitespace(column)]"
           )
             //- Slot for Custom Fields
             slot(:name="column.sort.sortByField ? column.sort.sortByField : column.field")&attributes({':item': 'item', ':index': 'i', ':column': 'column'})
@@ -811,7 +811,7 @@
         const offset = this.getPosition(headers)
         const yOffset = offset.y
         const xOffset = offset.x
-        const isScrolled = ( ((window.scrollY + 52) >= yOffset) && this.options.table.hasFixedHeaders && this.getPagedData.length > 0)
+        const isScrolled = ( ((window.scrollY + this.options.offsetTop) >= yOffset) && this.options.table.hasFixedHeaders && this.getPagedData.length > 0)
         if (isScrolled) {
           if (!_.isNil(fixedHeadRow)) {
             fixedHeadRow.style.transform = `translateX(${dataTable.scrollLeft * -1}px)`
@@ -1073,6 +1073,20 @@
           'type': 'total'
         }
       },
+      getWhitespace (column) {
+        const ws = column['whitespace']
+        // console.log(column, ws)
+        return {
+          'ws-no-wrap': ws === 'nowrap',
+          'ws-inherit': ws === 'inherit',
+          'ws-initial': ws === 'initial',
+          'ws-normal': ws === 'normal',
+          'ws-pre': ws === 'pre',
+          'ws-pre-line': ws === 'pre-line',
+          'ws-pre-wrap': ws === 'pre-wrap',
+          'ws-unset': ws === 'unset'
+        }
+      },
       computeTotals () {
         let isTotalable = true
         forEach(this.state.columns, (column) => {
@@ -1221,9 +1235,9 @@
     border 0
     padding 0
   .data-table .table
-    overflow hidden
-  .data-table .table.is-overflow-hidden
     overflow auto
+  .data-table .table.is-overflow-hidden
+    overflow hidden
     min-height 15rem
   .data-table .is-min-height-100
     min-height 100px
@@ -1356,7 +1370,7 @@
   opacity 0
   position fixed
   z-index 5
-  top 3rem
+  top 3.2rem
   left 0
   right 0
   width 100%
@@ -1371,4 +1385,22 @@
   opacity 1
 .data-table.is-scrolled thead.fixed-header tr.column__headers
   will-change transform
+
+// Whitespace Control
+.data-table .ws-no-wrap
+  white-space nowrap
+.data-table .ws-inherit
+  white-space inherit
+.data-table .ws-initial
+  white-space initial
+.data-table .ws-normal
+  white-space normal
+.data-table .ws-pre
+  white-space pre
+.data-table .ws-pre-line
+  white-space pre-line
+.data-table .ws-pre-wrap
+  white-space pre-wrap
+.data-table .ws-unset
+  white-space unset
 </style>

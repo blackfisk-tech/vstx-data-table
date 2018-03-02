@@ -61,6 +61,8 @@ export const schemas = {
         showLogo: joi.boolean(),
         position: joi.number().required(),
         isVisible: joi.boolean(),
+        // Whitespace
+        whitespace: joi.string().valid(['inherit', 'initial', 'nowrap', 'normal', 'pre', 'pre-line', 'pre-wrap unset']),
         // Link
         link: joi.string(),
         linkReplaceText: joi.string(),

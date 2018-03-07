@@ -76,7 +76,7 @@ export const schemas = {
           direction: joi.string().lowercase().allow('').valid(['asc', 'desc', '']),
           order: joi.number().min(0),
           sortByField: joi.string(),
-          sortByColumn: joi.string()
+          sortByColumns: joi.string()
         }).and('order', 'isSortable', 'direction')
       }).and('linkReplaceText', 'linkReplaceField')
     ),

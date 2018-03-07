@@ -297,15 +297,15 @@
             slot(:name="`${column.field}-header`")
               div
                 span(v-if="column['sort']['isSortable'] === true")
-                  a(@click.passive="toggleColumnSortDirection(column['field'])") {{ column['name'] }}&nbsp;
+                  a(@click.passive="toggleColumnSortDirection(column)") {{ column['name'] }}&nbsp;
                     span.icon(
-                      v-if="isSorted(column['field'])"
-                      :class="getColumnState(column['field']), getSizeClass"
+                      v-if="isSorted(column)"
+                      :class="getColumnState(column), getSizeClass"
                     )
                   a.tag(
-                    v-if="options.sortIndicator.isVisible && getSortPosition(column['field']) !== -1"
-                    @click.passive="toggleColumnSortDirection(column['field'])"
-                  ) {{ getSortPosition(column['field']) + 1 }}
+                    v-if="options.sortIndicator.isVisible && getSortPosition(column) !== -1"
+                    @click.passive="toggleColumnSortDirection(column)"
+                  ) {{ getSortPosition(column) + 1 }}
                 span(v-else="") {{ column['name'] }}&nbsp;
             //- Column Settings
             .column__settings(v-if="options.columns.isAllowed && options.columns.isVisible")
@@ -353,15 +353,15 @@
             slot(:name="`${column.field}-header`")
               div
                 span(v-if="column['sort']['isSortable'] === true")
-                  a(@click.passive="toggleColumnSortDirection(column['field'])") {{ column['name'] }}&nbsp;
+                  a(@click.passive="toggleColumnSortDirection(column)") {{ column['name'] }}&nbsp;
                     span.icon(
-                      v-if="isSorted(column['field'])"
-                      :class="getColumnState(column['field']), getSizeClass"
+                      v-if="isSorted(column)"
+                      :class="getColumnState(column), getSizeClass"
                     )
                   a.tag(
-                    v-if="options.sortIndicator.isVisible && getSortPosition(column['field']) !== -1"
-                    @click.passive="toggleColumnSortDirection(column['field'])"
-                  ) {{ getSortPosition(column['field']) + 1 }}
+                    v-if="options.sortIndicator.isVisible && getSortPosition(column) !== -1"
+                    @click.passive="toggleColumnSortDirection(column)"
+                  ) {{ getSortPosition(column) + 1 }}
                 span(v-else="") {{ column['name'] }}&nbsp;
             //- Column Settings
             .column__settings(v-if="options.columns.isAllowed && options.columns.isVisible")
@@ -446,7 +446,7 @@
                     @click.passive="state.offset = i - 1"
                   ) {{ i }}
       tbody
-        tr(v-if="isLoading")
+        tr.is-not-row(v-if="isLoading || state.isLoading")
           td(:colspan="getColspan")
             section.hero.is-medium.is-light
               .hero-body.has-text-centered
@@ -458,8 +458,17 @@
                     )
                 slot(name="error")
         //- Unavoidable? Use of v-if with v-for
+        tr.is-not-row(v-else-if="getPagination.length > 0 && getPagedData.length === 0")
+          td(:colspan="getColspan")
+            section.hero.is-medium.is-light
+              .hero-body.has-text-centered
+                p.subtitle &nbsp;Loading...&nbsp;
+                  loader(
+                    :barCount="parseInt(5)"
+                    size="small"
+                  )
         tr(
-          v-else=""
+          v-else-if="getPagedData.length > 0"
           v-for="(item, i) in getPagedData"
           :key="`table-row-${i}`"
           :class="{'is-altered': isAltered(item)}"
@@ -496,6 +505,7 @@
   import joi from 'joi'
   import md5 from 'md5'
   import { sortBy, filter, forEach, throttle, indexOf, differenceWith, isEqual, merge, cloneDeep, isDate, isNumber, round, isNil, get, isString } from 'lodash'
+
   // Components
   import DataTableCell from './vstxDataTableCell.vue'
   import SearchBar from 'vstx-search-bar'
@@ -634,6 +644,7 @@
       return {
         uniqueID: '',
         state: {
+          isLoading: false,
           scroll: {},
           hasScrolled: false,
           isScrolled: false,
@@ -700,7 +711,6 @@
           text: 'All Columns'
         }]
         forEach(this.getColumns, (column) => {
-          // FINDME
           options.push({
             value: (column.field),
             text: column.name
@@ -753,10 +763,12 @@
         let topColumns = []
         let columns = []
         let directions = []
+        let columnFields = []
         forEach(this.getSortedColumns, (value) => {
           if (value.sort.direction !== '') {
             topColumns.push( (!isNil(value.sort.sortByColumn) ? value.sort.sortByColumn : value.field) )
             let column = (!isNil(value.sort.sortByField) ? value.sort.sortByField : value.field)
+            columnFields.push(column)
             let sortByColumn = ''
             if (value.format === 'formatString') {
               sortByColumn = (item) => {
@@ -784,6 +796,7 @@
         })
         let data = {
           topColumns,
+          columnFields,
           columns,
           directions
         }
@@ -813,14 +826,14 @@
         const xOffset = offset.x
         const isScrolled = ( ((window.scrollY + this.options.offsetTop) >= yOffset) && this.options.table.hasFixedHeaders && this.getPagedData.length > 0)
         if (isScrolled) {
-          if (!_.isNil(fixedHeadRow)) {
+          if (!isNil(fixedHeadRow)) {
             fixedHeadRow.style.transform = `translateX(${dataTable.scrollLeft * -1}px)`
             fixedHeadRow.style.paddingLeft = xOffset + 'px'
           }
-          if (!_.isNil(headColumns) && headColumns.length && !_.isNil(firstColumns) && firstColumns.length) {
+          if (!isNil(headColumns) && headColumns.length && !isNil(firstColumns) && firstColumns.length) {
             for (let i = 0; i < headColumns.length; i++) {
               let el = headColumns[i]
-              if (!_.isNil(firstColumns[i])) {
+              if (!isNil(firstColumns[i])) {
                 el.style.minWidth = `${firstColumns[i].clientWidth}px`
               }
             }
@@ -988,23 +1001,26 @@
         // })
       },
       // Sorting
-      toggleColumnSortDirection (field) {
+      toggleColumnSortDirection (column) {
         let sortedColumns = 0
         let wasUnsorted = false
         let thisCol = {}
-        forEach(this.getDisplayColumns, (column) => {
-          if (column.field === field) {
-            thisCol = column
-            if (column.sort.direction === 'asc') {
-              column.sort.direction = 'desc'
-            } else if (column.sort.direction === 'desc') {
-              column.sort.direction = ''
-            } else if (column.sort.direction === '') {
+        forEach(this.getDisplayColumns, (thisColumn) => {
+          const hasSortBy = 'sort' in column && 'sortByField' in column.sort
+          const field = hasSortBy ? column.sort.sortByField : column.field
+          const columnField = hasSortBy ? thisColumn.sort.sortByField : thisColumn.field
+          if (columnField === field) {
+            thisCol = thisColumn
+            if (thisColumn.sort.direction === 'asc') {
+              thisColumn.sort.direction = 'desc'
+            } else if (thisColumn.sort.direction === 'desc') {
+              thisColumn.sort.direction = ''
+            } else if (thisColumn.sort.direction === '') {
               wasUnsorted = true
-              column.sort.direction = 'asc'
+              thisColumn.sort.direction = 'asc'
             }
           }
-          if (column.sort.direction !== '' && column.sort.isSortable) {
+          if (thisColumn.sort.direction !== '' && thisColumn.sort.isSortable) {
             sortedColumns++
           }
         })
@@ -1012,15 +1028,15 @@
           this.updateOrderBy([thisCol])
         }
       },
-      isSorted (field) {
-        return this.getSortDirection(field) === 'asc' ||  this.getSortDirection(field) === 'desc'
+      isSorted (column) {
+        return this.getSortDirection(column) === 'asc' ||  this.getSortDirection(column) === 'desc'
       },
-      getSortDirection (field) {
-        let direction = this.getOrderBy.directions[this.getSortPosition(field)]
+      getSortDirection (column) {
+        let direction = this.getOrderBy.directions[this.getSortPosition(column)]
         return direction
       },
-      getSortPosition (field) {
-        let position = indexOf(this.getOrderBy.topColumns, field)
+      getSortPosition (column) {
+        let position = indexOf(this.getOrderBy.columnFields, ('sort' in column && 'sortByField' in column.sort ? column.sort.sortByField : column.field))
         return position
       },
       unsort () {
@@ -1075,7 +1091,6 @@
       },
       getWhitespace (column) {
         const ws = column['whitespace']
-        // console.log(column, ws)
         return {
           'ws-no-wrap': ws === 'nowrap',
           'ws-inherit': ws === 'inherit',
@@ -1089,31 +1104,33 @@
       },
       computeTotals () {
         let isTotalable = true
-        forEach(this.state.columns, (column) => {
-          let total = 0
-          isTotalable = !(column['format'] === 'formatString' || column['format'] === '')
-          if (isTotalable) {
-            forEach(this.payload, (row) => {
-              total = total + row[column['field']]
-            })
-            let value = total
-            if (column['format'] === 'formatPercent') {
-              value = value / this.payload.length
+        if (this.options.totals.isVisible.all) {
+          forEach(this.state.columns, (column) => {
+            let total = 0
+            isTotalable = !(column['format'] === 'formatString' || column['format'] === '')
+            if (isTotalable) {
+              forEach(this.payload, (row) => {
+                total = total + row[column['field']]
+              })
+              let value = total
+              if (column['format'] === 'formatPercent') {
+                value = value / this.payload.length
+              }
+              let item = {
+                'id': 1,
+                'value': round(value, 2),
+                'type': 'total'
+              }
+              this.state.totals[column['field']] = item
+            } else {
+              this.state.totals[column['field']] = {
+                'id': 1,
+                'value': 'N/A',
+                'type': 'total'
+              }
             }
-            let item = {
-              'id': 1,
-              'value': round(value, 2),
-              'type': 'total'
-            }
-            this.state.totals[column['field']] = item
-          } else {
-            this.state.totals[column['field']] = {
-              'id': 1,
-              'value': 'N/A',
-              'type': 'total'
-            }
-          }
-        })
+          })
+        }
       },
       // Layout & UI
       getColumnAlignment (column) {
@@ -1123,10 +1140,10 @@
         classes.borderless = !this.options.table.cellbordered
         return classes
       },
-      getColumnState (field) {
+      getColumnState (column) {
         let state = {
-          'column__sort-indicator-asc': this.getSortDirection(field) === 'asc',
-          'column__sort-indicator-desc': this.getSortDirection(field) === 'desc'
+          'column__sort-indicator-asc': this.getSortDirection(column) === 'asc',
+          'column__sort-indicator-desc': this.getSortDirection(column) === 'desc'
         }
         return state
       },
@@ -1172,7 +1189,7 @@
           this.state.data = []
           this.state.search = ''
           this.state.filters = []
-          this.hasCalculatedTotals = false
+          this.state.hasCalculatedTotals = false
           this.state.totals = {}
           this.state.offset = 0
           this.state.columns = []
@@ -1403,4 +1420,8 @@
   white-space pre-wrap
 .data-table .ws-unset
   white-space unset
+.data-table tr.is-not-row, .data-table tr.is-not-row:hover
+  background none
+.table.is-hoverable.is-striped tbody tr.is-not-row:not(.is-selected):hover
+  background none
 </style>

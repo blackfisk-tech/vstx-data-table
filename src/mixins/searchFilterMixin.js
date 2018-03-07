@@ -1,5 +1,5 @@
 import md5 from 'md5'
-import { debounce, remove, orderBy, filter, find, isNil, forEach, isObject } from 'lodash'
+import { debounce, remove, find, isNil, cloneDeep } from 'lodash'
 
 export const searchFilterMixin = {
   created () {
@@ -27,47 +27,91 @@ export const searchFilterMixin = {
     },
     getFilters () {
       return this.state.filters
+    }
+  },
+  asyncComputed: {
+    getData: {
+      async get () {
+        this.state.isLoading = true
+        const data = ((this.state.search.length || this.getFilters.length) && this.state.data.length > 0 ? this.state.data : this.getPayload)
+        const result = await this.sortData(data)
+        return result
+      },
+      default: []
     },
-    getPagedData () {
-      return this.getData.slice(this.state.offset * this.options.pagination.rowsPerPage, this.options.pagination.rowsPerPage + this.state.offset * this.options.pagination.rowsPerPage)
-    },
-    getData () {
-      // Use Worker to Compute Order and Slice to prevent UI Lag
-      /*
-        Workers are ASYNC. This cannot be in a computed property.
-      */
-      // let workerData = {
-      //   payload: this.payload,
-      //   columns: this.getOrderBy.columns,
-      //   directions: this.getOrderBy.directions,
-      //   offset: this.state.offset,
-      //   rowsPerPage: this.options.pagination.rowsPerPage
-      // }
-      // const OrderByWorker = require('worker-loader!./workers/orderByAndPaginate.js')
-      // let worker = new OrderByWorker()
-      // worker.postMessage(workerData)
-      // worker.onmessage = (event) => {
-      //   console.log('onmessage', event.data)
-      // }
-      let data = ((this.state.search.length || this.getFilters.length) && this.state.data.length > 0 ? this.state.data : this.getPayload)
-      let sortedData = orderBy(
-        data,
-        // Columns
-        this.getOrderBy.columns,
-        // Directions
-        this.getOrderBy.directions
-      )
-      return sortedData
+    getPagedData: {
+      async get () {
+        const result = await this.sliceData(this.getData)
+        this.$nextTick(() => {
+          this.state.isLoading = false
+        })
+        return result
+      },
+      default: []
     }
   },
   methods: {
+    async sliceData (data) {
+      const result = await this.$worker.run((data, offset, rowsPerPage) => {
+        return !(data == null) ? data.slice(offset * rowsPerPage, rowsPerPage + offset * rowsPerPage) : []
+      }, [cloneDeep(data), this.state.offset, this.options.pagination.rowsPerPage])
+      return result
+    },
+    async sortData (data) {
+      const result = await this.$worker.run((data, sortedColumns) => {
+        self.importScripts('https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js')
+        const getOrderBy = (sortedColumns) => {
+          let topColumns = []
+          let columns = []
+          let directions = []
+          _.forEach(sortedColumns, (value) => {
+            if (value.sort.direction !== '') {
+              topColumns.push((!_.isNil(value.sort.sortByColumn) ? value.sort.sortByColumn : value.field))
+              let column = (!_.isNil(value.sort.sortByField) ? value.sort.sortByField : value.field)
+              let sortByColumn = ''
+              if (value.format === 'formatString') {
+                sortByColumn = (item) => {
+                  if (_.isNil(item[column])) {
+                    let value = _.get(item, column)
+                    return _.isString(value) ? value.toLowerCase() : value
+                  } else if (item[column].hasOwnProperty('toLowerCase')) {
+                    return item[column].toLowerCase()
+                  } else {
+                    return item[column]
+                  }
+                }
+              } else {
+                sortByColumn = (item) => {
+                  if (_.isNil(item[column])) {
+                    return _.get(item, column)
+                  } else {
+                    return item[column]
+                  }
+                }
+              }
+              columns.push(sortByColumn)
+              directions.push(value.sort.direction)
+            }
+          })
+          let data = {
+            topColumns,
+            columns,
+            directions
+          }
+          return data
+        }
+        const orderBy = getOrderBy(sortedColumns)
+        /* eslint no-undef: 'off' */
+        const sorted = _.orderBy(data, orderBy.columns, orderBy.directions)
+        return sorted
+      }, [cloneDeep(data), cloneDeep(this.getSortedColumns)])
+      return result
+    },
     setSearchColumn (e) {
       this.state.searchColumn = e[0]
       let column = find(this.getColumns, (column) => {
-        console.log(column.field)
         return column.field === e[0]
       })
-      console.log(column, e[0])
       this.state.searchColumnText = column.name
     },
     search (event = {}) {
@@ -84,23 +128,24 @@ export const searchFilterMixin = {
         this.state.searchColumn = 'all'
       }
     },
-    searchRemove () {
+    async searchRemove () {
       this.state.search = ''
-      this.filterAndSearch(this.getPayload)
+      await this.filterAndSearch(this.getPayload)
     },
-    filterAndSearch (oldData) {
+    async filterAndSearch (oldData) {
       this.state.offset = 0
       if (this.getFilters.length > 0) {
-        forEach(this.getFilters, (filter, i) => {
-          oldData = this.filter(oldData, filter)
-        })
+        for (let i = 0; i < this.getFilters.length; i++) {
+          const filter = this.getFilters[i]
+          oldData = await this.filter(oldData, filter)
+        }
       }
       if (this.state.search.length > 0) {
-        oldData = this.filter(oldData, {'value': this.state.search})
+        oldData = await this.filter(oldData, {'value': this.state.search})
       }
       this.state.data = oldData
     },
-    addFilter: debounce(function (event = {}) {
+    addFilter: debounce(async function (event = {}) {
       if ('search' in event && !isNil(event.search)) {
         this.state.filters.push({
           'value': event.search,
@@ -108,49 +153,51 @@ export const searchFilterMixin = {
           ...(event.hasOwnProperty('text') && event.text.length > 0) ? {'text': event.text} : null
         })
       }
-      this.filterAndSearch((this.getFilters.length && this.state.data.length > 0 ? this.state.data : this.getPayload))
+      await this.filterAndSearch((this.getFilters.length && this.state.data.length > 0 ? this.state.data : this.getPayload))
     }, 275),
-    find (o, criteria, level = 0, topLevel = '') {
-      // if (topLevel === 'channel') {
-      //   console.log('Channel being searched')
-      // }
-      let found = false
-      forEach(o, (value, key) => {
-        if (level === 0) {
-          topLevel = key
-        }
-        if (!isObject(value) && found === false) {
-          let match = isNil(value) ? [] : isNil(criteria.column) || criteria.column === key || criteria.column === topLevel ? value.toString().match(new RegExp(criteria.value, 'i')) : []
-          let isMatch = !isNil(value) && !isNil(match) && match.length > 0
-          if (isMatch) {
-            found = true
-          }
-        } else if (found === false) {
-          let oldLevel = level
-          if (!Array.isArray(value)) {
-            level++
-          }
-          let isMatch = this.find(value, criteria, level, topLevel)
-          level = oldLevel
-          if (isMatch) {
-            found = true
-          }
-        }
-      })
-      return found
-    },
-    filter (data, criteria) {
+    async filter (data, criteria) {
       if ('value' in criteria && !isNil(criteria.value)) {
-        return filter(data, (o) => {
-          return this.find(o, criteria)
-        })
+        const result = await this.$worker.run((data, criteria) => {
+          self.importScripts('https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js')
+          const deepFind = (o, criteria, level = 0, topLevel = '') => {
+            let found = false
+            /* eslint no-undef: 'off' */
+            _.forEach(o, (value, key) => {
+              if (level === 0) {
+                topLevel = key
+              }
+              if (!_.isObject(value) && found === false) {
+                let match = _.isNil(value) ? [] : _.isNil(criteria.column) || criteria.column === key || criteria.column === topLevel ? value.toString().match(new RegExp(criteria.value, 'i')) : []
+                let isMatch = !_.isNil(value) && !_.isNil(match) && match.length > 0
+                if (isMatch) {
+                  found = true
+                }
+              } else if (found === false) {
+                let oldLevel = level
+                if (!Array.isArray(value)) {
+                  level++
+                }
+                let isMatch = deepFind(value, criteria, level, topLevel)
+                level = oldLevel
+                if (isMatch) {
+                  found = true
+                }
+              }
+            })
+            return found
+          }
+          return _.filter(data, (o) => {
+            return deepFind(o, criteria)
+          })
+        }, [cloneDeep(data), cloneDeep(criteria)])
+        return result
       } else {
         // Exception Criteria Structure
       }
     },
-    filterRemove (filter) {
+    async filterRemove (filter) {
       remove(this.getFilters, filter)
-      this.filterAndSearch(this.getPayload)
+      await this.filterAndSearch(this.getPayload)
     },
     getFilterId (filter) {
       return md5(`${filter.value}${filter.column}`)

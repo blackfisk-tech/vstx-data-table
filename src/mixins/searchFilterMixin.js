@@ -59,7 +59,8 @@ export const searchFilterMixin = {
     },
     async sortData (data) {
       const result = await this.$worker.run((data, sortedColumns) => {
-        self.importScripts('https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js')
+        // self.importScripts('https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js')
+        self.importScripts('custom.lodash.min.js')
         const getOrderBy = (sortedColumns) => {
           let topColumns = []
           let columns = []

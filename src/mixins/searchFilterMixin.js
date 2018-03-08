@@ -32,7 +32,7 @@ export const searchFilterMixin = {
   asyncComputed: {
     getData: {
       async get () {
-        this.state.isLoading = true
+        // this.state.isLoading = true
         const data = ((this.state.search.length || this.getFilters.length) && this.state.data.length > 0 ? this.state.data : this.getPayload)
         const result = await this.sortData(data)
         return result
@@ -42,9 +42,9 @@ export const searchFilterMixin = {
     getPagedData: {
       async get () {
         const result = await this.sliceData(this.getData)
-        this.$nextTick(() => {
-          this.state.isLoading = false
-        })
+        // this.$nextTick(() => {
+        //   this.state.isLoading = false
+        // })
         return result
       },
       default: []

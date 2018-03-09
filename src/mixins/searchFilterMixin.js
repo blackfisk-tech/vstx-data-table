@@ -59,8 +59,7 @@ export const searchFilterMixin = {
     },
     async sortData (data) {
       const result = await this.$worker.run((data, sortedColumns) => {
-        // self.importScripts('https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js')
-        self.importScripts('custom.lodash.min.js')
+        importScripts('https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js')
         const getOrderBy = (sortedColumns) => {
           let topColumns = []
           let columns = []
@@ -159,7 +158,7 @@ export const searchFilterMixin = {
     async filter (data, criteria) {
       if ('value' in criteria && !isNil(criteria.value)) {
         const result = await this.$worker.run((data, criteria) => {
-          self.importScripts('https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js')
+          importScripts('https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js')
           const deepFind = (o, criteria, level = 0, topLevel = '') => {
             let found = false
             /* eslint no-undef: 'off' */

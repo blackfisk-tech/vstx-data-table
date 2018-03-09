@@ -521,9 +521,9 @@ import { searchFilterMixin } from './mixins/searchFilterMixin'
 import { defaults } from './constants/defaults' // The defaults should be set here so they can used for the merge function and the prop defaults.
 import { schemas } from './constants/schemas' // Joi Validation Schemas
 
-import { library } from '@fortawesome/fontawesome'
-import { faUser, faTable, faColumns, faSort, faFileExcel, faTimes, faList, faWrench, faAngleLeft, faAngleRight, faFilter } from '@fortawesome/fontawesome-free-solid'
-library.add(faUser, faTable, faColumns, faSort, faFileExcel, faTimes, faList, faWrench, faAngleLeft, faAngleRight, faFilter)
+// import { library } from '@fortawesome/fontawesome'
+// import { faUser, faTable, faColumns, faSort, faFileExcel, faTimes, faList, faWrench, faAngleLeft, faAngleRight, faFilter } from '@fortawesome/fontawesome-free-solid'
+// library.add(faUser, faTable, faColumns, faSort, faFileExcel, faTimes, faList, faWrench, faAngleLeft, faAngleRight, faFilter)
 
 export default {
   name: 'data-table',

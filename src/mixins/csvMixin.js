@@ -10,6 +10,7 @@ export const csvMixin = {
       // }
       // let output = encodeURI(input)
       let output = input
+      /* eslint no-undef: */
       let blob = new Blob([output], {type: 'text/csv'})
       if (window.navigator.msSaveOrOpenBlob) {
         window.navigator.msSaveOrOpenBlob(blob, filename)

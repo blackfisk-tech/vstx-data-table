@@ -27,7 +27,7 @@ span.data-table-cell
 <script>
 import accounting from 'accounting'
 import moment from 'moment'
-import { isNil, forEach, round } from 'lodash'
+import { isNil, forEach } from 'lodash'
 import DataTableCellDefault from './vstxDataTableCellDefault.vue'
 
 export default {

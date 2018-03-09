@@ -8,6 +8,7 @@ export const downloadXLSX = {
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet')
       const fileOptions = {bookType: (CSV ? 'csv' : 'xlsx'), bookSST: false, type: 'array'}
       const file = XLSX.write(workbook, fileOptions)
+      /* eslint no-undef: */
       const blob = new Blob([file], {type: (CSV ? 'text/csv' : 'xlsx')})
       let link = document.createElement('a')
       link.href = window.URL.createObjectURL(blob)

@@ -20,23 +20,25 @@ The VSTX Data Table is a powerful data grid component (Vue.js 2.4+) for displayi
  - On-page configurations for Column Position, Sort Order, and much more
  - Configuration Prop input and Emits configuration change events to support configuration persistence
  - Built-in Filters for Outputting Money, Numbers, and Dates (including timezone support)
- - Support for Custom Filters with multiple parameters
+ - Support for Custom Filters with *n* parameters
  - Text Replacement for variable Links
  - Hidden Columns
+ - Web Worker support for Filtering, Sorting, and Slicing data
 
 ### Roadmap
- - Move thread-expensive Filtering to Web Worker to reduce UI blocking
  - Add Weighted Multi-Column Sorting
  - Abstract the CSS layer for supporting any CSS Framework/Icon Set
- - Improve mobile support (Fixed headers and first column)
+ - Improve mobile support (~~Fixed headers~~ and first column)
  - Add Calculated Fields using basic Sum/Averages Formulas (can currently be achieved using Slots)
  - Extend support for higher level math/formula functions
  - Incorporate [Native Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) in our 2.0 release
  - Build testing suite for both UX/UI & low level support for testing formulas/math functions
+ - ~~Move thread-expensive Filtering, Sorting, and Slicing to Web Workers to reduce UI blocking~~
  - ~~Support Complex Objects in Sort, Filter, and Search~~
- - ~~Export to CSV/XLSX~~
  - ~~Multi-column Sorting~~
  - ~~Selectable Rows~~ 
+ - ~~Manage dependencies as externals~~
+ - ~~Treeshake lodash in build~~
 
 ### Demo
 ![alt text][example-table-1]
@@ -99,7 +101,10 @@ export default {
 > We are actively changing this data-table in our operations daily so please help us improve its usability.
 
 ### History
-- 0.1.4 - Added Web Worker option in Filtering to reduce UI blocking
+- 0.2.5 - Removed DownloadAs functionality (will be released as separate module to take advantage of dependency bundling)
+- 0.2.4 - Improved Performance by reducing Lodash, Fontawesome, other dependencies and improving build process
+- 0.2.3 - Web Worker support in Filtering, Sorting, and Pagination
+- 0.2.0 - Added Web Worker option in Filtering to reduce UI blocking
 - 0.1.2 - Updated Documentation, Added Default formatDate filter with Timezone support
 - 0.1.1 - Altered Search Bar behavior from Automatic to Manual (on Enter, on Click)
 - 0.1.0 - Deep Sorting and Deep Filtering configurations added to Columns prop Column Schema

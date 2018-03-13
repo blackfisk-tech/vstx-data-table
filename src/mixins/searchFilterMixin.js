@@ -52,13 +52,13 @@ export const searchFilterMixin = {
   },
   methods: {
     async sliceData (data) {
-      const result = await this.$worker.run((data, offset, rowsPerPage) => {
+      const result = window.Worker ? await this.$worker.run((data, offset, rowsPerPage) => {
         return !(data == null) ? data.slice(offset * rowsPerPage, rowsPerPage + offset * rowsPerPage) : []
-      }, [cloneDeep(data), this.state.offset, this.options.pagination.rowsPerPage])
+      }, [cloneDeep(data), this.state.offset, this.options.pagination.rowsPerPage]) : data.slice(this.state.offset * this.options.pagination.rowsPerPage, this.options.pagination.rowsPerPage + this.state.offset * this.options.pagination.rowsPerPage)
       return result
     },
     async sortData (data) {
-      const result = await this.$worker.run((data, sortedColumns) => {
+      const result = window.Worker ? await this.$worker.run((data, sortedColumns) => {
         importScripts('https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js')
         const getOrderBy = (sortedColumns) => {
           let topColumns = []
@@ -104,7 +104,12 @@ export const searchFilterMixin = {
         /* eslint no-undef: 'off' */
         const sorted = _.orderBy(data, orderBy.columns, orderBy.directions)
         return sorted
-      }, [cloneDeep(data), cloneDeep(this.getSortedColumns)])
+      }, [cloneDeep(data), cloneDeep(this.getSortedColumns)]) : () => {
+        const orderByColumns = this.getOrderBy(this.getSortedColumns)
+        /* eslint no-undef: 'off' */
+        const sorted = orderBy(data, orderByColumns.columns, orderByColumns.directions)
+        return sorted
+      }
       return result
     },
     setSearchColumn (e) {
@@ -157,8 +162,42 @@ export const searchFilterMixin = {
     }, 275),
     async filter (data, criteria) {
       if ('value' in criteria && !isNil(criteria.value)) {
-        const result = await this.$worker.run((data, criteria) => {
-          importScripts('https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js')
+        if (window.Worker) {
+          const result = await this.$worker.run((data, criteria) => {
+            importScripts('https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js')
+            const deepFind = (o, criteria, level = 0, topLevel = '') => {
+              let found = false
+              /* eslint no-undef: 'off' */
+              _.forEach(o, (value, key) => {
+                if (level === 0) {
+                  topLevel = key
+                }
+                if (!_.isObject(value) && found === false) {
+                  let match = _.isNil(value) ? [] : _.isNil(criteria.column) || criteria.column === key || criteria.column === topLevel ? value.toString().match(new RegExp(criteria.value, 'i')) : []
+                  let isMatch = !_.isNil(value) && !_.isNil(match) && match.length > 0
+                  if (isMatch) {
+                    found = true
+                  }
+                } else if (found === false) {
+                  let oldLevel = level
+                  if (!Array.isArray(value)) {
+                    level++
+                  }
+                  let isMatch = deepFind(value, criteria, level, topLevel)
+                  level = oldLevel
+                  if (isMatch) {
+                    found = true
+                  }
+                }
+              })
+              return found
+            }
+            return _.filter(data, (o) => {
+              return deepFind(o, criteria)
+            })
+          }, [cloneDeep(data), cloneDeep(criteria)])
+          return result
+        } else {
           const deepFind = (o, criteria, level = 0, topLevel = '') => {
             let found = false
             /* eslint no-undef: 'off' */
@@ -186,13 +225,12 @@ export const searchFilterMixin = {
             })
             return found
           }
-          return _.filter(data, (o) => {
+          return filter(data, (o) => {
             return deepFind(o, criteria)
           })
-        }, [cloneDeep(data), cloneDeep(criteria)])
-        return result
+        }
       } else {
-        // Exception Criteria Structure
+        return []
       }
     },
     async filterRemove (filter) {

@@ -1,5 +1,11 @@
 {
-  "presets": ["es2015", "stage-2"],
-  "plugins": ["transform-runtime", "transform-object-rest-spread", "transform-es2015-destructuring", "transform-es2015-parameters"],
+  "presets": [["env", {
+      "targets": {
+        "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+      }
+    }],
+    "stage-2"
+  ],
+  "plugins": ["transform-runtime", "transform-object-rest-spread", "transform-es2015-destructuring", "transform-es2015-parameters", "lodash"],
   "comments": false
 }

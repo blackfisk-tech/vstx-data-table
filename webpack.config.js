@@ -1,10 +1,12 @@
-const webpack = require('webpack');
-const merge = require('webpack-merge');
-const path = require('path');
+const webpack = require('webpack')
+const merge = require('webpack-merge')
+const path = require('path')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 var config = {
   output: {
-    path: path.resolve(__dirname + '/dist/'),
+    path: path.resolve(`${__dirname}/dist/`)
   },
   module: {
     loaders: [
@@ -33,39 +35,40 @@ var config = {
     joi: 'joi',
     joiBrowser: 'joi-browser',
     localforage: 'localforage',
-    lodash: 'lodash',
     md5: 'md5',
     moment: 'moment',
-    vstxDraggableList: 'vstx-draggable-list',
-    vstxLoader: 'vstx-loader',
-    vstxSearchBar: 'vstx-search-bar',
-    vstxSelect: 'vstx-select',
-    xlsx: 'xlsx'
+    'simple-web-worker': 'simple-web-worker',
+    'vue-async-computed': 'vue-async-computed',
+    'vstx-draggable-list': 'vstx-draggable-list',
+    'vstx-loader': 'vstx-loader',
+    'vstx-search-bar': 'vstx-search-bar',
+    'vstx-select': 'vstx-select',
+    '@fortawesome/fontawesome-free-solid': '@fortawesome/fontawesome-free-solid',
+    '@fortawesome/fontawesome': '@fortawesome/fontawesome',
+    '@fortawesome/vue-fontawesome': '@fortawesome/vue-fontawesome'
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin( {
-      minimize : true,
-      sourceMap : false,
-      mangle: true,
+    new UglifyJsPlugin({
       compress: {
         warnings: false
-      }
-    } )
+      },
+      sourceMap: false
+    }),
+    new BundleAnalyzerPlugin({})
   ]
-};
-
+}
 
 module.exports = [
   merge(config, {
-    entry: path.resolve(__dirname + '/src/plugin.js'),
+    entry: path.resolve(`${__dirname}/src/plugin.js`),
     output: {
       filename: 'vstx-data-table.min.js',
       libraryTarget: 'window',
-      library: 'vstxDataTable',
+      library: 'vstxDataTable'
     }
   }),
   merge(config, {
-    entry: path.resolve(__dirname + '/src/vstxDataTable.vue'),
+    entry: path.resolve(`${__dirname}/src/vstxDataTable.vue`),
     output: {
       filename: 'vstx-data-table.js',
       libraryTarget: 'umd',
@@ -73,4 +76,4 @@ module.exports = [
       umdNamedDefine: true
     }
   })
-];
+]

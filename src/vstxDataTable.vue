@@ -80,13 +80,13 @@
               @click.passive="download(state.downloadAs, getData, filename)"
               :class="getSizeClass"
             )
-              slot(name="slot-icon__downloadXLSX")
+              slot(name="slot-icon__downloadAs")
                 span.icon
                   i.fa.fa-file-excel
             .control
               vstx-select.data-table__select(
                 :size="options.size"
-                :options="[{value: 'xlsx', text: 'XLSX'}, {value: 'csv', text: 'CSV'}]"
+                :options="getDownloadOptions"
                 :value="[state.downloadAs]"
                 @input="state.downloadAs = $event[0]"
               )
@@ -514,7 +514,6 @@ import Loader from 'vstx-loader'
 import DraggableList from 'vstx-draggable-list'
 // Mixins
 // import { csvMixin } from './mixins/csvMixin'
-import { downloadXLSX } from './mixins/downloadXLSX'
 import { selectMixin } from './mixins/selectMixin'
 import { searchFilterMixin } from './mixins/searchFilterMixin'
 // Constants
@@ -600,7 +599,7 @@ export default {
       default: () => { return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) }
     }
   },
-  mixins: [downloadXLSX, selectMixin, searchFilterMixin],
+  mixins: [selectMixin, searchFilterMixin],
   components: {
     'data-table-cell': DataTableCell,
     'draggable-list': DraggableList,
@@ -671,6 +670,13 @@ export default {
     }
   },
   computed: {
+    getDownloadOptions () {
+      const options = [
+        {value: 'xlsx', text: 'XLSX'},
+        {value: 'csv', text: 'CSV'}
+      ]
+      return 'downloadAs' in options && options.downloadAs ? options.downloadAs : options
+    },
     getSizeClass () {
       return {
         'is-small': this.options.size === 'small',
@@ -861,13 +867,7 @@ export default {
       }
     },
     download (type, data, filename) {
-      switch (type) {
-        case 'csv':
-          this.downloadXLSX(data, `${filename}.${type}`, true)
-          break
-        case 'xlsx':
-          this.downloadXLSX(data, `${filename}.${type}`, false)
-      }
+      this.$emit('downloadData', {data, type})
     },
     populateColumnsFromPayload () {
       if (isNil(this.state.columns) || this.state.columns.length === 0) {

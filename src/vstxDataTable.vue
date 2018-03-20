@@ -1,7 +1,7 @@
 <template lang="pug">
   .data-table(:class="{'is-scrolled': this.state.isScrolled}", @scroll="handleScroll")
     .columns.is-multiline.is-marginless.data-table__head
-      .column.is-narrow.is-paddingless.title-column
+      .column.is-narrow.is-paddingless.title-column(v-if="$slots['slot-title'] && $slots['slot-title'].length > 0")
         //- Table Title
         slot(name="slot-title")
       .column.is-narrow.is-paddingless

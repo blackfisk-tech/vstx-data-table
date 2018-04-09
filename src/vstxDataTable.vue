@@ -1,5 +1,5 @@
 <template lang="pug">
-  .data-table(:class="{'is-scrolled': this.state.isScrolled}", @scroll="handleScroll")
+  .data-table#vstx-data-table(:class="{'is-scrolled': this.state.isScrolled}", @scroll="handleScroll")
     .columns.is-multiline.is-marginless.data-table__head
       .column.is-narrow.is-paddingless.title-column(v-if="$slots['slot-title'] && $slots['slot-title'].length > 0")
         //- Table Title
@@ -276,19 +276,18 @@
                     //-         i.fa.fa-times
                     //-     span Remove Sorting
 
-      thead.fixed-header(:class="{'is-visible': state.isFixedHeaderVisible, 'is-hidden': !state.isFixedHeaderVisible}")
+      thead.fixed-header(:class="{'is-visible': state.isFixedHeaderVisible}")
         //- Header
-        tr.column__headers(ref="fixed-column__headers")
-          th(v-if="options.isRanked", ref="fixed-column__header-th") #
-          th(v-if="options.table.isSelectable", ref="fixed-column__header-th")
+        tr.column__headers#fixed-column__headers
+          th.fixed-column__header-th(v-if="options.isRanked") #
+          th.fixed-column__header-th(v-if="options.table.isSelectable")
             label.checkbox(title="Select All")
               input(
                 type="checkbox"
                 @change="selectAll"
                 v-model="state.isSelectAll"
               )
-          th.column__header(
-            ref="fixed-column__header-th"
+          th.column__header.fixed-column__header-th(
             v-for="(column, idx) in getDisplayColumns"
             :key="`table-header-${idx}`"
             :class="getColumnAlignment(column)"
@@ -333,7 +332,7 @@
                       v-model="column['sort']['isSortable']"
                     )
                     | &nbsp;Sortable
-      thead.static-header
+      thead#static-header
         //- Header
         tr.column__headers
           th(v-if="options.isRanked") #
@@ -615,18 +614,9 @@ export default {
   },
   mounted () {
     if (this.options.table.hasFixedHeaders) {
-      window.addEventListener('scroll', (e) => {
-        this.state.scroll = e
-        this.state.hasScrolled = true
-      }, {
+      window.addEventListener('scroll', this.throttledScroll, {
         passive: true
       })
-      setInterval(() => {
-        if (this.state.hasScrolled) {
-          this.handleScroll()
-          this.state.hasScrolled = false
-        }
-      }, 50)
     }
   },
   destroyed () {
@@ -810,6 +800,34 @@ export default {
     }
   },
   methods: {
+    throttledScroll: throttle(function (e) {
+      this.state.scroll = e
+      this.handleScroll()
+    }, 250, {
+      'trailing': true
+    }),
+    query (selector, context) {
+      context = context || document
+      // Redirect simple selectors to the more performant function
+      if (/^(#?[\w-]+|\.[\w-.]+)$/.test(selector)) {
+        switch (selector.charAt(0)) {
+          case '#':
+            // Handle ID-based selectors
+            return [context.getElementById(selector.substr(1))]
+          case '.':
+            // Handle class-based selectors
+            // Query by multiple classes by converting the selector
+            // string into single spaced class names
+            var classes = selector.substr(1).replace(/\./g, ' ')
+            return [].slice.call(context.getElementsByClassName(classes))
+          default:
+            // Handle tag-based selectors
+            return [].slice.call(context.getElementsByTagName(selector))
+        }
+      }
+      // Default to `querySelectorAll`
+      return [].slice.call(context.querySelectorAll(selector))
+    },
     getPosition (element) {
       let xPosition = 0
       let yPosition = 0
@@ -820,12 +838,12 @@ export default {
       }
       return { x: xPosition, y: yPosition }
     },
-    handleScroll (e) {
-      const dataTable = document.querySelector('.data-table')
-      const fixedHeadRow = document.querySelector('.data-table.is-scrolled thead.fixed-header tr.column__headers')
-      const headColumns = document.querySelectorAll('.data-table.is-scrolled thead.fixed-header tr th')
-      const firstColumns = document.querySelectorAll('.data-table.is-scrolled tbody tr:first-of-type td')
-      const headers = document.querySelector('.data-table thead.static-header')
+    async handleScroll (e) {
+      const dataTable = this.query('#vstx-data-table')[0]
+      const fixedHeadRow = this.query('#fixed-column__headers')[0]
+      const headColumns = this.query('.fixed-column__header-th')
+      const firstColumns = this.query('.data-table.is-scrolled tbody tr:first-of-type td')
+      const headers = this.query('#static-header')[0]
       // const firstRow = document.querySelector('.data-table tbody tr:first-of-type')
       const offset = this.getPosition(headers)
       const yOffset = offset.y
@@ -844,9 +862,7 @@ export default {
             }
           }
           if (this.state.isFixedHeaderVisible === false) {
-            this.$nextTick(function () {
-              this.state.isFixedHeaderVisible = true
-            })
+            this.state.isFixedHeaderVisible = true
           }
         } else {
           this.state.isFixedHeaderVisible = false
@@ -1319,22 +1335,6 @@ export default {
     margin-left 0.25rem
   .data-table .filter-tag .delete
     margin-left 0.35rem
-  // Animation CSS
-  .data-table .slideUp-enter-active
-    animation fadeInUp .125s
-  .data-table .slideUp-leave-active
-    animation fadeInUp .25s reverse
-  @keyframes fadeInUp {
-    from {
-      opacity 0;
-      transform translate3d(0, 100%, 0);
-    }
-
-    to {
-      opacity 1;
-      transform none;
-    }
-  }
   //
 
   // Example of Fallback When Variable is not Defined
@@ -1383,8 +1383,7 @@ export default {
   padding 0 0.75rem
 .data-table.is-scrolled thead.fixed-header tr th
   padding 0.25em 0.5em
-.data-table.is-scrolled thead.fixed-header
-  opacity 0
+.data-table thead.fixed-header
   position fixed
   z-index 5
   top 3.2rem
@@ -1396,12 +1395,11 @@ export default {
   display table
   background-color rgba(255, 255, 255, 1)
   box-shadow 3px 3px 2px 0px rgba(0,0,0,0.075)
-  opacity 0
-  will-change transform, opacity
+  visibility hidden
 .data-table.is-scrolled thead.fixed-header.is-visible
-  opacity 1
-.data-table.is-scrolled thead.fixed-header tr.column__headers
-  will-change transform
+  visibility visible
+// .data-table.is-scrolled thead.fixed-header tr.column__headers
+//   will-change transform
 
 // Whitespace Control
 .data-table .ws-no-wrap

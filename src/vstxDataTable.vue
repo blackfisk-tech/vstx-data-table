@@ -800,6 +800,9 @@ export default {
     }
   },
   methods: {
+    reset () {
+      Object.assign(this.$data, this.$options.data.call(this))
+    },
     throttledScroll: throttle(function (e) {
       this.state.scroll = e
       this.handleScroll()

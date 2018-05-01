@@ -51,6 +51,16 @@ export const searchFilterMixin = {
     }
   },
   methods: {
+    clearFilters () {
+      console.log('CLEARING FILTERS')
+      this.state.filters = []
+      this.state.offset = 0
+    },
+    clearSearch () {
+      this.state.search = ''
+      this.state.searchColumn = 'all'
+      this.state.searchColumnText = ''
+    },
     async sliceData (data) {
       const result = window.Worker ? await this.$worker.run((data, offset, rowsPerPage) => {
         return !(data == null) ? data.slice(offset * rowsPerPage, rowsPerPage + offset * rowsPerPage) : []

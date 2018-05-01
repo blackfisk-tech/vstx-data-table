@@ -1327,7 +1327,7 @@ export default {
     font-size .85rem
   .data-table .data-table__rowsPerPage.field
     margin-bottom 0
-  .data-table .control.has-icons-left .icon, .data-table .control.has-icons-right .icon
+  .data-table .data-table__rowsPerPage .control.has-icons-left .icon, .data-table .data-table__rowsPerPage .control.has-icons-right .icon
     width 1rem
     height 1rem
     top 6px

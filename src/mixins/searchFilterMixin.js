@@ -178,28 +178,36 @@ export const searchFilterMixin = {
             const deepFind = (o, criteria, level = 0, topLevel = '') => {
               let found = false
               /* eslint no-undef: 'off' */
-              _.forEach(o, (value, key) => {
-                if (level === 0) {
-                  topLevel = key
+              if (level === 0 && !_.isNil(criteria.column) && criteria.column.includes('.')) {
+                let match = _.get(o, criteria.column).toString().match(new RegExp(criteria.value, 'i'))
+                let isMatch = !_.isNil(_.get(o, criteria.column)) && !_.isNil(match) && match.length > 0
+                if (isMatch) {
+                  found = true
                 }
-                if (!_.isObject(value) && found === false) {
-                  let match = _.isNil(value) ? [] : _.isNil(criteria.column) || criteria.column === key || criteria.column === topLevel ? value.toString().match(new RegExp(criteria.value, 'i')) : []
-                  let isMatch = !_.isNil(value) && !_.isNil(match) && match.length > 0
-                  if (isMatch) {
-                    found = true
+              } else {
+                _.forEach(o, (value, key) => {
+                  if (level === 0) {
+                    topLevel = key
                   }
-                } else if (found === false) {
-                  let oldLevel = level
-                  if (!Array.isArray(value)) {
-                    level++
+                  if (!_.isObject(value) && found === false) {
+                    let match = _.isNil(value) ? [] : _.isNil(criteria.column) || criteria.column === key || criteria.column === topLevel ? value.toString().match(new RegExp(criteria.value, 'i')) : []
+                    let isMatch = !_.isNil(value) && !_.isNil(match) && match.length > 0
+                    if (isMatch) {
+                      found = true
+                    }
+                  } else if (found === false) {
+                    let oldLevel = level
+                    if (!Array.isArray(value)) {
+                      level++
+                    }
+                    let isMatch = deepFind(value, criteria, level, topLevel)
+                    level = oldLevel
+                    if (isMatch) {
+                      found = true
+                    }
                   }
-                  let isMatch = deepFind(value, criteria, level, topLevel)
-                  level = oldLevel
-                  if (isMatch) {
-                    found = true
-                  }
-                }
-              })
+                })
+              }
               return found
             }
             return _.filter(data, (o) => {

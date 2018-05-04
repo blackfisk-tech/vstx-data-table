@@ -1,5 +1,6 @@
 <template lang="pug">
-  span.default(@mouseenter="expandText", @mouseleave="shrinkText") {{ getText }}
+  //- span.default(@mouseenter="expandText", @mouseleave="shrinkText") {{ getText }}
+  span.default() {{ getText }}
 </template>
 
 <script>

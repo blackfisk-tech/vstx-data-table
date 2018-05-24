@@ -58,7 +58,7 @@ npm install vstx-data-table
 > The below example will render a simple data-table with 3 columns. More complex examples are available at [www.vuestacks.com/data-table](https://www.vuestacks.com/data-table)
 
 
-```javascript
+```js
 <template lang="pug">
   .sample-data-table
     data-table(
@@ -67,6 +67,22 @@ npm install vstx-data-table
 </template>
 <script>
 import DataTable from 'vstx-data-table'
+
+/*
+   Due to a limtation of how we built this component. 
+   Importing AsyncComputed & VueWorker into your main.js file or 
+   into your data-table component is required. 
+   
+   We are actively working on a work-around to prevent this 
+   from being required to use this component. 
+   This bug was introduced when we added support for 
+   data-sets with 25k+ records.
+*/
+import AsyncComputed from 'vue-async-computed'
+import VueWorker from 'vue-worker'
+
+Vue.use(AsyncComputed)
+Vue.use(VueWorker)
 
 export default {
   name: 'SampleReport',

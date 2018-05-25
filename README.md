@@ -64,7 +64,7 @@ npm install vstx-data-table
 > The below example will render a simple data-table with 3 columns. More complex examples are available at [www.vuestacks.com/data-table](https://www.vuestacks.com/data-table)
 
 
-```js
+```vue
 <template lang="pug">
   .sample-data-table
     data-table(

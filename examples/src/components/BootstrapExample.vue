@@ -1,7 +1,7 @@
 <template lang="pug">
-  .wrapper(id="app")
-    .columns
-      .column
+  .container-fluid(id="app")
+    .row
+      .col
         DataTable(
           :payload="state.payload",
           :columns="settings.dataTable.columns"
@@ -119,4 +119,5 @@ export default {
 </script>
 
 <style>
+@import '~bootstrap/dist/css/bootstrap.min.css';
 </style>

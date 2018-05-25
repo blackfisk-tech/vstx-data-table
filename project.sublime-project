@@ -2,8 +2,11 @@
 	"folders":
 	[
 		{
-      "name": "vstx-Data-Table",
+			"name": "vstx-Data-Table",
 			"path": "."
+		},
+		{
+			"path": "node_modules\\@fortawesome"
 		}
 	]
 }

@@ -493,7 +493,7 @@
           )
             //- Slot for Custom Fields
             slot(:name="column.sort.sortByField ? column.sort.sortByField : column.field")&attributes({':item': 'item', ':index': 'i', ':column': 'column'})
-              data-table-cell()&attributes({'@onFilter': 'addFilter($event)', ':item': 'item', ':index': 'i', ':column': 'column'})
+              data-table-cell()&attributes({'@onFilter': 'onFilterClick($event)', ':item': 'item', ':index': 'i', ':column': 'column'})
 </template>
 
 <script>
@@ -518,6 +518,13 @@ import { searchFilterMixin } from './mixins/searchFilterMixin'
 // Constants
 import { defaults } from './constants/defaults' // The defaults should be set here so they can used for the merge function and the prop defaults.
 import { schemas } from './constants/schemas' // Joi Validation Schemas
+
+import Vue from 'vue'
+import vstxDataTable from './vstxDataTable.vue'
+import VueWorker from 'vue-worker'
+import AsyncComputed from 'vue-async-computed'
+Vue.use(VueWorker)
+Vue.use(AsyncComputed)
 
 // import { library } from '@fortawesome/fontawesome'
 // import { faUser, faTable, faColumns, faSort, faFileExcel, faTimes, faList, faWrench, faAngleLeft, faAngleRight, faFilter } from '@fortawesome/fontawesome-free-solid'
@@ -638,6 +645,7 @@ export default {
         hasScrolled: false,
         isScrolled: false,
         isFixedHeaderVisible: false,
+        allowWorkers: false,
         data: [],
         columns: [],
         // SelectMixin
@@ -1351,7 +1359,8 @@ export default {
   //
   .data-table__filters__active
     padding-bottom 10px
-
+    .tag:not(body) .delete
+      margin-right 0
 
   // Custom Label CSS
   // Example:

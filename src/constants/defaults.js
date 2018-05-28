@@ -3,6 +3,7 @@ export const defaults = {
     size: 'normal',
     collapsePages: false,
     isRanked: false,
+    allowWorkers: false,
     offsetTop: 0,
     table: {
       bordered: false,

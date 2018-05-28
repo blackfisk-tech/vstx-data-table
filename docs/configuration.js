@@ -2,59 +2,61 @@ export default {
   configuration: {
     payload: {
       documentation: {
-          "size": "Controls the size of inputs/buttons/etc.",
-          "collapsePages": "Hide pagination when records less than half of a default page",
-          "isRanked": "Show or Hide Record Ranks",
-          "table": {
-            "bordered": "Allows a border to be visible",
-            "striped": "Allows alternative striped rows",
-            "cellbordered": "Allows each cell to be bordered",
-            "overflow": "Hides cells if the Table overflows it's container",
-            "hoverable": "Allows mouse hovering on rows",
-            "fullwidth": "Allows the table to be forced full-width",
-            "filename": "Override the default filename of the CSV Exporting",
-            "isSelectable": "Enables a checkbox for selecting the row"
+        "size": "Controls the size of inputs/buttons/etc.",
+        "allowWorkers": "Allow or Disallow usage of Web Workers",
+        "collapsePages": "Hide pagination when records less than half of a default page",
+        "isRanked": "Show or Hide Record Ranks",
+        "table": {
+          "bordered": "Allows a border to be visible",
+          "striped": "Allows alternative striped rows",
+          "cellbordered": "Allows each cell to be bordered",
+          "overflow": "Hides cells if the Table overflows it's container",
+          "hoverable": "Allows mouse hovering on rows",
+          "fullwidth": "Allows the table to be forced full-width",
+          "filename": "Override the default filename of the CSV Exporting",
+          "isSelectable": "Enables a checkbox for selecting the row"
+        },
+        "settings": {
+          "isVisible": "Show or Hide the Settings",
+          "isAllowed": "Allow settings to be controlled or configured",
+          "offset": "Default Offset"
+        },
+        "sortIndicator": {
+          "isVisible": "Show or Hide the Sort Indicator",
+          "isAllowed": "Allow sorting"
+        },
+        "filter": {
+          "isVisible": "Show or Hide the Filter Options",
+          "isAllowed": "Allow filtering",
+          "isEvent": "Emit an event on filtering"
+        },
+        "columns": {
+          "isVisible": "Show or Hide the Column Options",
+          "isAllowed": "Allow column configuration"
+        },
+        "pagination": {
+          "rowsPerPage": "Rows per Page",
+          "isAllowed": "Allow pagination",
+          "isVisible": "Show or Hide pagination"
+        },
+        "orderBy": {
+          "isVisible": "Show or Hide Order By",
+          "isAllowed": "Allow Order By configuration option"
+        },
+        "totals": {
+          "isVisible": {
+            "all": "Allow data set totals only",
+            "page": "Allow page totals only",
+            "count": "Allow counts"
           },
-          "settings": {
-            "isVisible": "Show or Hide the Settings",
-            "isAllowed": "Allow settings to be controlled or configured",
-            "offset": "Default Offset"
-          },
-          "sortIndicator": {
-            "isVisible": "Show or Hide the Sort Indicator",
-            "isAllowed": "Allow sorting"
-          },
-          "filter": {
-            "isVisible": "Show or Hide the Filter Options",
-            "isAllowed": "Allow filtering",
-            "isEvent": "Emit an event on filtering"
-          },
-          "columns": {
-            "isVisible": "Show or Hide the Column Options",
-            "isAllowed": "Allow column configuration"
-          },
-          "pagination": {
-            "rowsPerPage": "Rows per Page",
-            "isAllowed": "Allow pagination",
-            "isVisible": "Show or Hide pagination"
-          },
-          "orderBy": {
-            "isVisible": "Show or Hide Order By",
-            "isAllowed": "Allow Order By configuration option"
-          },
-          "totals": {
-            "isVisible": {
-              "all": "Allow data set totals only",
-              "page": "Allow page totals only",
-              "count": "Allow counts"
-            },
-            "isAllowed": "Show or Hide Totals"
-          }
+          "isAllowed": "Show or Hide Totals"
+        }
       }
       ,
       example: `
         {
          "size": String ['small', 'normal', 'medium', 'large'],
+         "allowWorkers": Boolean,
          "collapsePages": Boolean,
          "isRanked": Boolean,
          "table": {
@@ -144,6 +146,6 @@ export default {
           }
         }
       `
-    },
-  },
+    }
+  }
 }

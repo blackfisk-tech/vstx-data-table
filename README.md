@@ -23,7 +23,7 @@ The VSTX Data Table is a powerful data grid component (Vue.js 2.4+) for displayi
  - Support for Custom Filters with *n* parameters
  - Text Replacement for variable Links
  - Hidden Columns
- - Web Worker support for Filtering, Sorting, and Slicing data
+ - (Optional) Web Worker support for Filtering, Sorting, and Slicing data
 
 ### Roadmap
  - Add Vue CLI 3.0 support with full cli integration
@@ -73,22 +73,6 @@ npm install vstx-data-table
 </template>
 <script>
 import DataTable from 'vstx-data-table'
-
-/*
-   Due to a limtation of how we built this component.
-   Importing AsyncComputed & VueWorker into your main.js file or
-   into your data-table component is required.
-
-   We are actively working on a work-around to prevent this
-   from being required to use this component.
-   This bug was introduced when we added support for
-   data-sets with 25k+ records.
-*/
-import AsyncComputed from 'vue-async-computed'
-import VueWorker from 'vue-worker'
-
-Vue.use(AsyncComputed)
-Vue.use(VueWorker)
 
 /*
   Due to the how we built this component, you will have to call

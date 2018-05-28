@@ -85,7 +85,8 @@ export default {
           ],
           configuration: {
             size: 'normal',
-            offsetTop: 100,
+            allowWorkers: true,
+            offsetTop: 0,
             table: {
               isLoading: true,
               fullwidth: true,

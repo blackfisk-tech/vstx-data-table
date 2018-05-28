@@ -76,5 +76,14 @@ module.exports = [
       library: 'vstx-data-table',
       umdNamedDefine: true
     }
+  }),
+  merge(config, {
+    entry: path.resolve(`${__dirname}/src/plugin.js`),
+    output: {
+      filename: 'vstx-data-table-install.js',
+      libraryTarget: 'umd',
+      library: 'vstx-data-table',
+      umdNamedDefine: true
+    }
   })
 ]

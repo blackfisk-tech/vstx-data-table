@@ -2,7 +2,7 @@
   "name": "vstx-data-table",
   "version": "0.2.13-4",
   "description": "Data table component for the Vue Stacks Template",
-  "main": "dist/vstx-data-table.js",
+  "main": "dist/vstx-data-table-install.js",
   "scripts": {
     "build": "rimraf ./dist && webpack --config ./webpack.config.js"
   },

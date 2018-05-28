@@ -519,17 +519,6 @@ import { searchFilterMixin } from './mixins/searchFilterMixin'
 import { defaults } from './constants/defaults' // The defaults should be set here so they can used for the merge function and the prop defaults.
 import { schemas } from './constants/schemas' // Joi Validation Schemas
 
-import Vue from 'vue'
-import vstxDataTable from './vstxDataTable.vue'
-import VueWorker from 'vue-worker'
-import AsyncComputed from 'vue-async-computed'
-Vue.use(VueWorker)
-Vue.use(AsyncComputed)
-
-// import { library } from '@fortawesome/fontawesome'
-// import { faUser, faTable, faColumns, faSort, faFileExcel, faTimes, faList, faWrench, faAngleLeft, faAngleRight, faFilter } from '@fortawesome/fontawesome-free-solid'
-// library.add(faUser, faTable, faColumns, faSort, faFileExcel, faTimes, faList, faWrench, faAngleLeft, faAngleRight, faFilter)
-
 export default {
   name: 'data-table',
   introduction: 'A data table component for the Vue Stacks Template',
@@ -542,7 +531,7 @@ export default {
       required: false,
       default: () => { return [] },
       validator: value => {
-        return joi.validate(value, schemas.payload.schema, (err, value) => {
+        return joi.validate(value, schemas.payload.schema, (err) => {
           return err ? () => { throw err } : true
         })
       }
@@ -555,7 +544,7 @@ export default {
         return defaults.configuration
       },
       validator: value => {
-        return joi.validate(value, schemas.configuration.schema, (err, value) => {
+        return joi.validate(value, schemas.configuration.schema, (err) => {
           return err ? () => { throw err } : true
         })
       }
@@ -566,7 +555,7 @@ export default {
       required: false,
       default: () => { return [] },
       validator: value => {
-        return joi.validate(value, schemas.columns.schema, schemas.columns.options, (err, value) => {
+        return joi.validate(value, schemas.columns.schema, schemas.columns.options, (err) => {
           return err ? () => { throw err } : true
         })
       }
@@ -587,7 +576,7 @@ export default {
       required: false,
       default: () => { return [] },
       validator: value => {
-        return joi.validate(value, schemas.altered.schema, schemas.altered.options, (err, value) => {
+        return joi.validate(value, schemas.altered.schema, schemas.altered.options, (err) => {
           return err ? () => { throw err } : true
         })
       }
@@ -849,7 +838,7 @@ export default {
       }
       return { x: xPosition, y: yPosition }
     },
-    async handleScroll (e) {
+    async handleScroll () {
       const dataTable = this.query('#vstx-data-table')[0]
       const fixedHeadRow = this.query('#fixed-column__headers')[0]
       const headColumns = this.query('.fixed-column__header-th')
@@ -893,7 +882,7 @@ export default {
         this.computeTotals()
       }
     },
-    download (type, data, filename) {
+    download (type, data) {
       this.$emit('downloadData', {data, type})
     },
     populateColumnsFromPayload () {
@@ -987,18 +976,18 @@ export default {
         this.options.orderBy.isVisible = true
       }
     },
-    openColumnOptions: throttle((e) => {
+    openColumnOptions: throttle(() => {
       // this.setOverflow(true)
       this.options.columns.isVisible = true
     }, 500),
-    closeColumnOptions: throttle((e) => {
+    closeColumnOptions: throttle(() => {
       this.options.columns.isVisible = false
     }, 500),
-    openOptions: throttle((e) => {
+    openOptions: throttle(() => {
       // this.setOverflow(true)
       this.options.orderBy.isVisible = true
     }, 500),
-    closeOptions: throttle((e) => {
+    closeOptions: throttle(() => {
       this.options.orderBy.isVisible = false
     }, 500),
     // UDF

@@ -61,57 +61,51 @@ npm install vstx-data-table
 ### Usage
 
 > We use pug & stylus in all of our code and examples. Please make adjustments if you wish you get the example below to work without installing support for pug or stylus.
-> The below example will render a simple data-table with 3 columns. More complex examples are available at [www.vuestacks.com/data-table](https://www.vuestacks.com/data-table)
+> The below example will render a simple data-table with 3 columns, a custom title via slot, and for 2/3 columns a customized presentation of header and cell content via slots. More complex examples are available at [www.vuestacks.com/data-table](https://www.vuestacks.com/data-table)
 
 
 ```vue
 <template lang="pug">
-  .sample-data-table
-    data-table(
-      :payload="data"
-    )
+  #app
+    .sample-data-table.container
+      vstx-data-table(
+        :payload="payload"
+        :configuration="configuration"
+      )
+        //- SLOT: Table Title
+        template(slot="slot-title")
+          div
+            h1.title.has-text-link Data Table Example
+        //- SLOTS: Title Column
+        template(slot="title-header", slot-scope="table")
+          span.has-text-danger Titles
+        template(slot="title", slot-scope="table")
+          span.has-text-success {{ table.item.title }}
+        //- SLOTS: Amount
+        template(slot="amount-header", slot-scope="table")
+          span.has-text-warning $
+        template(slot="amount", slot-scope="table")
+          em.has-text-info ${{ table.item.amount.toFixed(2) }}
+    custom
+
 </template>
+
 <script>
-import DataTable from 'vstx-data-table'
-
-/*
-  Due to the how we built this component, you will have to call
-  all icons. This step is NOT necessary if you use font-awesome
-  library in your application already.
- */
-import fontawesome from '@fortawesome/fontawesome'
-import faSearch from '@fortawesome/fontawesome-free-solid/faSearch'
-import faTable from '@fortawesome/fontawesome-free-solid/faTable'
-import faColumns from '@fortawesome/fontawesome-free-solid/faColumns'
-import faSort from '@fortawesome/fontawesome-free-solid/faSort'
-import faFileExcel from '@fortawesome/fontawesome-free-solid/faFileExcel'
-import faTimes from '@fortawesome/fontawesome-free-solid/faTimes'
-import faList from '@fortawesome/fontawesome-free-solid/faList'
-import faWrench from '@fortawesome/fontawesome-free-solid/faWrench'
-import faAngleLeft from '@fortawesome/fontawesome-free-solid/faAngleLeft'
-import faAngleRight from '@fortawesome/fontawesome-free-solid/faAngleRight'
-
-fontawesome.library.add(faSearch)
-fontawesome.library.add(faTable)
-fontawesome.library.add(faColumns)
-fontawesome.library.add(faSort)
-fontawesome.library.add(faFileExcel)
-fontawesome.library.add(faTimes)
-fontawesome.library.add(faList)
-fontawesome.library.add(faWrench)
-fontawesome.library.add(faAngleLeft)
-fontawesome.library.add(faAngleRight)
-
-import 'bulma'
+import 'bulma/css/bulma.css'
+import Vue from 'vue'
+import VstxDataTable from 'vstx-data-table'
+Vue.use(VstxDataTable)
 
 export default {
-  name: 'SampleReport',
-  components: {
-    'data-table': DataTable
-  },
+  name: 'app',
   data () {
     return {
-      data: [
+      configuration: {
+        table: {
+          fullwidth: true
+        }
+      },
+      payload: [
         {id: 1, title: 'row1', amount: 1},
         {id: 2, title: 'row2', amount: 2},
         {id: 3, title: 'row3', amount: 3},

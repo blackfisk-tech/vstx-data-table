@@ -925,7 +925,28 @@ export default {
           })
           this.state.columns = columns
         } else {
-          this.state.columns = this.columns
+          let mergedColumns = []
+          const defaultColumn = {
+            name: '',
+            format: 'formatString',
+            field: '',
+            align: 'left',
+            position: 0,
+            isVisible: true,
+            sort: {
+              isSortable: true,
+              direction: '',
+              order: 0
+            }
+          }
+          for (let i = 0; i < this.columns.length; i++) {
+            let thisDefaultColumn = cloneDeep(defaultColumn)
+            thisDefaultColumn.position = i
+            thisDefaultColumn.sort.order = i
+            const mergedColumn = merge(thisDefaultColumn, this.columns[i])
+            mergedColumns.push(mergedColumn)
+          }
+          this.state.columns = mergedColumns
         }
       }
     },

@@ -1,5 +1,9 @@
 <template lang="pug">
-  .data-table(:class="{'is-scrolled': this.state.isScrolled}", @scroll="handleScroll")
+  .data-table(
+    :id="'data-table-' + this._uid"
+    :class="{'is-scrolled': this.state.isScrolled}"
+    @scroll="handleScroll"
+  )
     .columns.is-multiline.is-marginless.data-table__head
       .column.is-narrow.is-paddingless.title-column(v-if="$slots['slot-title'] && $slots['slot-title'].length > 0")
         //- Table Title
@@ -839,11 +843,12 @@ export default {
       return { x: xPosition, y: yPosition }
     },
     async handleScroll () {
-      const dataTable = this.query('#vstx-data-table')[0]
-      const fixedHeadRow = this.query('#fixed-column__headers')[0]
-      const headColumns = this.query('.fixed-column__header-th')
-      const firstColumns = this.query('.data-table.is-scrolled tbody tr:first-of-type td')
-      const headers = this.query('#static-header')[0]
+      let id = this._uid
+      const dataTable = this.query(`#data-table-${id}`)[0]
+      const fixedHeadRow = this.query(`#data-table-${id} #fixed-column__headers`)[0]
+      const headColumns = this.query(`#data-table-${id} .fixed-column__header-th`)
+      const firstColumns = this.query(`#data-table-${id} .data-table.is-scrolled tbody tr:first-of-type td`)
+      const headers = this.query(`#data-table-${id} #static-header`)[0]
       // const firstRow = document.querySelector('.data-table tbody tr:first-of-type')
       const offset = this.getPosition(headers)
       const yOffset = offset.y

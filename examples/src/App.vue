@@ -2,16 +2,16 @@
   .wrapper(id="app")
     .columns
       .column
-        BootstrapExample
+        BulmaExample
 </template>
 
 <script>
-import BootstrapExample from './components/BootstrapExample.vue'
+import BulmaExample from './components/BulmaExample.vue'
 
 export default {
   name: 'app',
   components: {
-    BootstrapExample
+    BulmaExample
   },
   data () {
     return {

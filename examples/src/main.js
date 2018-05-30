@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import App from './App.vue'
-
 /*
   Due to the how we built this component, you will have to call
   all icons. This step is NOT necessary if you use font-awesome

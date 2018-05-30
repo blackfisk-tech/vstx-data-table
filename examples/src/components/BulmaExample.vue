@@ -2,7 +2,7 @@
   .wrapper(id="app")
     .columns
       .column
-        DataTable(
+        vstx-data-table(
           :payload="state.payload",
           :columns="settings.dataTable.columns"
           :configuration="settings.dataTable.configuration"
@@ -13,13 +13,11 @@
 <script>
 import Axios from 'axios'
 import DataTable from 'vstx-data-table'
+
 import 'bulma'
 
 export default {
   name: 'BulmaExample',
-  components: {
-    DataTable
-  },
   data () {
     return {
       state: {

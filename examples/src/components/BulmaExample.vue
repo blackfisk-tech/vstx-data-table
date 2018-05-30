@@ -11,8 +11,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import Axios from 'axios'
 import DataTable from 'vstx-data-table'
+
+Vue.use(DataTable)
 
 import 'bulma'
 

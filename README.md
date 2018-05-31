@@ -1,7 +1,10 @@
 # VueStacks.com Data-Table
 
 ### About:
-The VSTX Data Table is a powerful data grid component (Vue.js 2.4+) for displaying, sorting, searching, filtering, and interacting with large and deeply nested data sets. As simple as passing a Prop containing an array of objects, as complex you need it to be.
+:construction:
+VSTX Data Table is under active development building towards a 1.0 production ready release.
+
+The VSTX Data Table is a powerful data grid component plugin (Vue.js 2.4+) for displaying, sorting, searching, filtering, and interacting with large and deeply nested data sets. As simple as passing a Prop containing an array of objects, as complex you need it to be.
 
 > Theme (Look & Feel):
 > We rely on the Bulma (https://bulma.io/) CSS framework and FontAwesome icons for themeing. These are needed for the component to display properly. Support for other CSS frameworks like Bootstrap can be achieved using additional CSS. Other icon sets can currently be used by overriding the icons with named slots.
@@ -26,7 +29,6 @@ The VSTX Data Table is a powerful data grid component (Vue.js 2.4+) for displayi
  - (Optional) Web Worker support for Filtering, Sorting, and Slicing data
 
 ### Roadmap
- - Add Vue CLI 3.0 support with full cli integration
  - Add Weighted Multi-Column Sorting
  - Abstract the CSS layer for supporting any CSS Framework/Icon Set
  - Improve mobile support (~~Fixed headers~~ and first column)
@@ -55,13 +57,13 @@ A live demo can be found at [www.vuestacks.com/data-table](https://www.vuestacks
 ### Installation
 
 ```
-npm install vstx-data-table
+npm install --save vstx-data-table
 ```
 
 ### Usage
 
 > We use pug & stylus in all of our code and examples. Please make adjustments if you wish you get the example below to work without installing support for pug or stylus.
-> The below example will render a simple data-table with 3 columns, a custom title via slot, and for 2/3 columns a customized presentation of header and cell content via slots. More complex examples are available at [www.vuestacks.com/data-table](https://www.vuestacks.com/data-table)
+> The example below will render a simple data-table with 3 columns, a custom title via slot, and for 2/3 columns a customized presentation of header and cell content via slots. More complex examples are available at [www.vuestacks.com/data-table](https://www.vuestacks.com/data-table)
 
 
 ```vue
@@ -144,6 +146,13 @@ export default {
 </style>
 ```
 
+# Clone Example:
+Clone the repository to your machine
+Navigate to the examples directory e.g. `cd /examples`
+`npm install`
+`npm run serve`
+Visit `localhost:8080` in your browser
+
 ### Contributing
 
 1. Fork it!
@@ -156,8 +165,8 @@ export default {
 > We are actively changing this data-table in our operations daily so please help us improve its usability.
 
 ### History
+- 0.3.0 - Switched project to an installable plugin from a published component in order to simplify use. Component is now globally registered as 'vstx-data-table' and installs two required dependencies. This is a breaking change that can be corrected by installing via Vue.use(vstxDataTable) and no longer locally registering.
 - 0.2.13 - Updated documentation and support for async web components/web workers and bug fixes
-- 0.2.5  - Removed DownloadAs functionality (will be released as separate module to take advantage of dependency bundling)
 - 0.2.4  - Improved Performance by reducing Lodash, Fontawesome, other dependencies and improving build process
 - 0.2.3  - Web Worker support in Filtering, Sorting, and Pagination
 - 0.2.0  - Added Web Worker option in Filtering to reduce UI blocking

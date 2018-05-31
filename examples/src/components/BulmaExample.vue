@@ -1,13 +1,18 @@
 <template lang="pug">
   .wrapper(id="app")
-    .columns
-      .column
+    section.section
+      .container
         vstx-data-table(
           :payload="state.payload",
           :columns="settings.dataTable.columns"
           :configuration="settings.dataTable.configuration"
         )
-          template(slot="name", slot-scope="data") {{ data.item.name.first }}, {{ data.item.name.first }}
+          //- Insert a Data Table Title
+          template(slot="slot-title")
+            h1.title Asynchronous Data Table Example
+          //- Override Cell Content
+          template(slot="name", slot-scope="data") {{ data.item.name.last }}, {{ data.item.name.first }}
+
 </template>
 
 <script>
@@ -31,7 +36,7 @@ export default {
           isLoading: false,
           columns: [
             {
-              name: 'Id',
+              name: 'ID',
               align: 'left',
               field: '_id',
               format: 'formatString',
@@ -40,16 +45,19 @@ export default {
               sort: {}
             },
             {
+              name: 'Index',
               field: 'index',
               isVisible: false,
               sort: {}
             },
             {
+              name: 'Is Active',
               field: 'isActive',
               isVisible: false,
               sort: {}
             },
             {
+              name: 'GUID',
               field: 'guid',
               isVisible: false,
               sort: {}
@@ -98,7 +106,7 @@ export default {
               isVisible: true
             },
             pagination: {
-              rowsPerPage: 5
+              rowsPerPage: 25
             },
             totals: {
               isVisible: {

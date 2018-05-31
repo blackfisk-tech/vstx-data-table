@@ -18,7 +18,7 @@
 <script>
 import Vue from 'vue'
 import Axios from 'axios'
-import VstxDataTable from '../../../dist/vstx-data-table.min.esm.js'
+import VstxDataTable from 'vstx-data-table'
 
 Vue.use(VstxDataTable)
 

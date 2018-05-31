@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'data-table',
+  name: 'vstx-data-table',
   introduction: 'A data table component for the Vue Stacks Template',
   description: '',
   data () {

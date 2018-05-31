@@ -1,4 +1,4 @@
-const webpack = require('webpack')
+// const webpack = require('webpack')
 const merge = require('webpack-merge')
 const path = require('path')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
@@ -60,23 +60,6 @@ var config = {
 }
 
 module.exports = [
-  merge(config, {
-    entry: path.resolve(`${__dirname}/src/plugin.js`),
-    output: {
-      filename: 'vstx-data-table.min.js',
-      libraryTarget: 'window',
-      library: 'vstxDataTable'
-    }
-  }),
-  merge(config, {
-    entry: path.resolve(`${__dirname}/src/vstxDataTable.vue`),
-    output: {
-      filename: 'vstx-data-table.js',
-      libraryTarget: 'umd',
-      library: 'vstx-data-table',
-      umdNamedDefine: true
-    }
-  }),
   merge(config, {
     entry: path.resolve(`${__dirname}/src/plugin.js`),
     output: {

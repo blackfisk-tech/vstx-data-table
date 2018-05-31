@@ -146,12 +146,12 @@ export default {
 </style>
 ```
 
-#### Clone Example:
-> Clone the repository to your machine.
-> Navigate to the examples directory e.g. `cd /examples`.
-> `npm install`
-> `npm run serve`
-> Visit `localhost:8080` in your browser
+#### Run our Example Locally:
+- Clone the repository to your machine.
+- Navigate to the examples directory e.g. `cd /examples`.
+- `npm install`
+- `npm run serve`
+- Visit `localhost:8080` in your browser
 
 ### Contributing
 

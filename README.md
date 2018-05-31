@@ -1,8 +1,22 @@
 # VueStacks.com Data-Table
 
+[![Build Status][build-badge]][build]
+[![Code Coverage][coverage-badge]][coverage]
+[![version][version-badge]][package]
+[![downloads][downloads-badge]][npmtrends]
+[![MIT License][license-badge]][LICENSE]
+
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
+[![PRs Welcome][prs-badge]][prs]
+[![Code of Conduct][coc-badge]][coc]
+
+[![Watch on GitHub][github-watch-badge]][github-watch]
+[![Star on GitHub][github-star-badge]][github-star]
+[![Tweet][twitter-badge]][twitter]
+
 ### About:
-:construction:
-VSTX Data Table is under active development building towards a 1.0 production ready release.
+> :construction:
+> VSTX Data Table is under active development building towards a 1.0 production ready release.
 
 The VSTX Data Table is a powerful data grid component plugin (Vue.js 2.4+) for displaying, sorting, searching, filtering, and interacting with large and deeply nested data sets. As simple as passing a Prop containing an array of objects, as complex you need it to be.
 

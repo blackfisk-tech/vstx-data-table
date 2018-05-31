@@ -1,5 +1,3 @@
-# VueStacks.com Data-Table
-
 [![Build Status][build-badge]][build]
 [![Code Coverage][coverage-badge]][coverage]
 [![version][version-badge]][package]
@@ -13,6 +11,8 @@
 [![Watch on GitHub][github-watch-badge]][github-watch]
 [![Star on GitHub][github-star-badge]][github-star]
 [![Tweet][twitter-badge]][twitter]
+
+# VueStacks.com Data-Table
 
 ### About:
 > :construction:

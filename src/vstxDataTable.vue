@@ -502,7 +502,7 @@
 
 <script>
 // Sass?
-import './sass/vstxDataTable.sass'
+// import './sass/vstxDataTable.sass'
 // Libraries
 // import localForage from 'localforage'
 import joi from 'joi'

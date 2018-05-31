@@ -71,6 +71,14 @@ module.exports = [
   merge(config, {
     entry: path.resolve(`${__dirname}/src/vstxDataTable.vue`),
     output: {
+      filename: 'vstx-data-table.window.js',
+      libraryTarget: 'window',
+      library: 'vstx-data-table'
+    }
+  }),
+  merge(config, {
+    entry: path.resolve(`${__dirname}/src/vstxDataTable.vue`),
+    output: {
       filename: 'vstx-data-table.js',
       libraryTarget: 'umd',
       library: 'vstx-data-table',

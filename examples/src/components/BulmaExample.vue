@@ -18,9 +18,9 @@
 <script>
 import Vue from 'vue'
 import Axios from 'axios'
-import DataTable from 'vstx-data-table'
+import VstxDataTable from 'vstx-data-table'
 
-Vue.use(DataTable)
+Vue.use(VstxDataTable)
 
 import 'bulma'
 

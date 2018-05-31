@@ -7,6 +7,9 @@
 		},
 		{
 			"path": "node_modules\\@fortawesome"
+		},
+		{
+			"path": "D:\\Websites\\vue-autosuggest"
 		}
 	]
 }

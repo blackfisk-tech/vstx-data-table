@@ -1,11 +1,25 @@
 {
-  "presets": [["env", {
-      "targets": {
-        "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": ["last 2 versions", "safari >= 7"],
+          "uglify": true
+        },
+        "modules": "umd"
       }
-    }],
-    "stage-2"
+    ]
   ],
-  "plugins": ["transform-runtime", "transform-object-rest-spread", "transform-es2015-destructuring", "transform-es2015-parameters", "lodash"],
-  "comments": false
+  "plugins": [
+    "transform-object-rest-spread",
+    "transform-vue-jsx",
+    [
+      "transform-runtime",
+      {
+        "polyfill": true,
+        "regenerator": true
+      }
+    ]
+  ]
 }

@@ -1,17 +1,3 @@
-[![Build Status][build-badge]][build]
-[![Code Coverage][coverage-badge]][coverage]
-[![version][version-badge]][package]
-[![downloads][downloads-badge]][npmtrends]
-[![MIT License][license-badge]][LICENSE]
-
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
-[![PRs Welcome][prs-badge]][prs]
-[![Code of Conduct][coc-badge]][coc]
-
-[![Watch on GitHub][github-watch-badge]][github-watch]
-[![Star on GitHub][github-star-badge]][github-star]
-[![Tweet][twitter-badge]][twitter]
-
 # VueStacks.com Data-Table
 
 ### About:

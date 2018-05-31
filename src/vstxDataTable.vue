@@ -842,7 +842,7 @@ export default {
       }
       return { x: xPosition, y: yPosition }
     },
-    async handleScroll () {
+    handleScroll () {
       let id = this._uid
       const dataTable = this.query(`#data-table-${id}`)[0]
       const fixedHeadRow = this.query(`#data-table-${id} #fixed-column__headers`)[0]

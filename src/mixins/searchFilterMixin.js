@@ -272,7 +272,6 @@ export const searchFilterMixin = {
           let result = filter(data, (o) => {
             return deepFind(o, criteria)
           })
-          console.log('syncronous', result)
           return result
         }
       } else {

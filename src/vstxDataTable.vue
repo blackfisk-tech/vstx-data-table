@@ -99,21 +99,26 @@
     .data-table__filters__active(
       v-if="state.search.length || state.filters.length"
     )
-      nav.breadcrumb(aria-label="filters")
-        ul
-          li Filtering by:&nbsp;&nbsp;
-            span.tag.is-primary(v-if="state.search.length") Search: {{ state.search }}
-              button.delete(@click="searchRemove", :class="getSizeClass")
-            span.tag.is-primary.filter-tag(
-              v-for="filter in getFilters"
-              :key="getFilterId(filter)"
-            )
-              span.icon.is-small
-                i.fa.fa-filter.fa-xs
-              span {{ (filter.text || filter.column) }} : {{ filter.value }}
-              button.delete.is-small(
-                @click="filterRemove(filter)"
-              )
+      div Filtering by:&nbsp;&nbsp;
+        span.tag.is-primary(v-if="state.search.length")
+          span.icon.is-small
+            i.fa.fa-xs.fa-search
+          span Search: {{ state.search }}
+          button.delete(@click="searchRemove", :class="getSizeClass")
+        span.tag.is-primary.filter-tag(
+          v-for="filter in getFilters"
+          :key="getFilterId(filter)"
+        )
+          span.icon.is-small
+            i.fa.fa-filter.fa-xs
+          span {{ (filter.text || filter.column) }} : {{ filter.value }}
+          button.delete.is-small(
+            @click="filterRemove(filter)"
+          )
+        span.tag.is-default.is-bordered(style="border-top-left-radius:0;border-bottom-left-radius:0;")
+          span.icon.is-small
+            i.fa.fa-xs.fa-list-alt
+          span Matching {{ getRowCount }} of {{ payload.length }} Rows
     slot(name="slot-toolbar")
     //- Controls
     table.table.is-narrow.is-relative-position(
@@ -465,11 +470,7 @@
           td(:colspan="getColspan")
             section.hero.is-medium.is-light
               .hero-body.has-text-centered
-                p.subtitle &nbsp;Loading...&nbsp;
-                  loader(
-                    :barCount="parseInt(5)"
-                    size="small"
-                  )
+                span No Data
         tr(
           v-else-if="getPagedData.length > 0"
           v-for="(item, i) in getPagedData"
@@ -677,7 +678,7 @@ export default {
       }
     },
     getRowCount () {
-      if ((this.state.search.length || this.state.filters.length) && this.state.data.length > 0) {
+      if (this.state.search.length || this.state.filters.length) {
         return this.state.data.length
       } else {
         return this.payload.length

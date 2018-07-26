@@ -45,7 +45,7 @@ export const selectMixin = {
     selectAll (e) {
       // 'Select All in Page' vs 'Select All in Data' UX
       if (e.target.checked) {
-        let data = this.getPagedData
+        let data = this.getData
         forEach(data, (row) => {
           if (!this.isSelected(row)) {
             this.select(row)

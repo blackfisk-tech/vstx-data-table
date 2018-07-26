@@ -170,9 +170,7 @@ export const searchFilterMixin = {
           oldData = await this.filter(oldData, filter)
         }
       }
-      if (this.state.search.length > 0) {
-        oldData = await this.filter(oldData, {'value': this.state.search})
-      }
+      oldData = await this.filter(oldData, {'value': this.state.search})
       this.state.data = oldData
     },
     addFilter: debounce(async function (event = {}) {

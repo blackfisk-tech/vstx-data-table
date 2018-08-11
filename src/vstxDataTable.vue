@@ -2,7 +2,7 @@
   .data-table(
     :id="'data-table-' + this._uid"
     :class="{'is-scrolled': this.state.isScrolled}"
-    @scroll="handleScroll"
+    @onScroll="throttledScroll"
   )
     .columns.is-multiline.is-marginless.data-table__head
       .column.is-narrow.is-paddingless.title-column(v-if="$slots['slot-title'] && $slots['slot-title'].length > 0")
@@ -615,6 +615,10 @@ export default {
   },
   mounted () {
     if (this.options.table.hasFixedHeaders) {
+      let scrollingContainer = this.getScrollingParent(this.query(`#data-table-${this._uid}`)[0])
+      scrollingContainer.addEventListener('scroll', this.throttledScroll, {
+        passive: true
+      })
       window.addEventListener('scroll', this.throttledScroll, {
         passive: true
       })
@@ -622,7 +626,13 @@ export default {
   },
   destroyed () {
     if (this.options.table.hasFixedHeaders) {
-      window.removeEventListener('scroll', this.handleScroll)
+      let scrollingContainer = this.getScrollingParent(this.query(`#data-table-${this._uid}`)[0])
+      scrollingContainer.removeEventListener('scroll', this.throttledScroll, {
+        passive: true
+      })
+      window.removeEventListener('scroll', this.throttledScroll, {
+        passive: true
+      })
     }
     // Persist State to LocalStorage
     // localForage.setItem(this.uniqueID, {
@@ -635,7 +645,10 @@ export default {
       uniqueID: '',
       state: {
         isLoading: false,
-        scroll: {},
+        scroll: {
+          scrollY: 0,
+          isTicking: false
+        },
         hasScrolled: false,
         isScrolled: false,
         isFixedHeaderVisible: false,
@@ -805,12 +818,46 @@ export default {
     reset () {
       Object.assign(this.$data, this.$options.data.call(this))
     },
-    throttledScroll: throttle(function (e) {
-      this.state.scroll = e
-      this.handleScroll()
-    }, 250, {
-      'trailing': true
-    }),
+    getScrollingParent (node) {
+      if (!(node instanceof HTMLElement || node instanceof SVGElement)) {
+        return
+      }
+      const getParent = (node, parents) => {
+        if (node.parentNode === null) {
+          return parents
+        }
+        return getParent(node.parentNode, parents.concat([node]))
+      }
+      const parents = getParent(node.parentNode, [])
+      const getNodeStyle = (node, prop) => {
+        return getComputedStyle(node, null).getPropertyValue(prop, 'overflow')
+      }
+      for (let i = 0; i < parents.length; i++) {
+        const overflows = getNodeStyle(parents[i], 'overflow') + getNodeStyle(parents[i], 'overflow-y') + getNodeStyle(parents[i], 'overflow-x')
+        let isScrollable = /(auto|scroll)/.test(overflows)
+        if (isScrollable) {
+          return parents[i]
+        }
+      }
+      return document.scrollingElement || document.documentElement
+    },
+    isElementOffScreen (el) {
+      let rect = el.getBoundingClientRect()
+      const isOffLeft = (rect.x + rect.width) < 0
+      const isOffTop = (rect.y + rect.height) < (0 + this.options.offsetTop)
+      const isOffRight = (rect.x > window.innerWidth)
+      const isOffBottom = (rect.y > window.innerHeight)
+      return isOffLeft || isOffTop || isOffRight || isOffBottom
+    },
+    throttledScroll (e) {
+      this.scrollRequestTick()
+    },
+    scrollRequestTick () {
+      if (!this.state.scroll.isTicking) {
+        window.requestAnimationFrame(this.handleScroll)
+      }
+      this.state.scroll.isTicking = true
+    },
     query (selector, context) {
       context = context || document
       // Redirect simple selectors to the more performant function
@@ -844,17 +891,19 @@ export default {
       return { x: xPosition, y: yPosition }
     },
     async handleScroll () {
+      this.state.scroll.isTicking = false
       let id = this._uid
       const dataTable = this.query(`#data-table-${id}`)[0]
       const fixedHeadRow = this.query(`#data-table-${id} #fixed-column__headers`)[0]
       const headColumns = this.query(`#data-table-${id} .fixed-column__header-th`)
-      const firstColumns = this.query(`#data-table-${id} .data-table.is-scrolled tbody tr:first-of-type td`)
+      const firstColumns = this.query(`#data-table-${id} tbody tr:first-of-type td`)
       const headers = this.query(`#data-table-${id} #static-header`)[0]
+      const isStaticHeaderVisible = !this.isElementOffScreen(headers)
       // const firstRow = document.querySelector('.data-table tbody tr:first-of-type')
       const offset = this.getPosition(headers)
       const yOffset = offset.y
       const xOffset = offset.x
-      const isScrolled = (((window.scrollY + this.options.offsetTop) >= yOffset) && this.options.table.hasFixedHeaders && this.getPagedData.length > 0)
+      const isScrolled = !isStaticHeaderVisible && this.options.table.hasFixedHeaders && this.getPagedData.length > 0
       if (isScrolled) {
         if (!isNil(fixedHeadRow)) {
           fixedHeadRow.style.transform = `translateX(${dataTable.scrollLeft * -1}px)`
@@ -873,8 +922,7 @@ export default {
         } else {
           this.state.isFixedHeaderVisible = false
         }
-      }
-      if (!isScrolled) {
+      } else {
         this.state.isFixedHeaderVisible = false
       }
       this.state.isScrolled = isScrolled
@@ -949,8 +997,8 @@ export default {
             let thisDefaultColumn = cloneDeep(defaultColumn)
             thisDefaultColumn.position = i
             thisDefaultColumn.sort.order = i
-            const mergedColumn = merge(thisDefaultColumn, this.columns[i])
-            mergedColumns.push(mergedColumn)
+            merge(thisDefaultColumn, this.columns[i])
+            mergedColumns.push(thisDefaultColumn)
           }
           this.state.columns = mergedColumns
         }
@@ -978,7 +1026,10 @@ export default {
     },
     getConfiguration () {
       let defaultsCopy = cloneDeep(defaults)
-      let configuration = merge(defaultsCopy.configuration, this.configuration)
+      let globalConfiguration = this.$vstxDataTable.options || {}
+      let configuration = cloneDeep(defaultsCopy.configuration)
+      merge(configuration, globalConfiguration)
+      merge(configuration, this.configuration)
       return configuration
     },
     // Options Helpers
@@ -1209,6 +1260,12 @@ export default {
     // }
   },
   watch: {
+    'payload': {
+      handler: function (newVal, oldVal) {
+        this.filterAndSearch(newVal)
+      },
+      deep: true
+    },
     'options': {
       handler: function () {
         this.$emit('onOptionsChange', this.options)
@@ -1266,7 +1323,7 @@ export default {
     padding 5px
     border-bottom: 1px solid #eeeeee
     box-shadow: 3px 3px 2px 0px rgba(0,0,0,0.15)
-    z-index 9
+    z-index 6
   .data-table .title-column
     padding-right 2.5rem !important
   .data-table .column__headers
@@ -1286,7 +1343,7 @@ export default {
     padding 0.5rem 0.75rem
   .data-table caption
     background-color white
-    z-index 99
+    z-index 7
     border grey
   .data-table caption.is-overlay
     margin-top 34px

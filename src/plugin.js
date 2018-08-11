@@ -1,4 +1,4 @@
-import vstxDataTable from 'site-components/dataTable/vstxDataTable'
+import vstxDataTable from './vstxDataTable.vue'
 import VueWorker from 'vue-worker'
 import AsyncComputed from 'vue-async-computed'
 

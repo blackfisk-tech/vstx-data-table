@@ -508,7 +508,7 @@ import './sass/vstxDataTable.sass'
 // import localForage from 'localforage'
 import joi from 'joi'
 import md5 from 'md5'
-import { sortBy, filter, forEach, throttle, indexOf, differenceWith, isEqual, merge, cloneDeep, isDate, isNumber, round, isNil, get, isString } from 'lodash'
+import { sortBy, filter, forEach, throttle, indexOf, differenceWith, isEqual, merge, cloneDeep, isDate, isNumber, round, isNil, get, isString, isElement } from 'lodash'
 
 // Components
 import DataTableCell from './vstxDataTableCell.vue'
@@ -616,9 +616,11 @@ export default {
   mounted () {
     if (this.options.table.hasFixedHeaders) {
       let scrollingContainer = this.getScrollingParent(this.query(`#data-table-${this._uid}`)[0])
-      scrollingContainer.addEventListener('scroll', this.throttledScroll, {
-        passive: true
-      })
+      if (scrollingContainer) {
+        scrollingContainer.addEventListener('scroll', this.throttledScroll, {
+          passive: true
+        })
+      }
       window.addEventListener('scroll', this.throttledScroll, {
         passive: true
       })
@@ -627,9 +629,11 @@ export default {
   destroyed () {
     if (this.options.table.hasFixedHeaders) {
       let scrollingContainer = this.getScrollingParent(this.query(`#data-table-${this._uid}`)[0])
-      scrollingContainer.removeEventListener('scroll', this.throttledScroll, {
-        passive: true
-      })
+      if (scrollingContainer) {
+        scrollingContainer.removeEventListener('scroll', this.throttledScroll, {
+          passive: true
+        })
+      }
       window.removeEventListener('scroll', this.throttledScroll, {
         passive: true
       })
@@ -819,7 +823,7 @@ export default {
       Object.assign(this.$data, this.$options.data.call(this))
     },
     getScrollingParent (node) {
-      if (!(node instanceof HTMLElement || node instanceof SVGElement)) {
+      if (!(isElement(node))) {
         return
       }
       const getParent = (node, parents) => {
@@ -830,7 +834,7 @@ export default {
       }
       const parents = getParent(node.parentNode, [])
       const getNodeStyle = (node, prop) => {
-        return getComputedStyle(node, null).getPropertyValue(prop, 'overflow')
+        return window.getComputedStyle(node, null).getPropertyValue(prop, 'overflow')
       }
       for (let i = 0; i < parents.length; i++) {
         const overflows = getNodeStyle(parents[i], 'overflow') + getNodeStyle(parents[i], 'overflow-y') + getNodeStyle(parents[i], 'overflow-x')
@@ -842,12 +846,16 @@ export default {
       return document.scrollingElement || document.documentElement
     },
     isElementOffScreen (el) {
-      let rect = el.getBoundingClientRect()
-      const isOffLeft = (rect.x + rect.width) < 0
-      const isOffTop = (rect.y + rect.height) < (0 + this.options.offsetTop)
-      const isOffRight = (rect.x > window.innerWidth)
-      const isOffBottom = (rect.y > window.innerHeight)
-      return isOffLeft || isOffTop || isOffRight || isOffBottom
+      let isOffScreen = false
+      if (el) {
+        let rect = el.getBoundingClientRect()
+        const isOffLeft = (rect.x + rect.width) < 0
+        const isOffTop = (rect.y + rect.height) < (0 + this.options.offsetTop)
+        const isOffRight = (rect.x > window.innerWidth)
+        const isOffBottom = (rect.y > window.innerHeight)
+        isOffScreen = isOffLeft || isOffTop || isOffRight || isOffBottom
+      }
+      return isOffScreen
     },
     throttledScroll (e) {
       this.scrollRequestTick()
@@ -901,7 +909,7 @@ export default {
       const isStaticHeaderVisible = !this.isElementOffScreen(headers)
       // const firstRow = document.querySelector('.data-table tbody tr:first-of-type')
       const offset = this.getPosition(headers)
-      const yOffset = offset.y
+      // const yOffset = offset.y
       const xOffset = offset.x
       const isScrolled = !isStaticHeaderVisible && this.options.table.hasFixedHeaders && this.getPagedData.length > 0
       if (isScrolled) {

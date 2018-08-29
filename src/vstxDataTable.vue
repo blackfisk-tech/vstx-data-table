@@ -119,6 +119,7 @@
           span.icon.is-small
             i.fa.fa-xs.fa-list-alt
           span Matching {{ getRowCount }} of {{ payload.length }} Rows
+    slot(name="slot-pre-toolbar")
     slot(name="slot-toolbar")
     //- Controls
     table.table.is-narrow.is-relative-position(
@@ -341,6 +342,8 @@
                       v-model="column['sort']['isSortable']"
                     )
                     | &nbsp;Sortable
+        tr.column__headers#fixed-toolbar
+          slot(name="slot-fixed-toolbar")
       thead#static-header
         //- Header
         tr.column__headers
@@ -485,7 +488,7 @@
             v-if="options.table.isSelectable"
             :class="{'borderless': !options.table.cellbordered}"
           )
-            label.checkbox(title="`Select${'name' in item ? ' ' + item.name : ''}`")
+            label.checkbox(:title="`Select${'name' in item ? ' ' + item.name : ''}`")
               input(
                 type="checkbox"
                 :checked="isSelected(item)"
@@ -903,6 +906,7 @@ export default {
       let id = this._uid
       const dataTable = this.query(`#data-table-${id}`)[0]
       const fixedHeadRow = this.query(`#data-table-${id} #fixed-column__headers`)[0]
+      const fixedHeadToolbar = this.query(`#data-table-${id} #fixed-toolbar`)[0]
       const headColumns = this.query(`#data-table-${id} .fixed-column__header-th`)
       const firstColumns = this.query(`#data-table-${id} tbody tr:first-of-type td`)
       const headers = this.query(`#data-table-${id} #static-header`)[0]
@@ -916,6 +920,10 @@ export default {
         if (!isNil(fixedHeadRow)) {
           fixedHeadRow.style.transform = `translateX(${dataTable.scrollLeft * -1}px)`
           fixedHeadRow.style.paddingLeft = xOffset + 'px'
+        }
+        if (!isNil(fixedHeadToolbar)) {
+          fixedHeadToolbar.style.transform = `translateX(${dataTable.scrollLeft * -1}px)`
+          fixedHeadToolbar.style.paddingLeft = xOffset + 'px'
         }
         if (!isNil(headColumns) && headColumns.length && !isNil(firstColumns) && firstColumns.length) {
           for (let i = 0; i < headColumns.length; i++) {
@@ -987,30 +995,33 @@ export default {
           })
           this.state.columns = columns
         } else {
-          let mergedColumns = []
-          const defaultColumn = {
-            name: '',
-            format: 'formatString',
-            field: '',
-            align: 'left',
-            position: 0,
-            isVisible: true,
-            sort: {
-              isSortable: true,
-              direction: '',
-              order: 0
-            }
-          }
-          for (let i = 0; i < this.columns.length; i++) {
-            let thisDefaultColumn = cloneDeep(defaultColumn)
-            thisDefaultColumn.position = i
-            thisDefaultColumn.sort.order = i
-            merge(thisDefaultColumn, this.columns[i])
-            mergedColumns.push(thisDefaultColumn)
-          }
-          this.state.columns = mergedColumns
+          this.populateColumnsFromProps()
         }
       }
+    },
+    populateColumnsFromProps () {
+      let mergedColumns = []
+      const defaultColumn = {
+        name: '',
+        format: 'formatString',
+        field: '',
+        align: 'left',
+        position: 0,
+        isVisible: true,
+        sort: {
+          isSortable: true,
+          direction: '',
+          order: 0
+        }
+      }
+      for (let i = 0; i < this.columns.length; i++) {
+        let thisDefaultColumn = cloneDeep(defaultColumn)
+        thisDefaultColumn.position = i
+        thisDefaultColumn.sort.order = i
+        merge(thisDefaultColumn, this.columns[i])
+        mergedColumns.push(thisDefaultColumn)
+      }
+      this.state.columns = mergedColumns
     },
     collapsePages () {
       // Default RowsPerPage to 25 when Necessary
@@ -1283,6 +1294,12 @@ export default {
     'state.columns': {
       handler: function () {
         this.$emit('onColumnChange', this.state.columns)
+      },
+      deep: true
+    },
+    'columns': {
+      handler: function () {
+        this.populateColumnsFromProps()
       },
       deep: true
     },

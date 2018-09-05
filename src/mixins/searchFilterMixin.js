@@ -162,8 +162,10 @@ export const searchFilterMixin = {
       this.state.search = ''
       await this.filterAndSearch(this.getPayload)
     },
-    async filterAndSearch (oldData) {
-      this.state.offset = 0
+    async filterAndSearch (oldData, resetPagination) {
+      if (isNil(resetPagination) || resetPagination) {
+        this.state.offset = 0
+      }
       if (this.getFilters.length > 0) {
         for (let i = 0; i < this.getFilters.length; i++) {
           const filter = this.getFilters[i]

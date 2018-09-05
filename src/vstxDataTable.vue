@@ -1281,7 +1281,7 @@ export default {
   watch: {
     'payload': {
       handler: function (newVal, oldVal) {
-        this.filterAndSearch(newVal)
+        this.filterAndSearch(newVal, false)
       },
       deep: true
     },

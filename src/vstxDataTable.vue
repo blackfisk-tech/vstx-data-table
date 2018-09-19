@@ -404,29 +404,37 @@
         tr.data-table__total-row(v-if="options.totals.isVisible.all && getPagedData.length > 0")
           td.data-table__row(v-if="options.isRanked"): strong Totals
           td.data-table__row(
+            v-if="options.table.isSelectable"
+            :class="{'borderless': !options.table.cellbordered}"
+          )
+          td.data-table__row(
             v-for="(column, idx) in getDisplayColumns"
             :key="`table-total-top-${idx}`"
             :class="[getColumnAlignment(column), getWhitespace(column)]"
           )
-            data-table-cell(
-              v-if="column['format'] !== 'seller' && column['format'] !== 'brand' && column['format'] !== 'product'"
-              :column="column"
-              :item="state.totals[column['field']]"
-            )
+            slot(:name="`${column.sort.sortByField ? column.sort.sortByField : column.field}-pageTotal`")&attributes({':item': 'state.totals[column[`field`]]', ':index': 'idx', ':column': 'column'})
+              data-table-cell(
+                :column="column"
+                :item="state.totals[column['field']]"
+              )
       tfoot
         //- Bottom Totals
         tr.data-table__total-row(v-if="options.totals.isVisible.page && getPagedData.length > 0")
           td.data-table__row(v-if="options.isRanked"): strong Page Totals
           td.data-table__row(
+            v-if="options.table.isSelectable"
+            :class="{'borderless': !options.table.cellbordered}"
+          )
+          td.data-table__row(
             v-for="(column, idx) in getDisplayColumns"
             :key="`table-total-bottom-${idx}`"
             :class="getColumnAlignment(column)"
           )
-            data-table-cell(
-              v-if="column['format'] !== 'seller' && column['format'] !== 'brand' && column['format'] !== 'product'"
-              :column="column"
-              :item="getColumnTotal(column, 'page')"
-            )
+            slot(:name="`${column.sort.sortByField ? column.sort.sortByField : column.field}-total`")&attributes({':item': 'getColumnTotal(column, `page`)', ':index': 'idx', ':column': 'column'})
+              data-table-cell(
+                :column="column"
+                :item="getColumnTotal(column, 'page')"
+              )
         //- Pagination
         tr(v-if="options.pagination.isAllowed && options.pagination.isVisible")
           td.pagination__controls(:colspan="getColspan")
@@ -1218,13 +1226,13 @@ export default {
     computeTotals () {
       let isTotalable = true
       if (this.options.totals.isVisible.all) {
-        forEach(this.state.columns, (column) => {
+        for (let column of this.state.columns) {
           let total = 0
-          isTotalable = !(column['format'] === 'formatString' || column['format'] === '')
+          isTotalable = !(column['format'] === 'formatString' || column['format'] === '' || !column['format'])
           if (isTotalable) {
-            forEach(this.payload, (row) => {
-              total = total + row[column['field']]
-            })
+            for (let row of this.payload) {
+              total = total + get(row, column.sort.sortByField ? column.sort.sortByField : column.field)
+            }
             let value = total
             if (column['format'] === 'formatPercent') {
               value = value / this.payload.length
@@ -1242,7 +1250,7 @@ export default {
               'type': 'total'
             }
           }
-        })
+        }
       }
     },
     // Layout & UI

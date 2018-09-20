@@ -916,7 +916,7 @@ export default {
       const fixedHeadRow = this.query(`#data-table-${id} #fixed-column__headers`)[0]
       const fixedHeadToolbar = this.query(`#data-table-${id} #fixed-toolbar`)[0]
       const headColumns = this.query(`#data-table-${id} .fixed-column__header-th`)
-      const firstColumns = this.query(`#data-table-${id} tbody tr:first-of-type td`)
+      const firstColumns = this.query(`#data-table-${id} tbody tr:first-of-type td.data-table__row`)
       const headers = this.query(`#data-table-${id} #static-header`)[0]
       const isStaticHeaderVisible = !this.isElementOffScreen(headers)
       // const firstRow = document.querySelector('.data-table tbody tr:first-of-type')

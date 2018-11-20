@@ -188,6 +188,7 @@
                       input(
                         type="checkbox"
                         v-model="options.totals.isVisible.all"
+                        :tabindex="-1"
                       )
                       | Show Data Totals
                 //- Page
@@ -197,6 +198,7 @@
                       input(
                         type="checkbox"
                         v-model="options.totals.isVisible.page"
+                        :tabindex="-1"
                       )
                       | Show Page Totals
                 //- Rank
@@ -206,6 +208,7 @@
                       input(
                         type="checkbox"
                         v-model="options.isRanked"
+                        :tabindex="-1"
                       )
                       | Show Rank
                 //- Filter
@@ -215,6 +218,7 @@
                       input(
                         type="checkbox"
                         v-model="options.filter.isVisible"
+                        :tabindex="-1"
                       )
                       | Show Filter
                 //- All
@@ -224,6 +228,7 @@
                       input(
                         type="checkbox"
                         v-model="options.sortIndicator.isVisible"
+                        :tabindex="-1"
                       )
                       | Show Sort Order Numbering
                 //- Page
@@ -233,6 +238,7 @@
                       input(
                         type="checkbox"
                         v-model="options.totals.isVisible.count"
+                        :tabindex="-1"
                       )
                       | Show Row Count
             //- Sorting
@@ -296,6 +302,7 @@
                 type="checkbox"
                 @change="selectAll"
                 v-model="state.isSelectAll"
+                :tabindex="-1"
               )
           th.column__header.fixed-column__header-th(
             v-for="(column, idx) in getDisplayColumns"
@@ -340,6 +347,7 @@
                     input(
                       type="checkbox"
                       v-model="column['sort']['isSortable']"
+                      :tabindex="-1"
                     )
                     | &nbsp;Sortable
         tr.column__headers#fixed-toolbar
@@ -354,6 +362,7 @@
                 type="checkbox"
                 @change="selectAll"
                 v-model="state.isSelectAll"
+                :tabindex="-1"
               )
           th.column__header(
             v-for="(column, idx) in getDisplayColumns"
@@ -398,6 +407,7 @@
                     input(
                       type="checkbox"
                       v-model="column['sort']['isSortable']"
+                      :tabindex="-1"
                     )
                     | &nbsp;Sortable
         //- Top Totals
@@ -501,6 +511,7 @@
                 type="checkbox"
                 :checked="isSelected(item)"
                 @change="select(item)"
+                :tabindex="-1"
               )
           td.data-table__row(
             v-for="(column, idx) in getDisplayColumns"
@@ -1298,6 +1309,11 @@ export default {
         this.$emit('onOptionsChange', this.options)
       },
       deep: true
+    },
+    'configuration': {
+      handler: function () {
+        this.options = this.getConfiguration()
+      }
     },
     'state.columns': {
       handler: function () {

@@ -179,8 +179,8 @@ export const searchFilterMixin = {
       if ('search' in event && !isNil(event.search)) {
         this.state.filters.push({
           'value': event.search,
-          ...(event.hasOwnProperty('column') && event.column.length > 0) ? {'column': event.column} : null,
-          ...(event.hasOwnProperty('text') && event.text.length > 0) ? {'text': event.text} : null
+          ...(event.hasOwnProperty('column') && event.column.length > 0) && {'column': event.column},
+          ...(event.hasOwnProperty('text') && event.text.length > 0) && {'text': event.text}
         })
         this.$nextTick(() => {
           this.emitFilter(event)

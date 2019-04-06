@@ -1,5 +1,6 @@
 import md5 from 'md5'
 import { debounce, remove, find, isNil, orderBy, filter } from 'lodash'
+import { stringify } from 'flatted'
 
 export const searchFilterMixin = {
   created () {
@@ -189,20 +190,28 @@ export const searchFilterMixin = {
       await this.filterAndSearch((this.getFilters.length && this.state.data.length > 0 ? this.state.data : this.getPayload))
     }, 275),
     async filter (data, criteria) {
-      if ('value' in criteria && !isNil(criteria.value)) {
+      if ('value' in criteria && !isNil(criteria.value) && criteria.value !== '') {
         if (this.allowWorkers) {
           const result = await this.$worker.run((data, criteria) => {
             importScripts('https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js')
-            const deepFind = (o, criteria, level = 0, topLevel = '') => {
+            importScripts('https://unpkg.com/flatted@2.0.0/min.js')
+            const deepFind = (o, criteria, level = 0, topLevel = '', maxDepth = 1) => {
               let found = false
               /* eslint no-undef: 'off' */
               if (level === 0 && !_.isNil(criteria.column) && criteria.column.includes('.')) {
                 let match = _.get(o, criteria.column).toString().match(new RegExp(criteria.value, 'i'))
                 let isMatch = !_.isNil(_.get(o, criteria.column)) && !_.isNil(match) && match.length > 0
                 if (isMatch) {
+                  return true
+                }
+              } else if (maxDepth === 1) {
+                let match = stringify(o)
+                match = match.match(new RegExp(criteria.value, 'i'))
+                let isMatch = !_.isNil(match) && match.index
+                if (isMatch) {
                   found = true
                 }
-              } else {
+              } else if (level <= maxDepth) {
                 _.forEach(o, (value, key) => {
                   if (level === 0) {
                     topLevel = key
@@ -234,7 +243,7 @@ export const searchFilterMixin = {
           }, [[...data], [...criteria]])
           return result
         } else {
-          const deepFind = (o, criteria, level = 0, topLevel = '') => {
+          const deepFind = (o, criteria, level = 0, topLevel = '', maxDepth = 1) => {
             let found = false
             /* eslint no-undef: 'off' */
             if (level === 0 && !_.isNil(criteria.column) && criteria.column.includes('.')) {
@@ -243,7 +252,14 @@ export const searchFilterMixin = {
               if (isMatch) {
                 found = true
               }
-            } else {
+            } else if (maxDepth === 1) {
+              let match = stringify(o)
+              match = match.match(new RegExp(criteria.value, 'i'))
+              let isMatch = !_.isNil(match) && match.index
+              if (isMatch) {
+                found = true
+              }
+            } else if (level <= maxDepth) {
               _.forEach(o, (value, key) => {
                 if (level === 0) {
                   topLevel = key

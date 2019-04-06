@@ -65,6 +65,7 @@
     "@fortawesome/vue-fontawesome": "0.0.22",
     "accounting": "^0.4.1",
     "bulma": "^0.7.1",
+    "flatted": "^2.0.0",
     "joi": "^13.3.0",
     "joi-browser": "^13.4.0",
     "localforage": "^1.7.3",

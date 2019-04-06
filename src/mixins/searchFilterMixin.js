@@ -1,5 +1,5 @@
 import md5 from 'md5'
-import { debounce, remove, find, isNil, cloneDeep, orderBy, filter } from 'lodash'
+import { debounce, remove, find, isNil, orderBy, filter } from 'lodash'
 
 export const searchFilterMixin = {
   created () {
@@ -73,7 +73,7 @@ export const searchFilterMixin = {
       if (this.allowWorkers) {
         result = await this.$worker.run((data, offset, rowsPerPage) => {
           return !(data == null) ? data.slice(offset * rowsPerPage, rowsPerPage + offset * rowsPerPage) : []
-        }, [cloneDeep(data), this.state.offset, this.options.pagination.rowsPerPage])
+        }, [[...data], this.state.offset, this.options.pagination.rowsPerPage])
       } else {
         result = !(data == null) ? data.slice(this.state.offset * this.options.pagination.rowsPerPage, this.options.pagination.rowsPerPage + this.state.offset * this.options.pagination.rowsPerPage) : []
       }
@@ -128,7 +128,7 @@ export const searchFilterMixin = {
           /* eslint no-undef: 'off' */
           const sorted = _.orderBy(data, orderBy.columns, orderBy.directions)
           return sorted
-        }, [cloneDeep(data), cloneDeep(this.getSortedColumns)])
+        }, [[...data], [...this.getSortedColumns]])
       } else {
         const orderByColumns = this.getOrderBy
         /* eslint no-undef: 'off' */
@@ -231,7 +231,7 @@ export const searchFilterMixin = {
             return _.filter(data, (o) => {
               return deepFind(o, criteria)
             })
-          }, [cloneDeep(data), cloneDeep(criteria)])
+          }, [[...data], [...criteria]])
           return result
         } else {
           const deepFind = (o, criteria, level = 0, topLevel = '') => {

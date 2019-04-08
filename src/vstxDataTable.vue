@@ -530,7 +530,7 @@ import './sass/vstxDataTable.sass'
 // import localForage from 'localforage'
 import joi from 'joi'
 import md5 from 'md5'
-import { sortBy, filter, forEach, throttle, indexOf, differenceWith, isEqual, isDate, isNumber, round, isNil, get, isString, isElement } from 'lodash'
+import { sortBy, filter, forEach, throttle, indexOf, differenceWith, isEqual, isDate, isNumber, round, isNil, get, isString, isElement, merge } from 'lodash'
 
 // Components
 import DataTableCell from './vstxDataTableCell.vue'
@@ -1034,10 +1034,10 @@ export default {
         }
       }
       for (let i = 0; i < this.columns.length; i++) {
-        let thisDefaultColumn = {...defaultColumn}
+        let thisDefaultColumn = merge({}, defaultColumn)
         thisDefaultColumn.position = i
         thisDefaultColumn.sort.order = i
-        thisDefaultColumn = {...thisDefaultColumn, ...this.columns[i]}
+        merge(thisDefaultColumn, this.columns[i])
         mergedColumns.push(thisDefaultColumn)
       }
       this.state.columns = mergedColumns
@@ -1064,7 +1064,9 @@ export default {
     },
     getConfiguration () {
       const globalConfiguration = this.$vstxDataTable.options || {}
-      const configuration = {...defaults.configuration, ...globalConfiguration, ...this.configuration}
+      let configuration = defaults.configuration
+      merge(configuration, globalConfiguration)
+      merge(configuration, this.configuration)
       return configuration
     },
     // Options Helpers

@@ -44,6 +44,7 @@ var config = {
     'vstx-loader': 'vstx-loader',
     'vstx-search-bar': 'vstx-search-bar',
     'vstx-select': 'vstx-select',
+    'flatted': 'flatted',
     '@fortawesome/fontawesome-free-solid': '@fortawesome/fontawesome-free-solid',
     '@fortawesome/fontawesome': '@fortawesome/fontawesome',
     '@fortawesome/vue-fontawesome': '@fortawesome/vue-fontawesome'

@@ -1,10 +1,16 @@
 {
-  "presets": [["env", {
+  "presets": [
+    [
+      "env", {
+      "spec": true,
       "targets": {
-        "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+        "safari": 9,
+        "browserslist": ["safari >= 9", "iOS >= 9"],
+        "browsers": ["safari >= 9", "iOS >= 9"]
       }
     }],
-    "stage-2"
+    "stage-2",
+    "es2015"
   ],
   "plugins": ["transform-runtime", "transform-object-rest-spread", "transform-es2015-destructuring", "transform-es2015-parameters", "lodash"],
   "comments": false

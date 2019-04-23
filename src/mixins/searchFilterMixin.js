@@ -1,5 +1,5 @@
 import md5 from 'md5'
-import { debounce, remove, find, isNil, orderBy, filter } from 'lodash'
+import { debounce, remove, find, isNil, cloneDeep, orderBy, filter } from 'lodash'
 import { stringify } from 'flatted'
 
 export const searchFilterMixin = {
@@ -74,7 +74,7 @@ export const searchFilterMixin = {
       if (this.allowWorkers) {
         result = await this.$worker.run((data, offset, rowsPerPage) => {
           return !(data == null) ? data.slice(offset * rowsPerPage, rowsPerPage + offset * rowsPerPage) : []
-        }, [[...data], this.state.offset, this.options.pagination.rowsPerPage])
+        }, [cloneDeep(data), this.state.offset, this.options.pagination.rowsPerPage])
       } else {
         result = !(data == null) ? data.slice(this.state.offset * this.options.pagination.rowsPerPage, this.options.pagination.rowsPerPage + this.state.offset * this.options.pagination.rowsPerPage) : []
       }
@@ -129,7 +129,7 @@ export const searchFilterMixin = {
           /* eslint no-undef: 'off' */
           const sorted = _.orderBy(data, orderBy.columns, orderBy.directions)
           return sorted
-        }, [[...data], [...this.getSortedColumns]])
+        }, [cloneDeep(data), cloneDeep(this.getSortedColumns)])
       } else {
         const orderByColumns = this.getOrderBy
         /* eslint no-undef: 'off' */
@@ -190,103 +190,21 @@ export const searchFilterMixin = {
       await this.filterAndSearch((this.getFilters.length && this.state.data.length > 0 ? this.state.data : this.getPayload))
     }, 275),
     async filter (data, criteria) {
-      if ('value' in criteria && !isNil(criteria.value) && criteria.value !== '') {
+      if ('value' in criteria && !isNil(criteria.value)) {
         if (this.allowWorkers) {
           const result = await this.$worker.run((data, criteria) => {
             importScripts('https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js')
-            importScripts('https://unpkg.com/flatted@2.0.0/min.js')
-            const deepFind = (o, criteria, level = 0, topLevel = '', maxDepth = 1) => {
-              let found = false
-              /* eslint no-undef: 'off' */
-              if (level === 0 && !_.isNil(criteria.column) && criteria.column.includes('.')) {
-                let match = _.get(o, criteria.column).toString().match(new RegExp(criteria.value, 'i'))
-                let isMatch = !_.isNil(_.get(o, criteria.column)) && !_.isNil(match) && match.length > 0
-                if (isMatch) {
-                  return true
-                }
-              } else if (maxDepth === 1) {
-                let match = stringify(o)
-                match = match.match(new RegExp(criteria.value, 'i'))
-                let isMatch = !_.isNil(match) && match.index
-                if (isMatch) {
-                  found = true
-                }
-              } else if (level <= maxDepth) {
-                _.forEach(o, (value, key) => {
-                  if (level === 0) {
-                    topLevel = key
-                  }
-                  if (!_.isObject(value) && found === false) {
-                    let match = _.isNil(value) ? [] : _.isNil(criteria.column) || criteria.column === key || criteria.column === topLevel ? value.toString().match(new RegExp(criteria.value, 'i')) : []
-                    let isMatch = !_.isNil(value) && !_.isNil(match) && match.length > 0
-                    if (isMatch) {
-                      found = true
-                    }
-                  } else if (found === false) {
-                    let oldLevel = level
-                    if (!Array.isArray(value)) {
-                      level++
-                    }
-                    let isMatch = deepFind(value, criteria, level, topLevel)
-                    level = oldLevel
-                    if (isMatch) {
-                      found = true
-                    }
-                  }
-                })
-              }
-              return found
-            }
             return _.filter(data, (o) => {
-              return deepFind(o, criteria)
+              const text = stringify(o)
+              return text.toLowerCase().indexOf(criteria.value.toLowerCase()) >= 0
             })
-          }, [[...data], [...criteria]])
+          }, [cloneDeep(data), cloneDeep(criteria)])
           return result
         } else {
-          const deepFind = (o, criteria, level = 0, topLevel = '', maxDepth = 1) => {
-            let found = false
-            /* eslint no-undef: 'off' */
-            if (level === 0 && !_.isNil(criteria.column) && criteria.column.includes('.')) {
-              let match = _.get(o, criteria.column).toString().match(new RegExp(criteria.value, 'i'))
-              let isMatch = !_.isNil(_.get(o, criteria.column)) && !_.isNil(match) && match.length > 0
-              if (isMatch) {
-                found = true
-              }
-            } else if (maxDepth === 1) {
-              let match = stringify(o)
-              match = match.match(new RegExp(criteria.value, 'i'))
-              let isMatch = !_.isNil(match) && match.index
-              if (isMatch) {
-                found = true
-              }
-            } else if (level <= maxDepth) {
-              _.forEach(o, (value, key) => {
-                if (level === 0) {
-                  topLevel = key
-                }
-                if (!_.isObject(value) && found === false) {
-                  let match = _.isNil(value) ? [] : _.isNil(criteria.column) || criteria.column === key || criteria.column === topLevel ? value.toString().match(new RegExp(criteria.value, 'i')) : []
-                  let isMatch = !_.isNil(value) && !_.isNil(match) && match.length > 0
-                  if (isMatch) {
-                    found = true
-                  }
-                } else if (found === false) {
-                  let oldLevel = level
-                  if (!Array.isArray(value)) {
-                    level++
-                  }
-                  let isMatch = deepFind(value, criteria, level, topLevel)
-                  level = oldLevel
-                  if (isMatch) {
-                    found = true
-                  }
-                }
-              })
-            }
-            return found
-          }
           let result = filter(data, (o) => {
-            return deepFind(o, criteria)
+            // return deepFind(o, criteria)
+            const text = stringify(o)
+            return text.toLowerCase().indexOf(criteria.value.toLowerCase()) >= 0
           })
           return result
         }
